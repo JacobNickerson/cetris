@@ -5,16 +5,22 @@
 
 #include "color.hpp"
 
+// Represents a block in the grid.
 class Block {
+    private:
+        const int x; 
+        const int y;
+        std::optional<Color> col;
+
     public:
-        int x;
-        int y;
-        Color col;
-
         // Constructor
-        Block(int x, int y, Color col) : x(x), y(y), col(col) {};
-};
+        Block(int x, int y) : x(x), y(y) {};
 
-typedef std::optional<Block> Cell;
+        // "Activates" the block and assigns it a color.
+        void activate(Color col);
+
+        // Deactivates the block and removes its color.
+        void deactivate();
+};
 
 #endif
