@@ -21,6 +21,15 @@ class Block {
 
         // Deactivates the block and removes its color.
         void deactivate();
+
+        // returns x coord
+        int getX();
+
+        // returns y coord
+        int getY();
+
+        // returns exactly what you'd think
+        bool isActive();
 };
 
 #endif
