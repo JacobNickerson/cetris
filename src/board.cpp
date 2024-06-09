@@ -18,3 +18,7 @@ void Board::clearRow(int y) {
         // clear board[i]
     }
 }
+
+int Board::getIndex(int x, int y) {
+    return width*x+height*y;
+}
