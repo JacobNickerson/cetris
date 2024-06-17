@@ -28,7 +28,7 @@ class Tetromino {
 
         // Input a pointer pointing to the spawn point of the pivot point, Tetromino constructed from this, returns
         // false if constructing Tetromino results in a collision
-        bool constructTetromino(Block* piv, Board& board);
+        bool constructTetromino(Board& board);
 
         // Attempts to rotate the tetromino 90 degrees to the right.
         // Returns true if success, false if not.

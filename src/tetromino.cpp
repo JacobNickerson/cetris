@@ -1,8 +1,29 @@
 #include "tetromino.hpp"
 
-bool Tetromino::constructTetromino(Block* piv, Board& board) {}
+bool Tetromino::constructTetromino(Board& board) {
+    std::array<Block*, 4> new_blocks = blocks;
+    expandPivot(rotation, new_blocks, board);
+    for (size_t i = 0; i < new_blocks.size(); i++) {
+        if (new_blocks[i]->isActive()) {
+            for (size_t j = 0; j < new_blocks.size(); j++) {
+                delete new_blocks[j];
+                new_blocks[j] = nullptr;
+            }
+            return false;
+        }
+    }
+    blocks = new_blocks;
+    for (size_t i = 0; i < new_blocks.size(); i++) {
+        delete new_blocks[i];
+        new_blocks[i] = nullptr;
+    }
+    return true;
+}
 
 bool Tetromino::rotateRight(Board& board) {
+    for (size_t i = 0; i < blocks.size(); i++) { // deactivate blocks to avoid collision detecting with itself
+        blocks[i]->deactivate();
+    }
     std::array<Block*, 4> new_blocks;
     int new_rotation;
     if (rotation == 3) {
@@ -16,6 +37,7 @@ bool Tetromino::rotateRight(Board& board) {
             for (size_t i = 0; i < new_blocks.size(); i++) {
                 delete new_blocks[i];
                 new_blocks[i] = nullptr;
+                blocks[i]->activate(colo);
             }
             return false;
         }
@@ -35,6 +57,9 @@ bool Tetromino::rotateRight(Board& board) {
 }
 
 bool Tetromino::rotateLeft(Board& board) {
+    for (size_t i = 0; i < blocks.size(); i++) {
+        blocks[i]->deactivate();
+    }
     std::array<Block*, 4> new_blocks;
     int new_rotation;
     if (rotation == 0) {
@@ -48,6 +73,7 @@ bool Tetromino::rotateLeft(Board& board) {
             for (size_t i = 0; i < new_blocks.size(); i++) {
                 delete new_blocks[i];
                 new_blocks[i] = nullptr;
+                blocks[i]->activate(colo);
             }
             return false;
         }
