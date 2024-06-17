@@ -2,8 +2,6 @@
 
 bool Tetromino::constructTetromino(Block* piv, Board& board) {}
 
-// TType Tetromino::getType() {}
-
 bool Tetromino::rotateRight(Board& board) {
     std::array<Block*, 4> new_blocks;
     int new_rotation;

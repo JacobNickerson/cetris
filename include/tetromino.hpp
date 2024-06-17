@@ -30,9 +30,6 @@ class Tetromino {
         // false if constructing Tetromino results in a collision
         bool constructTetromino(Block* piv, Board& board);
 
-        // Returns the type of the tetromino.
-        // TType getType();
-
         // Attempts to rotate the tetromino 90 degrees to the right.
         // Returns true if success, false if not.
         bool rotateRight(Board& board);
