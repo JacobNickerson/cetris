@@ -16,10 +16,14 @@ class Tetromino {
         Block* pivot;
         int rotation; // this is kinda scuffed, perhaps that enum thing would be better
         // TType type;
+        Color colo;
+
 
     public:
         // Initialization of a tetromino.
-        Tetromino() : rotation(0) {};
+        Tetromino(Block* piv, Color colo) : pivot(piv), rotation(0), colo(colo) {
+            expandPivot();
+        };
 
         // Input a pointer pointing to the spawn point of the pivot point, Tetromino constructed from this, returns
         // false if constructing Tetromino results in a collision
@@ -64,8 +68,8 @@ class Tetromino {
 
         // Generates the tetrominos current orientation on the board according to its
         // orientation and pivot point location
-        void expandPivot();
-        void expandPivot(int& rotation, std::array<Block*, 4>& blocks_edit);
+        virtual void expandPivot();
+        virtual void expandPivot(int& new_rotation, std::array<Block*, 4>& new_blocks);
 
 
 };

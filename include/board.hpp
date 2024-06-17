@@ -5,7 +5,7 @@
 
 #include "block.hpp"
 
-static constexpr int BOARD_HEIGHT = 20;
+static constexpr int BOARD_HEIGHT = 22;
 static constexpr int BOARD_WIDTH = 10;
 
 class Board {
@@ -15,7 +15,12 @@ class Board {
     public:
         // Constructor
         Board() {
-            for (int r = 0; r < BOARD_HEIGHT; r++) {
+            for (int r = 2; r < BOARD_HEIGHT; r++) {
+                for (int c = 0; c < BOARD_WIDTH; c++) {
+                    board_matrix[r][c] = new RoofBlock(c,r);
+                }
+            }
+            for (int r = 2; r < BOARD_HEIGHT; r++) {
                 for (int c = 0; c < BOARD_WIDTH; c++) {
                     board_matrix[r][c] = new Block(c,r);
                 }

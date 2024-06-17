@@ -28,7 +28,7 @@ bool Tetromino::rotateRight() {
     blocks = new_blocks;
     rotation = new_rotation;
     for (size_t i = 0; i < new_blocks.size(); i++) {
-        new_blocks[i]->activate();
+        new_blocks[i]->activate(colo);
         delete new_blocks[i];
         new_blocks[i] = nullptr;
     }
@@ -60,7 +60,7 @@ bool Tetromino::rotateLeft() {
     blocks = new_blocks;
     rotation = new_rotation;
     for (size_t i = 0; i < new_blocks.size(); i++) {
-        new_blocks[i]->activate();
+        new_blocks[i]->activate(colo);
         delete new_blocks[i];
         new_blocks[i] = nullptr;
     }
@@ -79,7 +79,7 @@ bool Tetromino::up(Board& board) {
     for (Block* pBlock : blocks) {
         pBlock->deactivate();
         pBlock = board.getBlock(pBlock->getRow(), pBlock->getCol()-1);
-        pBlock->activate();
+        pBlock->activate(colo);
     }
     // move pivot
     movePivot(pivot->getRow(), pivot->getCol()-1, board);
@@ -97,7 +97,7 @@ bool Tetromino::down(Board& board) {
     for (Block* pBlock : blocks) {
         pBlock->deactivate();
         pBlock = board.getBlock(pBlock->getRow(), pBlock->getCol()+1);
-        pBlock->activate();
+        pBlock->activate(colo);
     }
     // move pivot
     movePivot(pivot->getRow(), pivot->getCol()+1, board);
@@ -115,7 +115,7 @@ bool Tetromino::left(Board& board) {
     for (Block* pBlock : blocks) {
         pBlock->deactivate();
         pBlock = board.getBlock(pBlock->getRow()-1, pBlock->getCol());
-        pBlock->activate();
+        pBlock->activate(colo);
     }
     // move pivot
     movePivot(pivot->getRow()-1, pivot->getCol(), board);
@@ -133,7 +133,7 @@ bool Tetromino::right(Board& board) {
     for (Block* pBlock : blocks) {
         pBlock->deactivate();
         pBlock = board.getBlock(pBlock->getRow()+1, pBlock->getCol());
-        pBlock->activate();
+        pBlock->activate(colo);
     }
     // move pivot
     movePivot(pivot->getRow()+1, pivot->getCol(), board);
@@ -148,7 +148,7 @@ bool Tetromino::hardDrop(Board& board) {
     for (size_t i = 0; i < blocks.size(); i++) {
         blocks[i]->deactivate();
         blocks[i] = board.getBlock(blocks[i]->getRow()+drop_dist, blocks[i]->getCol());
-        blocks[i]->activate();
+        blocks[i]->activate(colo);
     }
     pivot = board.getBlock(pivot->getRow()+drop_dist, pivot->getCol());
     return true;
