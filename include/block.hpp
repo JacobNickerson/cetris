@@ -8,25 +8,25 @@
 // Represents a block in the grid.
 class Block {
     private:
-        const int x; 
-        const int y;
-        std::optional<Color> col;
+        const int colu; 
+        const int row;
+        std::optional<Color> colo;
 
     public:
         // Constructor
-        Block(int x, int y) : x(x), y(y) {};
+        Block(int x, int y) : colu(x), row(y) {};
 
         // "Activates" the block and assigns it a color.
-        void activate(Color col);
+        void activate(Color colo);
 
         // Deactivates the block and removes its color.
         void deactivate();
 
         // returns x coord
-        int getX();
+        int getRow();
 
         // returns y coord
-        int getY();
+        int getCol();
 
         // returns exactly what you'd think
         bool isActive();

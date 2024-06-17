@@ -7,29 +7,34 @@
 #include "block.hpp"
 #include "board.hpp"
 
-// Tetromino type
-enum class TType { I, O, T, J, L, S, Z, };
+// Tetromino Rotation
+// enum class rotation { I, O, T, J, L, S, Z, };
 
 class Tetromino {
     private:
         std::array<Block*, 4> blocks;
         Block* pivot;
-        TType type;
+        int rotation; // this is kinda scuffed, perhaps that enum thing would be better
+        // TType type;
 
     public:
         // Initialization of a tetromino.
-        Tetromino(TType type);
+        Tetromino() : rotation(0) {};
+
+        // Input a pointer pointing to the spawn point of the pivot point, Tetromino constructed from this, returns
+        // false if constructing Tetromino results in a collision
+        bool spawnTetromino(Block* piv, Board& board);
 
         // Returns the type of the tetromino.
-        TType get_type();
+        // TType getType();
 
         // Attempts to rotate the tetromino 90 degrees to the right.
         // Returns true if success, false if not.
-        bool rotate_right();
+        bool rotateRight();
 
         // Attempts to rotate the tetromino 90 degrees to the left.
         // Returns true if success, false if not.
-        bool rotate_left();
+        bool rotateLeft();
 
         // Moves the tetromino up.  (Would this really get used?)
         // Returns true if success, false if not.
@@ -49,17 +54,18 @@ class Tetromino {
 
         // Shoves the tetromino to the ghost position.
         // Returns true if success, false if not.
-        bool hard_drop();
+        bool hardDrop(Board& Board);
 
         // Calculates how far down the ghost position is.
-        int ghost_position();
+        int ghostPosition(Board& board);
 
-        // Moves the pivot point
-        void movePivot(int i, int j);
+        // Moves the pivot point to point i,j
+        void movePivot(int colu, int row, Board& board);
 
         // Generates the tetrominos current orientation on the board according to its
         // orientation and pivot point location
         void expandPivot();
+        void expandPivot(int& rotation, std::array<Block*, 4>& blocks_edit);
 
 
 };

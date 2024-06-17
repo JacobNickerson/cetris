@@ -1,23 +1,23 @@
 #include "block.hpp"
 
 
-int Block::getX() {
-    return x;
+int Block::getRow() {
+    return row;
 }
 
-int Block::getY() {
-    return y;
+int Block::getCol() {
+    return colu;
 }
 
 bool Block::isActive() {
-    if (col.has_value()) return true;
+    if (colo.has_value()) return true;
     return false;
 }
 
-void Block::activate(Color color) {
-    col = color;
+void Block::activate(Color new_color) {
+    colo = new_color;
 }
 
 void Block::deactivate() {
-    col.reset();
+    colo.reset();
 }

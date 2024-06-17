@@ -15,32 +15,29 @@ class Board {
     public:
         // Constructor
         Board() {
-            for (int y = 0; y < BOARD_HEIGHT; y++) {
-                for (int x = 0; x < BOARD_WIDTH; x++) {
-                    board_matrix[y][x] = new Block(x,y);
+            for (int r = 0; r < BOARD_HEIGHT; r++) {
+                for (int c = 0; c < BOARD_WIDTH; c++) {
+                    board_matrix[r][c] = new Block(c,r);
                 }
             }
         }
 
         // Deconstructor (deleter, even)
         ~Board() {
-            for (int y = 0; y < BOARD_HEIGHT; y++) {
-                for (int x = 0; x < BOARD_WIDTH; x++) {
-                    delete board_matrix[y][x];
+            for (int r = 0; r < BOARD_HEIGHT; r++) {
+                for (int c = 0; c < BOARD_WIDTH; c++) {
+                    delete board_matrix[r][c];
                 }
             }
         }
 
-        // Get a pointer to the block at the position x,y
-        Block* getBlock(int x, int y); 
+        // Get a pointer to the block at the position row, col : Board[row][col]
+        Block* getBlock(int row, int colu);
+
 
         // does what it says on the tin
-        // y is row index position
-        void removeRow(int y) {
-            for (int i=0; i < BOARD_WIDTH; i++) {
-                board_matrix[y][i]->deactivate();
-            }
-        }
+        void removeRow(int row);
+
 };
 
 #endif

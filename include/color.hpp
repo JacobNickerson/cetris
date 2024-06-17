@@ -7,6 +7,7 @@ struct Color {
     unsigned short b;
 
     Color(short r, short g, short b) : r(r), g(g), b(b) {};
+    
 };
 
 #endif
