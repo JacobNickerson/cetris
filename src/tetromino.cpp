@@ -1,10 +1,10 @@
 #include "tetromino.hpp"
 
-bool Tetromino::spawnTetromino(Block* piv, Board& board) {}
+bool Tetromino::constructTetromino(Block* piv, Board& board) {}
 
 // TType Tetromino::getType() {}
 
-bool Tetromino::rotateRight() {
+bool Tetromino::rotateRight(Board& board) {
     std::array<Block*, 4> new_blocks;
     int new_rotation;
     if (rotation == 3) {
@@ -12,7 +12,7 @@ bool Tetromino::rotateRight() {
     } else {
         new_rotation = rotation+1;
     }
-    expandPivot(new_rotation, new_blocks);
+    expandPivot(new_rotation, new_blocks, board);
     for (Block* new_pBlock : new_blocks) {
         if (new_pBlock->isActive()) {
             for (size_t i = 0; i < new_blocks.size(); i++) {
@@ -36,7 +36,7 @@ bool Tetromino::rotateRight() {
     
 }
 
-bool Tetromino::rotateLeft() {
+bool Tetromino::rotateLeft(Board& board) {
     std::array<Block*, 4> new_blocks;
     int new_rotation;
     if (rotation == 0) {
@@ -44,7 +44,7 @@ bool Tetromino::rotateLeft() {
     } else {
         new_rotation = rotation-1;
     }
-    expandPivot(new_rotation, new_blocks);
+    expandPivot(new_rotation, new_blocks, board);
     for (Block* new_pBlock : new_blocks) {
         if (new_pBlock->isActive()) {
             for (size_t i = 0; i < new_blocks.size(); i++) {
@@ -171,10 +171,18 @@ void Tetromino::movePivot(int colu, int row, Board& board) {
     pivot = board.getBlock(colu, row);
 }
 
-void Tetromino::expandPivot() {
-    return;
+void Tetromino::expandPivot(Board& board) {
+    for (size_t i = 0; i < blocks.size(); i++) {
+        int new_row = pivot->getRow() + rotation_positions[rotation][i].first;
+        int new_col = pivot->getCol() + rotation_positions[rotation][i].second;
+        blocks[i] = board.getBlock(new_row, new_col);
+    }
 }
 
-void Tetromino::expandPivot(int& rotation, std::array<Block*, 4>& blocks_edit) {  // should this be a method of a subclass for each specific tetromino?
-    return;
+void Tetromino::expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks, Board& board) {
+    for (size_t i = 0; i < new_blocks.size(); i++) {
+        int new_row = pivot->getRow() + rotation_positions[new_rotation][i].first;
+        int new_col = pivot->getCol() + rotation_positions[new_rotation][i].second;
+        new_blocks[i] = board.getBlock(new_row, new_col);
+    }
 };

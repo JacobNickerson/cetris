@@ -1,9 +1,9 @@
-#ifndef I_TETROMINO_HPP
-#define I_TETROMINO_HPP
+#ifndef S_TETROMINO_HPP
+#define S_TETROMINO_HPP
 
 #include "tetromino.hpp"
 
-class I_Tetromino : public Tetromino {
+class S_Tetromino : public Tetromino {
     private:
         std::array<Block*, 4> blocks;
         Block* pivot;
