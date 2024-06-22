@@ -14,7 +14,7 @@ class Block {
 
     public:
         // Constructor
-        Block(int x, int y) : colu(x), row(y), colo(Color(0,0,0)) {};
+        Block(int x, int y) : colu(x), row(y) {};
 
         // "Activates" the block and assigns it a color.
         void activate(Color colo);
