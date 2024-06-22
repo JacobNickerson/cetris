@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include <array>
 #include <iostream>
 
 void Game::run() {
@@ -27,19 +28,17 @@ void Game::run() {
                 start_rect.top  + start_rect.height/2.0f);
     press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
 
-    // Initializing our fake tetromino
-    sf::Sprite example_block_sprite;
+    // Initializing our test matrix
     sf::Texture block_texture;
     block_texture.loadFromFile("images/block.png");
-    example_block_sprite.setTexture(block_texture);
-    example_block_sprite.setColor(sf::Color(255, 0, 0));
-    example_block_sprite.move(sf::Vector2f(0.f,150.f));
-    sf::Sprite example_block_sprite2 = example_block_sprite;
-    example_block_sprite2.move(sf::Vector2f(0.f,85.f));
-    sf::Sprite example_block_sprite3 = example_block_sprite2;
-    example_block_sprite3.move(sf::Vector2f(0.f,85.f));
-    sf::Sprite example_block_sprite4 = example_block_sprite3;
-    example_block_sprite4.move(sf::Vector2f(85.f,0.f));
+    std::array<std::array<sf::Sprite, 12>, 23> board_sprites;
+    for (int i = 0; i < board_sprites.size(); i++) {
+        for (int j = 0; j < board_sprites[0].size(); j++) {
+            board_sprites[i][j].setTexture(block_texture);
+            board_sprites[i][j].setScale(sf::Vector2f(0.35, 0.35));
+            board_sprites[i][j].move(sf::Vector2f(85*0.35*j,85*0.35*i));
+        }
+    }
 
     // Render loop. Everything is rendered here.
     while (window.isOpen() && game_state == GameState::Title) {
@@ -62,6 +61,7 @@ void Game::run() {
         window.display();
     }
 
+    // Game is being played
     while (window.isOpen() && game_state == GameState::GameRunning) {
     sf::Event event;
         
@@ -69,44 +69,16 @@ void Game::run() {
             if (event.type == sf::Event::Closed) { 
                 window.close(); 
             }
-            if (event.type == sf::Event::KeyPressed) {
-
-            }
         }
         
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            example_block_sprite.move(sf::Vector2f(1.f, 0.f));
-            example_block_sprite2.move(sf::Vector2f(1.f, 0.f));
-            example_block_sprite3.move(sf::Vector2f(1.f, 0.f));
-            example_block_sprite4.move(sf::Vector2f(1.f, 0.f));
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            example_block_sprite.move(sf::Vector2f(-1.f, 0.f));
-            example_block_sprite2.move(sf::Vector2f(-1.f, 0.f));
-            example_block_sprite3.move(sf::Vector2f(-1.f, 0.f));
-            example_block_sprite4.move(sf::Vector2f(-1.f, 0.f));
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            example_block_sprite.move(sf::Vector2f(0.f, 1.f));
-            example_block_sprite2.move(sf::Vector2f(0.f, 1.f));
-            example_block_sprite3.move(sf::Vector2f(0.f, 1.f));
-            example_block_sprite4.move(sf::Vector2f(0.f, 1.f));
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            example_block_sprite.move(sf::Vector2f(0.f, -1.f));
-            example_block_sprite2.move(sf::Vector2f(0.f, -1.f));
-            example_block_sprite3.move(sf::Vector2f(0.f, -1.f));
-            example_block_sprite4.move(sf::Vector2f(0.f, -1.f));
-        }
-
         window.clear();
-        window.draw(example_block_sprite);
-        window.draw(example_block_sprite2);
-        window.draw(example_block_sprite3);
-        window.draw(example_block_sprite4);
+        for (int i = 0; i < board_sprites.size(); i++) {
+            for (int j = 0; j < board_sprites[0].size(); j++) {
+                if (board.getBlock(i, j)->isActive()) {
+                    window.draw(board_sprites[i][j]);
+                }
+            }
+        }
         window.display();
     } 
 }
