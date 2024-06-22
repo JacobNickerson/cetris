@@ -19,11 +19,3 @@ bool Board::rowIsFull(int row) {
     }
     return true;
 }
-
-size_t Board::getWidth() {
-    return board_matrix[0].size();
-}
-
-size_t Board::getHeight() {
-    return board_matrix.size();
-}

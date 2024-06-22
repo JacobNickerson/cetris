@@ -52,9 +52,6 @@ class Board {
         // does what it says on the tin
         bool rowIsFull(int row);
 
-        size_t getWidth();
-
-        size_t getHeight();
 };
 
 #endif
