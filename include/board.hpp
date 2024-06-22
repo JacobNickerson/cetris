@@ -4,9 +4,8 @@
 #include <array>
 
 #include "block.hpp"
-
-static constexpr int BOARD_HEIGHT = 22;
-static constexpr int BOARD_WIDTH = 10;
+static constexpr int BOARD_HEIGHT = 23;
+static constexpr int BOARD_WIDTH = 12;
 
 class Board {
     private:
@@ -15,15 +14,20 @@ class Board {
     public:
         // Constructor
         Board() {
-            for (int r = 2; r < BOARD_HEIGHT; r++) {
-                for (int c = 0; c < BOARD_WIDTH; c++) {
-                    board_matrix[r][c] = new RoofBlock(c,r);
-                }
-            }
-            for (int r = 2; r < BOARD_HEIGHT; r++) {
+            // initialize entire board
+            for (int r = 0; r < BOARD_HEIGHT; r++) {
                 for (int c = 0; c < BOARD_WIDTH; c++) {
                     board_matrix[r][c] = new Block(c,r);
                 }
+            }
+            // activate side walls
+            for (int r = 0; r < BOARD_HEIGHT; r++) {
+                board_matrix[r][0]->activate(Color(0,0,0));
+                board_matrix[r][BOARD_WIDTH-1]->activate(Color(0,0,0));
+            }
+            // activate floor
+            for (int c = 0; c < BOARD_WIDTH; c++) {
+                board_matrix[c][BOARD_HEIGHT-1]->activate(Color(0,0,0));
             }
         }
 
@@ -32,6 +36,7 @@ class Board {
             for (int r = 0; r < BOARD_HEIGHT; r++) {
                 for (int c = 0; c < BOARD_WIDTH; c++) {
                     delete board_matrix[r][c];
+                    board_matrix[r][c] = nullptr;
                 }
             }
         }
@@ -43,6 +48,8 @@ class Board {
         // does what it says on the tin
         void removeRow(int row);
 
+        // does what it says on the tin
+        bool rowIsFull(int row);
 };
 
 #endif

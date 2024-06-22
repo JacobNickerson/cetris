@@ -30,10 +30,10 @@ class Tetromino {
         ~Tetromino() {
             for (size_t i = 0; i < blocks.size(); i++) {
                 delete blocks[i];
-                blocks[i] = NULL;
+                blocks[i] = nullptr;
             }
             delete pivot;
-            pivot = NULL;
+            pivot = nullptr;
         }
 
         // Input a pointer pointing to the spawn point of the pivot point, Tetromino constructed from this, returns
