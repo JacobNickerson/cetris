@@ -4,18 +4,25 @@
 #include <SFML/Graphics.hpp>
 #include "board.hpp"
 
+enum class GameState {
+    Title,
+    GameRunning,
+    GameOver
+};
+
 class Game {
     private:
         Board board;
-        bool game_over;
+        GameState game_state;
 
     public:
         Game() {
-            Board board;
-            game_over = false;
+            game_state = GameState::Title;
         }
 
-        void start();
+        void run();
+
+        void playGame();
 
 };
 
