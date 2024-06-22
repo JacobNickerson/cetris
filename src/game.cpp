@@ -40,6 +40,9 @@ void Game::run() {
         }
     }
 
+    // Making das boardenheimer
+    Board board;
+
     // Render loop. Everything is rendered here.
     while (window.isOpen() && game_state == GameState::Title) {
         sf::Event event;
@@ -84,6 +87,5 @@ void Game::run() {
 }
 
 void Game::playGame() {
-    board = Board();
     game_state = GameState::GameRunning;
 }

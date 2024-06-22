@@ -28,7 +28,7 @@ class Board {
             }
             // activate floor
             for (int c = 0; c < BOARD_WIDTH; c++) {
-                board_matrix[c][BOARD_HEIGHT-1]->activate(Color(0,0,0));
+                board_matrix[BOARD_HEIGHT-1][c]->activate(Color(0,0,0));
             }
         }
 
@@ -51,6 +51,8 @@ class Board {
 
         // does what it says on the tin
         bool rowIsFull(int row);
+
+        void reset();
 
 };
 
