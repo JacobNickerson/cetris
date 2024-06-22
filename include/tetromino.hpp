@@ -26,6 +26,16 @@ class Tetromino {
         // Initialization of a tetromino.
         Tetromino(Block* piv, Color colo) : pivot(piv), rotation(0), colo(colo) {};
 
+        // Deletion of a tetromino
+        ~Tetromino() {
+            for (size_t i = 0; i < blocks.size(); i++) {
+                delete blocks[i];
+                blocks[i] = NULL;
+            }
+            delete pivot;
+            pivot = NULL;
+        }
+
         // Input a pointer pointing to the spawn point of the pivot point, Tetromino constructed from this, returns
         // false if constructing Tetromino results in a collision
         bool constructTetromino(Board& board);
@@ -68,7 +78,6 @@ class Tetromino {
         // orientation and pivot point location
         void expandPivot(Board& board);
         void expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks, Board& board);
-
 
 };
 

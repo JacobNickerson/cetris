@@ -209,4 +209,4 @@ void Tetromino::expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks,
         int new_col = pivot->getCol() + rotation_positions[new_rotation][i].second;
         new_blocks[i] = board.getBlock(new_row, new_col);
     }
-};
+}
