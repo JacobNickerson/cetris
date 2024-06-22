@@ -4,6 +4,7 @@
 #include <array>
 
 #include "block.hpp"
+
 static constexpr int BOARD_HEIGHT = 23;
 static constexpr int BOARD_WIDTH = 12;
 

@@ -1,6 +1,7 @@
 # In makefiles, the default script is the topmost one. Run using `$ make`
 build-and-run:
 	@# Compile main.cpp
+	g++ src/*.cpp
 	g++ -c src/main.cpp -o build/main.o
 
 	@# Link the compiled object file with SFML libraries
