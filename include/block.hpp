@@ -3,21 +3,21 @@
 
 #include <optional>
 
-#include "color.hpp"
+#include <SFML/Graphics.hpp>
 
 // Represents a block in the grid.
 class Block {
     private:
         const int colu; 
         const int row;
-        std::optional<Color> colo;
+        std::optional<sf::Color> colo;
 
     public:
         // Constructor
         Block(int x, int y) : colu(x), row(y) {};
 
         // "Activates" the block and assigns it a color.
-        void activate(Color colo);
+        void activate(sf::Color colo);
 
         // Deactivates the block and removes its color.
         void deactivate();

@@ -12,8 +12,9 @@ bool Tetromino::constructTetromino(Board& board) {
             return false;
         }
     }
-    blocks = new_blocks;
+    
     for (size_t i = 0; i < new_blocks.size(); i++) {
+        blocks[i] = board.getBlock(new_blocks[i]->getCol(), new_blocks[i]->getRow());
         delete new_blocks[i];
         new_blocks[i] = nullptr;
     }
@@ -93,74 +94,88 @@ bool Tetromino::rotateLeft(Board& board) {
 }
 
 bool Tetromino::up(Board& board) {
+    deactivate();
     // check for collisions
-    for (Block* pBlock : blocks) {
-        if (board.getBlock(pBlock->getRow(), pBlock->getCol()-1)->isActive()) {
+    for (size_t i = 0; i < blocks.size(); i++) {
+        if (board.getBlock(blocks[i]->getRow()-1, blocks[i]->getCol())->isActive()) {
+            activate();
             return false;
         }
     }
     // move all blocks
-    for (Block* pBlock : blocks) {
-        pBlock->deactivate();
-        pBlock = board.getBlock(pBlock->getRow(), pBlock->getCol()-1);
-        pBlock->activate(colo);
-    }
-    // move pivot
-    movePivot(pivot->getRow(), pivot->getCol()-1, board);
-    return true;
-}
-
-bool Tetromino::down(Board& board) {
-    // check for collisions
-    for (Block* pBlock : blocks) {
-        if (board.getBlock(pBlock->getRow(), pBlock->getCol()+1)->isActive()) {
-            return false;
-        }
-    }
-    // move all blocks
-    for (Block* pBlock : blocks) {
-        pBlock->deactivate();
-        pBlock = board.getBlock(pBlock->getRow(), pBlock->getCol()+1);
-        pBlock->activate(colo);
-    }
-    // move pivot
-    movePivot(pivot->getRow(), pivot->getCol()+1, board);
-    return true;
-}
-
-bool Tetromino::left(Board& board) {
-    // check for collisions
-    for (Block* pBlock : blocks) {
-        if (board.getBlock(pBlock->getRow()-1, pBlock->getCol())->isActive()) {
-            return false;
-        }
-    }
-    // move all blocks
-    for (Block* pBlock : blocks) {
-        pBlock->deactivate();
-        pBlock = board.getBlock(pBlock->getRow()-1, pBlock->getCol());
-        pBlock->activate(colo);
+    for (size_t i = 0; i < blocks.size(); i++) {
+        blocks[i]->deactivate();
+        blocks[i] = board.getBlock(blocks[i]->getRow()-1, blocks[i]->getCol());
+        blocks[i]->activate(colo);
     }
     // move pivot
     movePivot(pivot->getRow()-1, pivot->getCol(), board);
     return true;
 }
 
-bool Tetromino::right(Board& board) {
+bool Tetromino::down(Board& board) {
+    deactivate();
     // check for collisions
-    for (Block* pBlock : blocks) {
-        if (board.getBlock(pBlock->getRow()+1, pBlock->getCol())->isActive()) {
+    for (size_t i = 0; i < blocks.size(); i++) {
+        if (board.getBlock(blocks[i]->getRow()+1, blocks[i]->getCol())->isActive()) {
+            activate();
             return false;
         }
     }
     // move all blocks
-    for (Block* pBlock : blocks) {
-        pBlock->deactivate();
-        pBlock = board.getBlock(pBlock->getRow()+1, pBlock->getCol());
-        pBlock->activate(colo);
+    for (size_t i = 0; i < blocks.size(); i++) {
+        blocks[i]->deactivate();
+        blocks[i] = board.getBlock(blocks[i]->getRow()+1, blocks[i]->getCol());
+        blocks[i]->activate(colo);
     }
     // move pivot
     movePivot(pivot->getRow()+1, pivot->getCol(), board);
+    return true;
+}
+
+bool Tetromino::left(Board& board) {
+    // deactivate to prevent self collision
+    deactivate();
+
+    // check for collisions
+
+    for (size_t i = 0; i < blocks.size(); i++) {
+        if (board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()-1)->isActive()) {
+            activate();
+            return false;
+        }
+    }
+    // move all blocks
+    for (size_t i = 0; i < blocks.size(); i++) {
+        blocks[i]->deactivate();
+        blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()-1);
+        blocks[i]->activate(colo);
+    }
+    // move pivot
+    movePivot(pivot->getRow(), pivot->getCol()-1, board);
+    return true;
+}
+
+bool Tetromino::right(Board& board) {
+    // deactivate to prevent self collision
+    deactivate();
+
+    // check for collisions
+
+    for (size_t i = 0; i < blocks.size(); i++) {
+        if (board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()+1)->isActive()) {
+            activate();
+            return false;
+        }
+    }
+    // move all blocks
+    for (size_t i = 0; i < blocks.size(); i++) {
+        blocks[i]->deactivate();
+        blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()+1);
+        blocks[i]->activate(colo);
+    }
+    // move pivot
+    movePivot(pivot->getRow(), pivot->getCol()+1, board);
     return true;
 }
 
@@ -209,4 +224,24 @@ void Tetromino::expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks,
         int new_col = pivot->getCol() + rotation_positions[new_rotation][i].second;
         new_blocks[i] = board.getBlock(new_row, new_col);
     }
+}
+
+void Tetromino::activate() {
+    for (size_t i = 0; i < blocks.size(); i++) {
+        blocks[i]->activate(colo);
+    }
+}
+
+void Tetromino::deactivate() {
+    for (size_t i = 0; i < blocks.size(); i++) {
+        blocks[i]->deactivate();
+    }
+}
+
+std::array<Block*, 4> Tetromino::getBlocks() {
+    return blocks;
+}
+
+sf::Color Tetromino::getColor() {
+    return colo;
 }

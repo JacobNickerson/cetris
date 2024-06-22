@@ -14,17 +14,33 @@ class Tetromino {
         Block* pivot;
         int rotation; // this is kinda scuffed, perhaps that enum thing would be better
         const std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions = {{
-                { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
-                { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
+                { {{0, -1}, {0, 0}, {0, 1}, {0, 2}} },
+                { {{-1, 0}, {0, 0}, {1, 0}, {2, 0}} },
                 { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
                 { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} }
         }};
-        Color colo;
+        sf::Color colo;
 
 
     public:
+        Tetromino() : rotation(0), colo(sf::Color(0,0,0)) {
+            for (size_t i = 0; i < blocks.size(); i++) {
+                blocks[i] = nullptr;
+            }
+        };
+
+        Tetromino(sf::Color colo) : rotation(0), colo(colo) {
+            for (size_t i = 0; i < blocks.size(); i++) {
+                blocks[i] = nullptr;
+            }
+        };
+
         // Initialization of a tetromino.
-        Tetromino(Block* piv, Color colo) : pivot(piv), rotation(0), colo(colo) {};
+        Tetromino(Block* piv, sf::Color colo) : pivot(piv), rotation(0), colo(colo) {
+            for (size_t i = 0; i < blocks.size(); i++) {
+                blocks[i] = piv;
+            }
+        };
 
         // Deletion of a tetromino
         ~Tetromino() {
@@ -79,6 +95,15 @@ class Tetromino {
         void expandPivot(Board& board);
         void expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks, Board& board);
 
+        // Activates all the blocks in a tetromino
+        void activate();
+
+        // Deactivates all the blocks in a tetromino
+        void deactivate();
+
+        std::array<Block*, 4> getBlocks();
+
+        sf::Color getColor();
 };
 
 #endif

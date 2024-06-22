@@ -14,7 +14,7 @@ bool Block::isActive() {
     return false;
 }
 
-void Block::activate(Color new_color) {
+void Block::activate(sf::Color new_color) {
     colo = new_color;
 }
 

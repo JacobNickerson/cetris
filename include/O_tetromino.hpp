@@ -8,7 +8,7 @@ class O_Tetromino : public Tetromino {
         std::array<Block*, 4> blocks;
         Block* pivot;
         int rotation; 
-        Color colo;
+        sf::Color colo;
     
     public:
 

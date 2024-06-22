@@ -23,13 +23,16 @@ class Board {
             }
             // activate side walls
             for (int r = 0; r < BOARD_HEIGHT; r++) {
-                board_matrix[r][0]->activate(Color(0,0,0));
-                board_matrix[r][BOARD_WIDTH-1]->activate(Color(0,0,0));
+                board_matrix[r][0]->activate(sf::Color(0,0,0));
+                board_matrix[r][BOARD_WIDTH-1]->activate(sf::Color(0,0,0));
             }
             // activate floor
             for (int c = 0; c < BOARD_WIDTH; c++) {
-                board_matrix[BOARD_HEIGHT-1][c]->activate(Color(0,0,0));
+                board_matrix[BOARD_HEIGHT-1][c]->activate(sf::Color(0,0,0));
+                // temp activate ceiling
+                board_matrix[0][c]->activate(sf::Color(0,0,0));
             }
+            
         }
 
         // Deconstructor (deleter, even)
