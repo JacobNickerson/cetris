@@ -2,8 +2,12 @@
 #define BOARD_HPP
 
 #include <array>
+#include <vector>
+#include <algorithm>
 
 #include "block.hpp"
+
+// using std::find;
 
 static constexpr int BOARD_HEIGHT = 24;
 static constexpr int BOARD_WIDTH = 14;
@@ -28,12 +32,10 @@ class Board {
                 board_matrix[r][BOARD_WIDTH-1]->activate(sf::Color(0,0,0));
                 board_matrix[r][BOARD_WIDTH-2]->activate(sf::Color(0,0,0));
             }
-            // activate floor and ceiling
+            // activate floor
             for (int c = 0; c < BOARD_WIDTH; c++) {
                 board_matrix[BOARD_HEIGHT-1][c]->activate(sf::Color(0,0,0));
                 board_matrix[BOARD_HEIGHT-2][c]->activate(sf::Color(0,0,0));
-                board_matrix[0][c]->activate(sf::Color(0,0,0));
-                board_matrix[1][c]->activate(sf::Color(0,0,0));
             }
             
         }
@@ -48,6 +50,8 @@ class Board {
             }
         }
 
+        void reset();
+
         // Get a pointer to the block at the position row, col : Board[row][col]
         Block* getBlock(int row, int colu);
 
@@ -58,7 +62,9 @@ class Board {
         // does what it says on the tin
         bool rowIsFull(int row);
 
-        void reset();
+        // checks tetromino placement for completed rows, removes completed rows, WIP: move rows down
+        void checkPlacement(std::array<Block*, 4> blocks);
+
 
 };
 

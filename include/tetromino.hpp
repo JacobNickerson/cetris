@@ -56,7 +56,7 @@ class Tetromino {
             pivot = nullptr;
         }
 
-        // Input a pointer pointing to the spawn point of the pivot point, Tetromino constructed from this, returns
+        // Tetromino constructed from pivot point returns
         // false if constructing Tetromino results in a collision
         bool constructTetromino(Board& board);
 
@@ -105,9 +105,17 @@ class Tetromino {
         // Deactivates all the blocks in a tetromino
         void deactivate();
 
+        // returns the array of blocks in a tetromino
         std::array<Block*, 4> getBlocks();
-
+        
+        // return the color of the tetromino
         sf::Color getColor();
+
+        // sets a tetromino to default rotation, no pivot point, and no color
+        void reset();
+
+        // sets a tetromino to have a specified rotation, a specified pivot point, and a specified color
+        void set(int rot, Block* pivot, sf::Color color);
 };
 
 #endif

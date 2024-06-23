@@ -31,19 +31,19 @@ void Game::run() {
                 start_rect.top  + start_rect.height/2.0f);
     press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
 
-    // Initializing our sprite matrix
+    // Initializing our sprite texture
     sf::Texture block_texture;
-    block_texture.loadFromFile("images/block.png");
-    std::array<std::array<sf::Sprite, 14>, 24> board_sprites;
-    for (int i = 0; i < board_sprites.size(); i++) {
-        for (int j = 0; j < board_sprites[0].size(); j++) {
-            board_sprites[i][j].setTexture(block_texture);
-            board_sprites[i][j].setScale(sf::Vector2f(0.5, 0.5));
-            board_sprites[i][j].move(sf::Vector2f(32*j,32*i));
-        }
+    if (!block_texture.loadFromFile("images/block.png")) {
+        std::cout << "TEXTURE FAILED TO LOAD" << std::endl;
+        return;
     }
 
-    // Making das boardenheimer
+    // Initializing our sprite board
+    SpriteBoard sprite_board;
+    sprite_board.initialize(block_texture);
+    game_sprite_board = sprite_board;
+
+    // Initializing game logic board
     Board board;
     game_board = board;
 
@@ -80,64 +80,76 @@ void Game::run() {
             if (event.type == sf::Event::Closed) { 
                 window.close(); 
             } else if (event.type == sf::Event::KeyPressed && live_block) {
-                if (event.key.code == sf::Keyboard::S) {
-                    if (!testromino.down(board)) {
-                        std::cout << "GAMING" << std::endl;  // eventually this will be replaced with handling placement
-                    }
-                    for (Block* block : testromino.getBlocks()) {
-                        board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());
-                    }
-                } else if (event.key.code == sf::Keyboard::W) {
-                    testromino.up(board);
-                    for (Block* block : testromino.getBlocks()) {
-                        board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());
-                    }
-                } else if (event.key.code == sf::Keyboard::A) {
-                    testromino.left(board);
-                    for (Block* block : testromino.getBlocks()) {
-                        board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());
-                    }
-                } else if (event.key.code == sf::Keyboard::D) {
-                    testromino.right(board);
-                    for (Block* block : testromino.getBlocks()) {
-                        board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());
-                    }
-                } else if (event.key.code == sf::Keyboard::Q) {
-                    testromino.rotateLeft(board);
-                    for (Block* block : testromino.getBlocks()) {
-                        board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());
-                    }
-                } else if (event.key.code == sf::Keyboard::E) {
-                    testromino.rotateRight(board);
-                    for (Block* block : testromino.getBlocks()) {
-                        board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());
-                    }
+                switch (event.key.code) {
+                    case sf::Keyboard::S: 
+                        if (!testromino.down(board)) {
+                            game_board.checkPlacement(testromino.getBlocks());
+                            if (!spawnTetromino(testromino)) {
+                                game_board.reset();
+                                game_state = GameState::Title;
+                            }
+                        }
+                        game_sprite_board.colorTetromino(testromino);
+                        break;
+                    case sf::Keyboard::A:
+                        testromino.left(board);
+                        game_sprite_board.colorTetromino(testromino);
+                        break;
+                    case sf::Keyboard::D:
+                        testromino.right(board);
+                        game_sprite_board.colorTetromino(testromino);
+                        break;
+                    case sf::Keyboard::Q:
+                        testromino.rotateLeft(board);
+                        game_sprite_board.colorTetromino(testromino);
+                        break;
+                    case sf::Keyboard::E:
+                        testromino.rotateRight(board);
+                        game_sprite_board.colorTetromino(testromino);
+                        break;
                 }
             }
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && !live_block) {
-            testromino.movePivot(2,5,game_board);
-            testromino.expandPivot(game_board);
-            testromino.activate();
-            for (Block* block : testromino.getBlocks()) {
-                board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());
-            }
-            live_block = true;
+            spawnTetromino(testromino);
         }
         
         window.clear();
-        for (int i = 0; i < board_sprites.size(); i++) {
-            for (int j = 0; j < board_sprites[0].size(); j++) {
+        for (int i = 2; i < game_sprite_board.getHeight(); i++) {
+            for (int j = 0; j < game_sprite_board.getWidth(); j++) {
                 if (game_board.getBlock(i, j)->isActive()) {
-                    window.draw(board_sprites[i][j]);
+                    window.draw(*sprite_board.getSprite(i,j));
                 }
             }
         }
         window.display();
     } 
+
+    if (game_state == GameState::Title) {
+        std::cout << "YES!!!" << std::endl;
+    }
 }
 
 void Game::playGame() {
     game_state = GameState::GameRunning;
+}
+
+bool Game::spawnTetromino(Tetromino& tetromino) {
+    tetromino.reset();
+    tetromino.set(0, game_board.getBlock(2,6), sf::Color(0,255,255));
+    if (!tetromino.constructTetromino(game_board)) return false;
+    tetromino.activate();
+    game_sprite_board.colorTetromino(tetromino);
+    live_block = true;
+    return true;
+}
+
+bool Game::spawnTetromino(Tetromino& tetromino, int row, int col) {
+    tetromino.movePivot(row, col,game_board);
+    if (!tetromino.constructTetromino(game_board)) return false;
+    tetromino.activate();
+    game_sprite_board.colorTetromino(tetromino);
+    live_block = true;
+    return true;
 }

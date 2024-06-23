@@ -6,18 +6,12 @@ bool Tetromino::constructTetromino(Board& board) {
     expandPivot(rotation, new_blocks, board);
     for (size_t i = 0; i < new_blocks.size(); i++) {
         if (new_blocks[i]->isActive()) {
-            for (size_t j = 0; j < new_blocks.size(); j++) {
-                delete new_blocks[j];
-                new_blocks[j] = nullptr;
-            }
             return false;
         }
     }
     
     for (size_t i = 0; i < new_blocks.size(); i++) {
-        blocks[i] = board.getBlock(new_blocks[i]->getCol(), new_blocks[i]->getRow());
-        delete new_blocks[i];
-        new_blocks[i] = nullptr;
+        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getCol());
     }
     return true;
 }
@@ -215,4 +209,16 @@ std::array<Block*, 4> Tetromino::getBlocks() {
 
 sf::Color Tetromino::getColor() {
     return colo;
+}
+
+void Tetromino::reset() {
+    rotation = 0;
+    pivot = nullptr;
+    colo = sf::Color(-1,-1,-1);
+}
+
+void Tetromino::set(int rot, Block* piv, sf::Color color) {
+    rotation = rot;
+    pivot = piv;
+    colo = color;
 }
