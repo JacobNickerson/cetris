@@ -16,17 +16,15 @@ class Game {
         Board game_board;
         SpriteBoard game_sprite_board;
         GameState game_state;
-        bool live_block;
+        int score;
 
     public:
         Game() {
             game_state = GameState::Title;
-            live_block = false;
+            score = 0;
         }
 
         void run();
-
-        void playGame();
 
         // places the tetromino in the current position and spawns a new one at ()
         bool spawnTetromino(Tetromino& tetromino);
@@ -34,6 +32,13 @@ class Game {
         // places the tetromino in the current position and spawns one at a given coordinate
         bool spawnTetromino(Tetromino& tetromino, int row, int col);
 
+        void titleScreen(sf::RenderWindow& window);
+        
+        void playGame(sf::RenderWindow& window);
+
+        bool initializeSprites();
+
+        void reset();
 };
 
 #endif

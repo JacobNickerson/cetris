@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "tetromino.hpp"
+#include <string>
 
 static constexpr int SPRITE_BOARD_HEIGHT = 24;
 static constexpr int SPRITE_BOARD_WIDTH = 14;
@@ -10,6 +11,8 @@ static constexpr int SPRITE_BOARD_WIDTH = 14;
 class SpriteBoard {
     private:
         std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;
+        sf::Sprite score_box;
+        sf::Text score_text;
 
     public:
         // Constructor
@@ -31,10 +34,21 @@ class SpriteBoard {
         }
         
         // Initialize sprites with an sf::Texture
-        void initialize(sf::Texture& sprite_texture);
+        void initializeSpriteMatrix(sf::Texture& sprite_texture);
 
-        // returns a pointer to the sprite at a specific coordinate
-        sf::Sprite* getSprite(int row, int col);
+        void initializeScoreBox(sf::Texture& score_box_texture, sf::Font& score_box_font);
+
+        // returns the sprite at specific coordinates
+        sf::Sprite getBoardSprite(int row, int col);
+
+        // returns the score_box sprite
+        sf::Sprite getScoreBoxSprite();
+
+        // returns the score text
+        sf::Text getScoreText();
+
+        // changes score text
+        void setScoreText(int score);
 
         // returns width of board
         int getWidth();
@@ -43,6 +57,9 @@ class SpriteBoard {
         int getHeight();
 
         void colorTetromino(Tetromino& tetromino);
+
+        void updateScore(int score);
+
 };
 
 #endif

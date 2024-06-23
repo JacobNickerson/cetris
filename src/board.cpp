@@ -27,13 +27,13 @@ Block* Board::getBlock(int row, int colu) {
 }
 
 void Board::removeRow(int row) {
-    for (int i=1; i < BOARD_WIDTH-1; i++) {
+    for (int i=2; i < BOARD_WIDTH-2; i++) { // starts and ends +/- 2 due to two block thick boundary walls
         board_matrix[row][i]->deactivate();
     }
 }
 
 bool Board::rowIsFull(int row) {
-    for (int i = 1; i < BOARD_WIDTH-1; i++) {
+    for (int i = 2; i < BOARD_WIDTH-2; i++) {
         if (!board_matrix[row][i]->isActive()) {
             return false;
         }
