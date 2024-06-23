@@ -160,8 +160,8 @@ void Game::playGame(sf::RenderWindow& window) {
 
             // rendering
             window.clear();
-            for (int i = 2; i < game_sprite_board.getHeight(); i++) {
-                for (int j = 0; j < game_sprite_board.getWidth(); j++) {
+            for (int i = 2; i < game_sprite_board.getHeight()-1; i++) {
+                for (int j = 1; j < game_sprite_board.getWidth()-1; j++) {
                     if (game_board.getBlock(i, j)->isActive()) {
                         window.draw(game_sprite_board.getBoardSprite(i,j));
                     }
