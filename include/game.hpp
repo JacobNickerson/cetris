@@ -18,7 +18,7 @@ class Game {
 
     public:
         Game() {
-            game_state = GameState::GameRunning;
+            game_state = GameState::Title;
             live_block = false;
         }
 

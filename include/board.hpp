@@ -26,11 +26,11 @@ class Board {
                 board_matrix[r][0]->activate(sf::Color(0,0,0));
                 board_matrix[r][BOARD_WIDTH-1]->activate(sf::Color(0,0,0));
             }
-            // activate floor
+            // activate floor and ceiling
             for (int c = 0; c < BOARD_WIDTH; c++) {
                 board_matrix[BOARD_HEIGHT-1][c]->activate(sf::Color(0,0,0));
-                // temp activate ceiling
                 board_matrix[0][c]->activate(sf::Color(0,0,0));
+                board_matrix[1][c]->activate(sf::Color(0,0,0));
             }
             
         }

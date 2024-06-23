@@ -1,4 +1,5 @@
 #include "tetromino.hpp"
+#include <iostream>
 
 bool Tetromino::constructTetromino(Board& board) {
     std::array<Block*, 4> new_blocks = blocks;
@@ -38,27 +39,27 @@ bool Tetromino::rotateRight(Board& board) {
             for (size_t i = 0; i < new_blocks.size(); i++) {
                 delete new_blocks[i];
                 new_blocks[i] = nullptr;
-                blocks[i]->activate(colo);
             }
+            activate();
             return false;
         }
     }
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i]->deactivate();
+        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getCol());
+        blocks[i]->activate(colo);
     }
-    blocks = new_blocks;
     rotation = new_rotation;
-    for (size_t i = 0; i < new_blocks.size(); i++) {
-        new_blocks[i]->activate(colo);
-        delete new_blocks[i];
-        new_blocks[i] = nullptr;
-    }
+    // for (size_t i = 0; i < new_blocks.size(); i++) {
+    //     delete new_blocks[i];
+    //     new_blocks[i] = nullptr;
+    // }
+
     return true;
     
 }
 
 bool Tetromino::rotateLeft(Board& board) {
-    for (size_t i = 0; i < blocks.size(); i++) {
+    for (size_t i = 0; i < blocks.size(); i++) { // deactivate blocks to avoid collision detecting with itself
         blocks[i]->deactivate();
     }
     std::array<Block*, 4> new_blocks;
@@ -74,21 +75,21 @@ bool Tetromino::rotateLeft(Board& board) {
             for (size_t i = 0; i < new_blocks.size(); i++) {
                 delete new_blocks[i];
                 new_blocks[i] = nullptr;
-                blocks[i]->activate(colo);
             }
+            activate();
             return false;
         }
     }
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i]->deactivate();
+        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getCol());
+        blocks[i]->activate(colo);
     }
-    blocks = new_blocks;
     rotation = new_rotation;
-    for (size_t i = 0; i < new_blocks.size(); i++) {
-        new_blocks[i]->activate(colo);
-        delete new_blocks[i];
-        new_blocks[i] = nullptr;
-    }
+    // for (size_t i = 0; i < new_blocks.size(); i++) {
+    //     delete new_blocks[i];
+    //     new_blocks[i] = nullptr;
+    // }
+
     return true;
     
 }
@@ -104,7 +105,6 @@ bool Tetromino::up(Board& board) {
     }
     // move all blocks
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i]->deactivate();
         blocks[i] = board.getBlock(blocks[i]->getRow()-1, blocks[i]->getCol());
         blocks[i]->activate(colo);
     }
@@ -124,7 +124,6 @@ bool Tetromino::down(Board& board) {
     }
     // move all blocks
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i]->deactivate();
         blocks[i] = board.getBlock(blocks[i]->getRow()+1, blocks[i]->getCol());
         blocks[i]->activate(colo);
     }
@@ -147,7 +146,6 @@ bool Tetromino::left(Board& board) {
     }
     // move all blocks
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i]->deactivate();
         blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()-1);
         blocks[i]->activate(colo);
     }
@@ -169,8 +167,7 @@ bool Tetromino::right(Board& board) {
         }
     }
     // move all blocks
-    for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i]->deactivate();
+    for (size_t i = 0; i < blocks.size() ; i++) {
         blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()+1);
         blocks[i]->activate(colo);
     }
