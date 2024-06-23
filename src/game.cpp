@@ -31,10 +31,10 @@ void Game::run() {
                 start_rect.top  + start_rect.height/2.0f);
     press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
 
-    // Initializing our test matrix
+    // Initializing our sprite matrix
     sf::Texture block_texture;
     block_texture.loadFromFile("images/block.png");
-    std::array<std::array<sf::Sprite, 12>, 23> board_sprites;
+    std::array<std::array<sf::Sprite, 14>, 24> board_sprites;
     for (int i = 0; i < board_sprites.size(); i++) {
         for (int j = 0; j < board_sprites[0].size(); j++) {
             board_sprites[i][j].setTexture(block_texture);
@@ -116,7 +116,7 @@ void Game::run() {
             }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Home) && !live_block) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && !live_block) {
             testromino.movePivot(2,5,game_board);
             testromino.expandPivot(game_board);
             testromino.activate();

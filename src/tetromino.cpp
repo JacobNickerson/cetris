@@ -27,19 +27,14 @@ bool Tetromino::rotateRight(Board& board) {
         blocks[i]->deactivate();
     }
     std::array<Block*, 4> new_blocks;
-    int new_rotation;
-    if (rotation == 3) {
-        new_rotation = 0;
-    } else {
-        new_rotation = rotation+1;
-    }
+    int new_rotation = (rotation+1) % 4;
     expandPivot(new_rotation, new_blocks, board);
     for (Block* new_pBlock : new_blocks) {
         if (new_pBlock->isActive()) {
-            for (size_t i = 0; i < new_blocks.size(); i++) {
-                delete new_blocks[i];
-                new_blocks[i] = nullptr;
-            }
+            // for (size_t i = 0; i < new_blocks.size(); i++) {
+            //     delete new_blocks[i];
+            //     new_blocks[i] = nullptr;
+            // }
             activate();
             return false;
         }
@@ -63,19 +58,14 @@ bool Tetromino::rotateLeft(Board& board) {
         blocks[i]->deactivate();
     }
     std::array<Block*, 4> new_blocks;
-    int new_rotation;
-    if (rotation == 0) {
-        new_rotation = 3;
-    } else {
-        new_rotation = rotation-1;
-    }
+    int new_rotation = (rotation-1+4) % 4;
     expandPivot(new_rotation, new_blocks, board);
     for (Block* new_pBlock : new_blocks) {
         if (new_pBlock->isActive()) {
-            for (size_t i = 0; i < new_blocks.size(); i++) {
-                delete new_blocks[i];
-                new_blocks[i] = nullptr;
-            }
+            // for (size_t i = 0; i < new_blocks.size(); i++) {
+            //     delete new_blocks[i];
+            //     new_blocks[i] = nullptr;
+            // }
             activate();
             return false;
         }
