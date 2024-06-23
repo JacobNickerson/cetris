@@ -82,7 +82,7 @@ void Game::run() {
             } else if (event.type == sf::Event::KeyPressed && live_block) {
                 if (event.key.code == sf::Keyboard::S) {
                     if (!testromino.down(board)) {
-                        std::cout << "GAMING" << std::endl;
+                        std::cout << "GAMING" << std::endl;  // eventually this will be replaced with handling placement
                     }
                     for (Block* block : testromino.getBlocks()) {
                         board_sprites[block->getRow()][block->getCol()].setColor(testromino.getColor());

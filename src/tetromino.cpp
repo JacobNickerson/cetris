@@ -31,10 +31,6 @@ bool Tetromino::rotateRight(Board& board) {
     expandPivot(new_rotation, new_blocks, board);
     for (Block* new_pBlock : new_blocks) {
         if (new_pBlock->isActive()) {
-            // for (size_t i = 0; i < new_blocks.size(); i++) {
-            //     delete new_blocks[i];
-            //     new_blocks[i] = nullptr;
-            // }
             activate();
             return false;
         }
@@ -44,10 +40,6 @@ bool Tetromino::rotateRight(Board& board) {
         blocks[i]->activate(colo);
     }
     rotation = new_rotation;
-    // for (size_t i = 0; i < new_blocks.size(); i++) {
-    //     delete new_blocks[i];
-    //     new_blocks[i] = nullptr;
-    // }
 
     return true;
     
@@ -62,10 +54,6 @@ bool Tetromino::rotateLeft(Board& board) {
     expandPivot(new_rotation, new_blocks, board);
     for (Block* new_pBlock : new_blocks) {
         if (new_pBlock->isActive()) {
-            // for (size_t i = 0; i < new_blocks.size(); i++) {
-            //     delete new_blocks[i];
-            //     new_blocks[i] = nullptr;
-            // }
             activate();
             return false;
         }
@@ -75,10 +63,6 @@ bool Tetromino::rotateLeft(Board& board) {
         blocks[i]->activate(colo);
     }
     rotation = new_rotation;
-    // for (size_t i = 0; i < new_blocks.size(); i++) {
-    //     delete new_blocks[i];
-    //     new_blocks[i] = nullptr;
-    // }
 
     return true;
     
