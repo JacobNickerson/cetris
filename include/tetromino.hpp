@@ -10,13 +10,11 @@
 
 
 class Tetromino {
-    private:
+    protected:
         std::array<Block*, 4> blocks;
         Block* pivot;
         int rotation; // this is kinda scuffed, perhaps that enum thing would be better
-        
-    protected:
-        const std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions = {{
+        std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions = {{
                 // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
                 // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
                 // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
@@ -25,10 +23,6 @@ class Tetromino {
                 { {{-1,0}, {0,0}, {1,0}, {0,1}} },
                 { {{0,-1}, {0,0}, {1,0}, {0,1}} },
                 { {{-1,0}, {0,0}, {1,0}, {0,-1}} },
-                // { {{0, -1}, {0, 0}, {0, 1}, {0, 2}} },
-                // { {{-1, 0}, {0, 0}, {1, 0}, {2, 0}} },
-                // { {{0, -2}, {0, -1}, {0, 0}, {0, 1}} },
-                // { {{-2, 0}, {-1, 0}, {0, 0}, {1, 0}} }
         }};
         sf::Color colo;
 

@@ -70,8 +70,15 @@ void Game::run() {
     game_sprite_board.initializeScoreBox(score_box_texture, game_font);
 
     // spawning a tetromino
-    Tetromino example_tetromino = I_Tetromino();
-    Tetromino* tetropointer = &example_tetromino; 
+    std::vector<Tetromino*> tetrominos;
+    I_Tetromino example_tetromino = I_Tetromino();
+    Tetromino* tetropointer = &example_tetromino;
+    tetrominos.push_back(tetropointer);
+    L_Tetromino example_tetromino2 = L_Tetromino();
+    Tetromino* tetropointer2 = &example_tetromino2;
+    tetrominos.push_back(tetropointer2);
+    tetropointer = tetrominos[0];
+
 
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
