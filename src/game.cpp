@@ -1,8 +1,7 @@
-#include "game.hpp"
-#include <array>
 #include "block.hpp"
-#include "tetromino.hpp"
-#include "L_tetromino.hpp"
+#include "game.hpp"
+#include "tetromino_types.hpp"
+#include <array>
 #include <iostream>
 
 void Game::run() {
