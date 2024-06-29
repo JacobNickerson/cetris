@@ -28,6 +28,27 @@ void Game::run() {
                 start_rect.top  + start_rect.height/2.0f);
     press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
 
+    // Initializing endscreen with our specified font
+    sf::Text end_text;
+    end_text.setFont(game_font);
+    end_text.setString("Game Over!");
+    end_text.setCharacterSize(100);
+    end_text.setFillColor(sf::Color::White);
+
+    // center text
+    sf::FloatRect end_text_rect = end_text.getLocalBounds();
+    end_text.setOrigin(end_text_rect.left + end_text_rect.width/2.0f,
+                end_text_rect.top  + end_text_rect.height/2.0f);
+    end_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f));
+
+    sf::Text end_score = end_text;
+    end_score.setString("You Scored: 0 Points");
+    end_score.setCharacterSize(50);
+    sf::FloatRect end_rect = end_score.getLocalBounds();
+    end_score.setOrigin(end_rect.left + end_rect.width/2.0f,
+                end_rect.top  + end_rect.height/2.0f);
+    end_score.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
+
     // Initializing our sprite texture
     sf::Texture block_texture;
     if (!block_texture.loadFromFile("images/block.png")) {
@@ -65,13 +86,12 @@ void Game::run() {
         }
 
         while (window.isOpen() && game_state == GameState::GameRunning) {
-            std::cout << "play" << std::endl;
             playGame(window, tetropointer);
         }
 
         while (window.isOpen() && game_state == GameState::GameOver) {
-            // wip
             std::cout << "GAME OVER MAN" << std::endl;
+            endScreen(window, end_text, end_score);
             reset();
         }
     }
@@ -179,4 +199,26 @@ void Game::reset() {
     game_sprite_board.reset();
     game_state = GameState::Title;
     score = 0;
+}
+
+void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score) {
+    end_score.setString("You Scored: " + std::to_string(score));
+    while (window.isOpen() && game_state == GameState::GameOver) {
+        sf::Event event;
+
+        // pollEvent pops any new events off the event stack and breaks when empty
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) { 
+                window.close(); 
+            }
+            if (event.type == sf::Event::KeyPressed) {
+                game_state = GameState::Title;
+            }
+        }
+        
+        window.clear();
+        window.draw(end_text);
+        window.draw(end_score);
+        window.display();
+    }
 }

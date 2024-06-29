@@ -41,6 +41,8 @@ class Game {
         bool initializeSprites();
 
         void reset();
+
+        void endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score);
 };
 
 #endif

@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "tetromino.hpp"
-#include <string>
 
 static constexpr int SPRITE_BOARD_HEIGHT = 24;
 static constexpr int SPRITE_BOARD_WIDTH = 14;
