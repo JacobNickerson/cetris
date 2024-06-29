@@ -7,6 +7,27 @@
 void Game::run() {
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Cetris");
 
+    // Initializing title with our specified font
+    sf::Text title;
+    title.setFont(game_font);
+    title.setString("Cetris!");
+    title.setCharacterSize(100);
+    title.setFillColor(sf::Color::White);
+
+    // center text
+    sf::FloatRect textRect = title.getLocalBounds();
+    title.setOrigin(textRect.left + textRect.width/2.0f,
+                textRect.top  + textRect.height/2.0f);
+    title.setPosition(sf::Vector2f(1600/2.0f,900/2.0f));
+
+    sf::Text press_to_start_message = title;
+    press_to_start_message.setString("Press any key to start");
+    press_to_start_message.setCharacterSize(50);
+    sf::FloatRect start_rect = press_to_start_message.getLocalBounds();
+    press_to_start_message.setOrigin(start_rect.left + start_rect.width/2.0f,
+                start_rect.top  + start_rect.height/2.0f);
+    press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
+
     // Initializing our sprite texture
     sf::Texture block_texture;
     if (!block_texture.loadFromFile("images/block.png")) {
@@ -34,14 +55,18 @@ void Game::run() {
     // Initializing our scoreboard
     game_sprite_board.initializeScoreBox(score_box_texture, game_font);
 
+    // spawning a tetromino
+    I_Tetromino example_tetromino;
+    I_Tetromino* tetropointer = &example_tetromino; 
+
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
-            titleScreen(window);
+            titleScreen(window, title, press_to_start_message);
         }
 
         while (window.isOpen() && game_state == GameState::GameRunning) {
             std::cout << "play" << std::endl;
-            playGame(window);
+            playGame(window, tetropointer);
         }
 
         while (window.isOpen() && game_state == GameState::GameOver) {
@@ -69,30 +94,7 @@ bool Game::spawnTetromino(Tetromino* tetromino, int row, int col) {
     return true;
 }
 
-void Game::titleScreen(sf::RenderWindow& window) {
-    // Initializing title with our specified font
-    sf::Text title;
-    sf::Font font;
-    font.loadFromFile("./fonts/tetris-font.ttf");
-    title.setFont(font);
-    title.setString("Cetris!");
-    title.setCharacterSize(100);
-    title.setFillColor(sf::Color::White);
-
-    // center text
-    sf::FloatRect textRect = title.getLocalBounds();
-    title.setOrigin(textRect.left + textRect.width/2.0f,
-                textRect.top  + textRect.height/2.0f);
-    title.setPosition(sf::Vector2f(1600/2.0f,900/2.0f));
-
-    sf::Text press_to_start_message = title;
-    press_to_start_message.setString("Press any key to start");
-    press_to_start_message.setCharacterSize(50);
-    sf::FloatRect start_rect = press_to_start_message.getLocalBounds();
-    press_to_start_message.setOrigin(start_rect.left + start_rect.width/2.0f,
-                start_rect.top  + start_rect.height/2.0f);
-    press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
-
+void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message) {
     while (window.isOpen() && game_state == GameState::Title) {
         sf::Event event;
 
@@ -113,64 +115,61 @@ void Game::titleScreen(sf::RenderWindow& window) {
     }
 }
 
-void Game::playGame(sf::RenderWindow& window) {
-    // spawning a tetromino
-    I_Tetromino example_tetromino;
-    I_Tetromino* tetropointer = &example_tetromino; 
+void Game::playGame(sf::RenderWindow& window, Tetromino* tetropointer) {
+    // moving our tetromino to the correct spawn location and generating its blocks
     spawnTetromino(tetropointer);
 
-
-        while (window.isOpen() && game_state == GameState::GameRunning) {
-            // User Inputs
-            sf::Event event;
-                while (window.pollEvent(event)) {
-                    if (event.type == sf::Event::Closed) { 
-                        window.close(); 
-                    } else if (event.type == sf::Event::KeyPressed) {
-                        switch (event.key.code) {
-                            case sf::Keyboard::S: 
-                                if (!tetropointer->down(game_board)) {
-                                    game_board.checkPlacement(tetropointer->getBlocks());
-                                    if (!spawnTetromino(tetropointer)) {
-                                        game_state = GameState::GameOver;
-                                        return;
-                                    }
-                                    break;
+    while (window.isOpen() && game_state == GameState::GameRunning) {
+        // User Inputs
+        sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) { 
+                    window.close(); 
+                } else if (event.type == sf::Event::KeyPressed) {
+                    switch (event.key.code) {
+                        case sf::Keyboard::S: 
+                            if (!tetropointer->down(game_board)) {
+                                game_board.checkPlacement(tetropointer->getBlocks());
+                                if (!spawnTetromino(tetropointer)) {
+                                    game_state = GameState::GameOver;
+                                    return;
                                 }
-                                game_sprite_board.colorTetromino(tetropointer);
                                 break;
-                            case sf::Keyboard::A:
-                                tetropointer->left(game_board);
-                                game_sprite_board.colorTetromino(tetropointer);
-                                break;
-                            case sf::Keyboard::D:
-                                tetropointer->right(game_board);
-                                game_sprite_board.colorTetromino(tetropointer);
-                                break;
-                            case sf::Keyboard::Q:
-                                tetropointer->rotateLeft(game_board);
-                                game_sprite_board.colorTetromino(tetropointer);
-                                break;
-                            case sf::Keyboard::E:
-                                tetropointer->rotateRight(game_board);
-                                game_sprite_board.colorTetromino(tetropointer);
-                                break;
-                        }
-                    }
-                }
-
-            // rendering
-            window.clear();
-            for (int i = 2; i < game_sprite_board.getHeight()-1; i++) {
-                for (int j = 1; j < game_sprite_board.getWidth()-1; j++) {
-                    if (game_board.getBlock(i, j)->isActive()) {
-                        window.draw(game_sprite_board.getBoardSprite(i,j));
+                            }
+                            game_sprite_board.colorTetromino(tetropointer);
+                            break;
+                        case sf::Keyboard::A:
+                            tetropointer->left(game_board);
+                            game_sprite_board.colorTetromino(tetropointer);
+                            break;
+                        case sf::Keyboard::D:
+                            tetropointer->right(game_board);
+                            game_sprite_board.colorTetromino(tetropointer);
+                            break;
+                        case sf::Keyboard::Q:
+                            tetropointer->rotateLeft(game_board);
+                            game_sprite_board.colorTetromino(tetropointer);
+                            break;
+                        case sf::Keyboard::E:
+                            tetropointer->rotateRight(game_board);
+                            game_sprite_board.colorTetromino(tetropointer);
+                            break;
                     }
                 }
             }
-            window.draw(game_sprite_board.getScoreBoxSprite());
-            window.draw(game_sprite_board.getScoreText());
-            window.display();
+
+        // rendering
+        window.clear();
+        for (int i = 2; i < game_sprite_board.getHeight()-1; i++) {
+            for (int j = 1; j < game_sprite_board.getWidth()-1; j++) {
+                if (game_board.getBlock(i, j)->isActive()) {
+                    window.draw(game_sprite_board.getBoardSprite(i,j));
+                }
+            }
+        }
+        window.draw(game_sprite_board.getScoreBoxSprite());
+        window.draw(game_sprite_board.getScoreText());
+        window.display();
     }
 }
 

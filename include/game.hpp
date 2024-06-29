@@ -16,11 +16,13 @@ class Game {
         Board game_board;
         SpriteBoard game_sprite_board;
         GameState game_state;
+        sf::Font game_font;
         int score;
 
     public:
         Game() {
             game_state = GameState::Title;
+            game_font.loadFromFile("./fonts/tetris-font.ttf");
             score = 0;
         }
 
@@ -32,9 +34,9 @@ class Game {
         // places the tetromino in the current position and spawns one at a given coordinate
         bool spawnTetromino(Tetromino* tetromino, int row, int col);
 
-        void titleScreen(sf::RenderWindow& window);
+        void titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message);
         
-        void playGame(sf::RenderWindow& window);
+        void playGame(sf::RenderWindow& window, Tetromino* tetropointer);
 
         bool initializeSprites();
 
