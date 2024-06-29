@@ -63,13 +63,6 @@ void Game::run() {
         return;
     }    
 
-    // Initializing the game's font
-    sf::Font game_font;
-    if (!game_font.loadFromFile("fonts/tetris-font.ttf")) {
-        std::cout << "FONT FAILED TO LOAD" << std::endl;
-        return;
-    }
-
     // Initializing our sprite board
     game_sprite_board.initializeSpriteMatrix(block_texture);
 
@@ -77,8 +70,8 @@ void Game::run() {
     game_sprite_board.initializeScoreBox(score_box_texture, game_font);
 
     // spawning a tetromino
-    I_Tetromino example_tetromino;
-    I_Tetromino* tetropointer = &example_tetromino; 
+    Tetromino example_tetromino = I_Tetromino();
+    Tetromino* tetropointer = &example_tetromino; 
 
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
@@ -174,6 +167,16 @@ void Game::playGame(sf::RenderWindow& window, Tetromino* tetropointer) {
                         case sf::Keyboard::E:
                             tetropointer->rotateRight(game_board);
                             game_sprite_board.colorTetromino(tetropointer);
+                            break;
+                        case sf::Keyboard::Space:
+                            tetropointer->hardDrop(game_board);
+                            game_sprite_board.colorTetromino(tetropointer);
+                            score += game_board.checkPlacement(tetropointer->getBlocks());
+                            game_sprite_board.setScoreText(score);
+                            if (!spawnTetromino(tetropointer)) {
+                                game_state = GameState::GameOver;
+                                return;
+                            }
                             break;
                     }
                 }

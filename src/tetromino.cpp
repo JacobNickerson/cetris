@@ -145,25 +145,24 @@ bool Tetromino::right(Board& board) {
 }
 
 bool Tetromino::hardDrop(Board& board) {
+    deactivate();
     int drop_dist = ghostPosition(board);
     if (drop_dist == 0) {
+        activate();
         return false;
     }
-    for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i]->deactivate();
-        blocks[i] = board.getBlock(blocks[i]->getRow()+drop_dist, blocks[i]->getCol());
-        blocks[i]->activate(colo);
-    }
     pivot = board.getBlock(pivot->getRow()+drop_dist, pivot->getCol());
+    expandPivot(board);
+    activate();
     return true;
 }
 
 int Tetromino::ghostPosition(Board& board) { // probably a faster way to do this
-    int min_dist = 0;
+    int min_dist = 1000;
     for (size_t i = 0; i < blocks.size(); i++) {
         int row_init = blocks[i]->getRow();
         int j = row_init;
-        while (!board.getBlock(j, blocks[i]->getCol())) {
+        while (!board.getBlock(j, blocks[i]->getCol())->isActive()) {
             j++;
         }
         min_dist = std::min(min_dist, j-row_init-1);
