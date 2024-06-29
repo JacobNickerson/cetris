@@ -53,19 +53,19 @@ void Game::run() {
     }
 }
 
-bool Game::spawnTetromino(Tetromino& tetromino) {
-    tetromino.reset();
-    tetromino.set(0, game_board.getBlock(2,6), sf::Color(0,255,255));
-    if (!tetromino.constructTetromino(game_board)) return false;
-    tetromino.activate();
+bool Game::spawnTetromino(Tetromino* tetromino) {
+    tetromino->reset();
+    tetromino->set(0, game_board.getBlock(2,6), sf::Color(0,255,255));
+    if (!tetromino->constructTetromino(game_board)) return false;
+    tetromino->activate();
     game_sprite_board.colorTetromino(tetromino);
     return true;
 }
 
-bool Game::spawnTetromino(Tetromino& tetromino, int row, int col) {
-    tetromino.movePivot(row, col,game_board);
-    if (!tetromino.constructTetromino(game_board)) return false;
-    tetromino.activate();
+bool Game::spawnTetromino(Tetromino* tetromino, int row, int col) {
+    tetromino->movePivot(row, col,game_board);
+    if (!tetromino->constructTetromino(game_board)) return false;
+    tetromino->activate();
     game_sprite_board.colorTetromino(tetromino);
     return true;
 }
@@ -116,8 +116,10 @@ void Game::titleScreen(sf::RenderWindow& window) {
 
 void Game::playGame(sf::RenderWindow& window) {
     // spawning a tetromino
-    Tetromino live_tetromino(sf::Color(255, 0, 255));
-    spawnTetromino(live_tetromino);
+    Tetromino example_tetromino(sf::Color(255, 0, 255));
+    Tetromino* tetropointer = &example_tetromino; 
+    spawnTetromino(tetropointer);
+
 
         while (window.isOpen() && game_state == GameState::GameRunning) {
             // User Inputs
@@ -128,31 +130,31 @@ void Game::playGame(sf::RenderWindow& window) {
                     } else if (event.type == sf::Event::KeyPressed) {
                         switch (event.key.code) {
                             case sf::Keyboard::S: 
-                                if (!live_tetromino.down(game_board)) {
-                                    game_board.checkPlacement(live_tetromino.getBlocks());
-                                    if (!spawnTetromino(live_tetromino)) {
+                                if (!tetropointer->down(game_board)) {
+                                    game_board.checkPlacement(tetropointer->getBlocks());
+                                    if (!spawnTetromino(tetropointer)) {
                                         game_state = GameState::GameOver;
                                         return;
                                     }
                                     break;
                                 }
-                                game_sprite_board.colorTetromino(live_tetromino);
+                                game_sprite_board.colorTetromino(tetropointer);
                                 break;
                             case sf::Keyboard::A:
-                                live_tetromino.left(game_board);
-                                game_sprite_board.colorTetromino(live_tetromino);
+                                tetropointer->left(game_board);
+                                game_sprite_board.colorTetromino(tetropointer);
                                 break;
                             case sf::Keyboard::D:
-                                live_tetromino.right(game_board);
-                                game_sprite_board.colorTetromino(live_tetromino);
+                                tetropointer->right(game_board);
+                                game_sprite_board.colorTetromino(tetropointer);
                                 break;
                             case sf::Keyboard::Q:
-                                live_tetromino.rotateLeft(game_board);
-                                game_sprite_board.colorTetromino(live_tetromino);
+                                tetropointer->rotateLeft(game_board);
+                                game_sprite_board.colorTetromino(tetropointer);
                                 break;
                             case sf::Keyboard::E:
-                                live_tetromino.rotateRight(game_board);
-                                game_sprite_board.colorTetromino(live_tetromino);
+                                tetropointer->rotateRight(game_board);
+                                game_sprite_board.colorTetromino(tetropointer);
                                 break;
                         }
                     }

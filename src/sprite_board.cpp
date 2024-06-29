@@ -54,8 +54,8 @@ int SpriteBoard::getHeight() {
     return sprite_board_matrix.size();
 }
 
-void SpriteBoard::colorTetromino(Tetromino& tetromino) {
-    for (Block* block : tetromino.getBlocks()) {
-        sprite_board_matrix[block->getRow()][block->getCol()]->setColor(tetromino.getColor());
+void SpriteBoard::colorTetromino(Tetromino* tetromino) {
+    for (Block* block : tetromino->getBlocks()) {
+        sprite_board_matrix[block->getRow()][block->getCol()]->setColor(tetromino->getColor());
     }
 }

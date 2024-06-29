@@ -56,7 +56,7 @@ class SpriteBoard {
         // returns height of board
         int getHeight();
 
-        void colorTetromino(Tetromino& tetromino);
+        void colorTetromino(Tetromino* tetromino);
 
         void updateScore(int score);
 

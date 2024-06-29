@@ -27,10 +27,10 @@ class Game {
         void run();
 
         // places the tetromino in the current position and spawns a new one at ()
-        bool spawnTetromino(Tetromino& tetromino);
+        bool spawnTetromino(Tetromino* tetromino);
 
         // places the tetromino in the current position and spawns one at a given coordinate
-        bool spawnTetromino(Tetromino& tetromino, int row, int col);
+        bool spawnTetromino(Tetromino* tetromino, int row, int col);
 
         void titleScreen(sf::RenderWindow& window);
         
