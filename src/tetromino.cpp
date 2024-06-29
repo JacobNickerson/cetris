@@ -214,11 +214,9 @@ sf::Color Tetromino::getColor() {
 void Tetromino::reset() {
     rotation = 0;
     pivot = nullptr;
-    colo = sf::Color(-1,-1,-1);
 }
 
-void Tetromino::set(int rot, Block* piv, sf::Color color) {
+void Tetromino::set(int rot, Block* piv) {
     rotation = rot;
     pivot = piv;
-    colo = color;
 }

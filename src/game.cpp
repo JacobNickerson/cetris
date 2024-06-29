@@ -54,7 +54,7 @@ void Game::run() {
 
 bool Game::spawnTetromino(Tetromino* tetromino) {
     tetromino->reset();
-    tetromino->set(0, game_board.getBlock(2,6), sf::Color(0,255,255));
+    tetromino->movePivot(2,6, game_board);
     if (!tetromino->constructTetromino(game_board)) return false;
     tetromino->activate();
     game_sprite_board.colorTetromino(tetromino);
@@ -62,7 +62,7 @@ bool Game::spawnTetromino(Tetromino* tetromino) {
 }
 
 bool Game::spawnTetromino(Tetromino* tetromino, int row, int col) {
-    tetromino->movePivot(row, col,game_board);
+    tetromino->movePivot(row, col, game_board);
     if (!tetromino->constructTetromino(game_board)) return false;
     tetromino->activate();
     game_sprite_board.colorTetromino(tetromino);
@@ -115,8 +115,8 @@ void Game::titleScreen(sf::RenderWindow& window) {
 
 void Game::playGame(sf::RenderWindow& window) {
     // spawning a tetromino
-    Tetromino example_tetromino(sf::Color(255, 0, 255));
-    Tetromino* tetropointer = &example_tetromino; 
+    I_Tetromino example_tetromino;
+    I_Tetromino* tetropointer = &example_tetromino; 
     spawnTetromino(tetropointer);
 
 

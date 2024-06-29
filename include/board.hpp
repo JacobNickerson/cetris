@@ -65,6 +65,7 @@ class Board {
         // checks tetromino placement for completed rows, removes completed rows, WIP: move rows down
         void checkPlacement(std::array<Block*, 4> blocks);
 
+        void pullBlocksDown(int& row);
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include <array>
 #include <utility>
+#include <iostream>
 
 #include "block.hpp"
 #include "board.hpp"
@@ -13,11 +14,17 @@ class Tetromino {
         std::array<Block*, 4> blocks;
         Block* pivot;
         int rotation; // this is kinda scuffed, perhaps that enum thing would be better
+        
+    protected:
         const std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions = {{
                 // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
                 // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
                 // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
                 // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} }
+                // { {{0,-1}, {0,0}, {-1,0}, {0,1}} },
+                // { {{-1,0}, {0,0}, {1,0}, {0,1}} },
+                // { {{0,-1}, {0,0}, {1,0}, {0,1}} },
+                // { {{-1,0}, {0,0}, {1,0}, {0,-1}} },
                 { {{0, -1}, {0, 0}, {0, 1}, {0, 2}} },
                 { {{-1, 0}, {0, 0}, {1, 0}, {2, 0}} },
                 { {{0, -2}, {0, -1}, {0, 0}, {0, 1}} },
@@ -25,9 +32,8 @@ class Tetromino {
         }};
         sf::Color colo;
 
-
     public:
-        Tetromino() : rotation(0), colo(sf::Color(0,0,0)) {
+        Tetromino() : rotation(0), colo(sf::Color(255,0,0)) {
             for (size_t i = 0; i < blocks.size(); i++) {
                 blocks[i] = nullptr;
             }
@@ -62,11 +68,11 @@ class Tetromino {
 
         // Attempts to rotate the tetromino 90 degrees to the right.
         // Returns true if success, false if not.
-        bool rotateRight(Board& board);
+        virtual bool rotateRight(Board& board);
 
         // Attempts to rotate the tetromino 90 degrees to the left.
         // Returns true if success, false if not.
-        bool rotateLeft(Board& board);
+        virtual bool rotateLeft(Board& board);
 
         // Moves the tetromino up.  (Would this really get used?)
         // Returns true if success, false if not.
@@ -96,8 +102,8 @@ class Tetromino {
 
         // Generates the tetrominos current orientation on the board according to its
         // orientation and pivot point location
-        void expandPivot(Board& board);
-        void expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks, Board& board);
+        virtual void expandPivot(Board& board);
+        virtual void expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks, Board& board);
 
         // Activates all the blocks in a tetromino
         void activate();
@@ -114,8 +120,8 @@ class Tetromino {
         // sets a tetromino to default rotation, no pivot point, and no color
         void reset();
 
-        // sets a tetromino to have a specified rotation, a specified pivot point, and a specified color
-        void set(int rot, Block* pivot, sf::Color color);
+        // sets a tetromino to have a specified rotation, a specified pivot point
+        void set(int rot, Block* pivot);
 };
 
 #endif

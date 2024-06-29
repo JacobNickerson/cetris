@@ -16,8 +16,8 @@ class Block {
         // Constructor
         Block(int x, int y) : colu(x), row(y) {};
 
-        // "Activates" the block and assigns it a color.
-        void activate(sf::Color colo);
+        // "Activates" the block
+        void activate(sf::Color);
 
         // Deactivates the block and removes its color.
         void deactivate();

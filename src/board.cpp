@@ -1,4 +1,5 @@
 #include "board.hpp"
+#include <iostream>
 
 
 void Board::reset() {
@@ -51,6 +52,19 @@ void Board::checkPlacement(std::array<Block*, 4> blocks) {
     for (int row : rows) {
         if (rowIsFull(row)) {
             removeRow(row);
+            std::cout << row << std::endl;
+            pullBlocksDown(row);
+        }
+    }
+}
+
+void Board::pullBlocksDown(int& row) {
+    for (int r = row-1; r >= 2; r--) {
+        for (int c = 2; c < BOARD_WIDTH-2; c++) {
+            if (board_matrix[r][c]->isActive()) {
+                board_matrix[r][c]->deactivate();
+                board_matrix[r+1][c]->activate(sf::Color(0,0,0));
+            }
         }
     }
 }
