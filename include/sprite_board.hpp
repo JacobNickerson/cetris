@@ -58,8 +58,7 @@ class SpriteBoard {
 
         void colorTetromino(Tetromino* tetromino);
 
-        void updateScore(int score);
-
+        void reset();
 };
 
 #endif

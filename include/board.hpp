@@ -62,8 +62,9 @@ class Board {
         // does what it says on the tin
         bool rowIsFull(int row);
 
-        // checks tetromino placement for completed rows, removes completed rows, WIP: move rows down
-        void checkPlacement(std::array<Block*, 4> blocks);
+        // checks tetromino placement for completed rows, removes completed rows
+        // return an integer, 0 if no rows cleared otherwise returns points to add to score
+        int checkPlacement(std::array<Block*, 4> blocks);
 
         void pullBlocksDown(int& row);
 };

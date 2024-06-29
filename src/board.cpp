@@ -42,8 +42,9 @@ bool Board::rowIsFull(int row) {
     return true;
 }
 
-void Board::checkPlacement(std::array<Block*, 4> blocks) {
+int Board::checkPlacement(std::array<Block*, 4> blocks) {
     std::vector<int> rows;
+    int rows_cleared = 0;
     for (Block* block : blocks) {
         if (std::find(rows.begin(), rows.end(), block->getRow()) == rows.end()) {
             rows.push_back(block->getRow());
@@ -52,10 +53,23 @@ void Board::checkPlacement(std::array<Block*, 4> blocks) {
     for (int row : rows) {
         if (rowIsFull(row)) {
             removeRow(row);
-            std::cout << row << std::endl;
             pullBlocksDown(row);
+            rows_cleared++;
         }
     }
+    switch (rows_cleared) {
+        case 0:
+            return 0;
+        case 1:
+            return 100;
+        case 2:
+            return 300;
+        case 3:
+            return 500;
+        case 4:
+            return 800;
+    }
+    return 0;
 }
 
 void Board::pullBlocksDown(int& row) {

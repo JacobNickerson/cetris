@@ -17,7 +17,7 @@ void SpriteBoard::initializeScoreBox(sf::Texture& score_box_texture, sf::Font& s
     score_box.setScale(sf::Vector2f(0.5,0.5));
     score_box.setPosition(sf::Vector2f(744, 109.0));
     
-    score_text.setString("1000");
+    score_text.setString("0");
     score_text.setFont(score_box_font);
     score_text.setFillColor(sf::Color::White);
     score_text.setCharacterSize(50);
@@ -58,4 +58,8 @@ void SpriteBoard::colorTetromino(Tetromino* tetromino) {
     for (Block* block : tetromino->getBlocks()) {
         sprite_board_matrix[block->getRow()][block->getCol()]->setColor(tetromino->getColor());
     }
+}
+
+void SpriteBoard::reset() {  // to chris: remember when you said you made a function that calls another function at your internship?
+    setScoreText(0);
 }

@@ -129,7 +129,8 @@ void Game::playGame(sf::RenderWindow& window, Tetromino* tetropointer) {
                     switch (event.key.code) {
                         case sf::Keyboard::S: 
                             if (!tetropointer->down(game_board)) {
-                                game_board.checkPlacement(tetropointer->getBlocks());
+                                score += game_board.checkPlacement(tetropointer->getBlocks());
+                                game_sprite_board.setScoreText(score);
                                 if (!spawnTetromino(tetropointer)) {
                                     game_state = GameState::GameOver;
                                     return;
@@ -175,6 +176,7 @@ void Game::playGame(sf::RenderWindow& window, Tetromino* tetropointer) {
 
 void Game::reset() {
     game_board.reset();
+    game_sprite_board.reset();
     game_state = GameState::Title;
     score = 0;
 }
