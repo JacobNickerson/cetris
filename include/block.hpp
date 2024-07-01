@@ -26,10 +26,13 @@ class Block {
         int getRow();
 
         // returns y coord
-        int getCol();
+        int getColu();
 
         // returns exactly what you'd think
         bool isActive();
+
+        // returns exactly what you'd think
+        sf::Color getColo();
 };
 
 #endif

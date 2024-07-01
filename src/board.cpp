@@ -76,8 +76,8 @@ void Board::pullBlocksDown(int& row) {
     for (int r = row-1; r >= 2; r--) {
         for (int c = 2; c < BOARD_WIDTH-2; c++) {
             if (board_matrix[r][c]->isActive()) {
+                board_matrix[r+1][c]->activate(board_matrix[r][c]->getColo());
                 board_matrix[r][c]->deactivate();
-                board_matrix[r+1][c]->activate(sf::Color(0,0,0));
             }
         }
     }

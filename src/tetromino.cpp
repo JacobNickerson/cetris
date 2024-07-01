@@ -11,7 +11,7 @@ bool Tetromino::constructTetromino(Board& board) {
     }
     
     for (size_t i = 0; i < new_blocks.size(); i++) {
-        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getCol());
+        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getColu());
     }
     return true;
 }
@@ -30,7 +30,7 @@ bool Tetromino::rotateRight(Board& board) {
         }
     }
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getCol());
+        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getColu());
         blocks[i]->activate(colo);
     }
     rotation = new_rotation;
@@ -53,7 +53,7 @@ bool Tetromino::rotateLeft(Board& board) {
         }
     }
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getCol());
+        blocks[i] = board.getBlock(new_blocks[i]->getRow(), new_blocks[i]->getColu());
         blocks[i]->activate(colo);
     }
     rotation = new_rotation;
@@ -66,18 +66,18 @@ bool Tetromino::up(Board& board) {
     deactivate();
     // check for collisions
     for (size_t i = 0; i < blocks.size(); i++) {
-        if (board.getBlock(blocks[i]->getRow()-1, blocks[i]->getCol())->isActive()) {
+        if (board.getBlock(blocks[i]->getRow()-1, blocks[i]->getColu())->isActive()) {
             activate();
             return false;
         }
     }
     // move all blocks
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i] = board.getBlock(blocks[i]->getRow()-1, blocks[i]->getCol());
+        blocks[i] = board.getBlock(blocks[i]->getRow()-1, blocks[i]->getColu());
         blocks[i]->activate(colo);
     }
     // move pivot
-    movePivot(pivot->getRow()-1, pivot->getCol(), board);
+    movePivot(pivot->getRow()-1, pivot->getColu(), board);
     return true;
 }
 
@@ -85,18 +85,18 @@ bool Tetromino::down(Board& board) {
     deactivate();
     // check for collisions
     for (size_t i = 0; i < blocks.size(); i++) {
-        if (board.getBlock(blocks[i]->getRow()+1, blocks[i]->getCol())->isActive()) {
+        if (board.getBlock(blocks[i]->getRow()+1, blocks[i]->getColu())->isActive()) {
             activate();
             return false;
         }
     }
     // move all blocks
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i] = board.getBlock(blocks[i]->getRow()+1, blocks[i]->getCol());
+        blocks[i] = board.getBlock(blocks[i]->getRow()+1, blocks[i]->getColu());
         blocks[i]->activate(colo);
     }
     // move pivot
-    movePivot(pivot->getRow()+1, pivot->getCol(), board);
+    movePivot(pivot->getRow()+1, pivot->getColu(), board);
     return true;
 }
 
@@ -107,18 +107,18 @@ bool Tetromino::left(Board& board) {
     // check for collisions
 
     for (size_t i = 0; i < blocks.size(); i++) {
-        if (board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()-1)->isActive()) {
+        if (board.getBlock(blocks[i]->getRow(), blocks[i]->getColu()-1)->isActive()) {
             activate();
             return false;
         }
     }
     // move all blocks
     for (size_t i = 0; i < blocks.size(); i++) {
-        blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()-1);
+        blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getColu()-1);
         blocks[i]->activate(colo);
     }
     // move pivot
-    movePivot(pivot->getRow(), pivot->getCol()-1, board);
+    movePivot(pivot->getRow(), pivot->getColu()-1, board);
     return true;
 }
 
@@ -129,18 +129,18 @@ bool Tetromino::right(Board& board) {
     // check for collisions
 
     for (size_t i = 0; i < blocks.size(); i++) {
-        if (board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()+1)->isActive()) {
+        if (board.getBlock(blocks[i]->getRow(), blocks[i]->getColu()+1)->isActive()) {
             activate();
             return false;
         }
     }
     // move all blocks
     for (size_t i = 0; i < blocks.size() ; i++) {
-        blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getCol()+1);
+        blocks[i] = board.getBlock(blocks[i]->getRow(), blocks[i]->getColu()+1);
         blocks[i]->activate(colo);
     }
     // move pivot
-    movePivot(pivot->getRow(), pivot->getCol()+1, board);
+    movePivot(pivot->getRow(), pivot->getColu()+1, board);
     return true;
 }
 
@@ -151,7 +151,7 @@ bool Tetromino::hardDrop(Board& board) {
         activate();
         return false;
     }
-    pivot = board.getBlock(pivot->getRow()+drop_dist, pivot->getCol());
+    pivot = board.getBlock(pivot->getRow()+drop_dist, pivot->getColu());
     expandPivot(board);
     activate();
     return true;
@@ -162,7 +162,7 @@ int Tetromino::ghostPosition(Board& board) { // probably a faster way to do this
     for (size_t i = 0; i < blocks.size(); i++) {
         int row_init = blocks[i]->getRow();
         int j = row_init;
-        while (!board.getBlock(j, blocks[i]->getCol())->isActive()) {
+        while (!board.getBlock(j, blocks[i]->getColu())->isActive()) {
             j++;
         }
         min_dist = std::min(min_dist, j-row_init-1);
@@ -177,7 +177,7 @@ void Tetromino::movePivot(int colu, int row, Board& board) {
 void Tetromino::expandPivot(Board& board) {
     for (size_t i = 0; i < blocks.size(); i++) {
         int new_row = pivot->getRow() + rotation_positions[rotation][i].first;
-        int new_col = pivot->getCol() + rotation_positions[rotation][i].second;
+        int new_col = pivot->getColu() + rotation_positions[rotation][i].second;
         blocks[i] = board.getBlock(new_row, new_col);
     }
 }
@@ -185,7 +185,7 @@ void Tetromino::expandPivot(Board& board) {
 void Tetromino::expandPivot(int new_rotation, std::array<Block*, 4>& new_blocks, Board& board) {
     for (size_t i = 0; i < new_blocks.size(); i++) {
         int new_row = pivot->getRow() + rotation_positions[new_rotation][i].first;
-        int new_col = pivot->getCol() + rotation_positions[new_rotation][i].second;
+        int new_col = pivot->getColu() + rotation_positions[new_rotation][i].second;
         new_blocks[i] = board.getBlock(new_row, new_col);
     }
 }

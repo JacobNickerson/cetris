@@ -52,7 +52,7 @@ class Game {
 
         void titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message);
         
-        void playGame(sf::RenderWindow& window, Tetromino* tetropointer);
+        void playGame(sf::RenderWindow& window);
 
         bool initializeSprites();
 

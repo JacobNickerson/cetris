@@ -5,7 +5,7 @@ int Block::getRow() {
     return row;
 }
 
-int Block::getCol() {
+int Block::getColu() {
     return colu;
 }
 
@@ -20,4 +20,12 @@ void Block::activate(sf::Color new_color) {
 
 void Block::deactivate() {
     colo.reset();
+}
+
+sf::Color Block::getColo() {
+    if (colo.has_value()) {
+        return colo.value();
+    } else {
+        return sf::Color(0,0,0);
+    }
 }

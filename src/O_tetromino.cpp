@@ -23,8 +23,8 @@ bool O_Tetromino::rotateLeft(Board& board) {
 }
 
 void O_Tetromino::expandPivot(Board& board) {
-    blocks[0] = board.getBlock(pivot->getRow(), pivot->getCol());
-    blocks[1] = board.getBlock(pivot->getRow()-1, pivot->getCol());
-    blocks[2] = board.getBlock(pivot->getRow()-1, pivot->getCol()+1);
-    blocks[3] = board.getBlock(pivot->getRow(), pivot->getCol()+1);
+    blocks[0] = board.getBlock(pivot->getRow(), pivot->getColu());
+    blocks[1] = board.getBlock(pivot->getRow()-1, pivot->getColu());
+    blocks[2] = board.getBlock(pivot->getRow()-1, pivot->getColu()+1);
+    blocks[3] = board.getBlock(pivot->getRow(), pivot->getColu()+1);
 }

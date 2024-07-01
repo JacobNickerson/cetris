@@ -56,7 +56,7 @@ int SpriteBoard::getHeight() {
 
 void SpriteBoard::colorTetromino(Tetromino* tetromino) {
     for (Block* block : tetromino->getBlocks()) {
-        sprite_board_matrix[block->getRow()][block->getCol()]->setColor(tetromino->getColor());
+        sprite_board_matrix[block->getRow()][block->getColu()]->setColor(tetromino->getColor());
     }
 }
 
