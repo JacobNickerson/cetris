@@ -4,19 +4,18 @@
 #include "tetromino.hpp"
 
 class O_Tetromino : public Tetromino {
-    private:
-        std::array<Block*, 4> blocks;
-        Block* pivot;
-        int rotation; 
-        sf::Color colo;
-    
     public:
+        O_Tetromino() : Tetromino() {
+            colo = sf::Color(255,255,0);
+        }
 
-        bool rotateRight(Board& board);
+        bool constructTetromino(Board& board) override;
 
-        bool rotateLeft(Board& board);
+        bool rotateRight(Board& board) override;
 
-        void expandPivot(Board& board);
+        bool rotateLeft(Board& board) override;
+
+        void expandPivot(Board& board) override;
 };
 
 #endif

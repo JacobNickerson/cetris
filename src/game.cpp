@@ -14,7 +14,7 @@ void Game::run() {
     title.setCharacterSize(100);
     title.setFillColor(sf::Color::White);
 
-    // center text
+    // center start screen text
     sf::FloatRect textRect = title.getLocalBounds();
     title.setOrigin(textRect.left + textRect.width/2.0f,
                 textRect.top  + textRect.height/2.0f);
@@ -35,7 +35,7 @@ void Game::run() {
     end_text.setCharacterSize(100);
     end_text.setFillColor(sf::Color::White);
 
-    // center text
+    // center end screen text
     sf::FloatRect end_text_rect = end_text.getLocalBounds();
     end_text.setOrigin(end_text_rect.left + end_text_rect.width/2.0f,
                 end_text_rect.top  + end_text_rect.height/2.0f);
@@ -70,15 +70,7 @@ void Game::run() {
     game_sprite_board.initializeScoreBox(score_box_texture, game_font);
 
     // spawning a tetromino
-    std::vector<Tetromino*> tetrominos;
-    I_Tetromino example_tetromino = I_Tetromino();
-    Tetromino* tetropointer = &example_tetromino;
-    tetrominos.push_back(tetropointer);
-    L_Tetromino example_tetromino2 = L_Tetromino();
-    Tetromino* tetropointer2 = &example_tetromino2;
-    tetrominos.push_back(tetropointer2);
-    tetropointer = tetrominos[0];
-
+    Tetromino* tetropointer = tetrominos[0];
 
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
@@ -138,6 +130,7 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
 void Game::playGame(sf::RenderWindow& window, Tetromino* tetropointer) {
     // moving our tetromino to the correct spawn location and generating its blocks
     spawnTetromino(tetropointer);
+    int index = 0;
 
     while (window.isOpen() && game_state == GameState::GameRunning) {
         // User Inputs
@@ -151,6 +144,14 @@ void Game::playGame(sf::RenderWindow& window, Tetromino* tetropointer) {
                             if (!tetropointer->down(game_board)) {
                                 score += game_board.checkPlacement(tetropointer->getBlocks());
                                 game_sprite_board.setScoreText(score);
+                                // currently loops through tetrominos in a set order
+                                // TODO: select index position using RNG
+                                if (index < 6) {
+                                    index++;
+                                } else {
+                                    index = 0;
+                                }
+                                tetropointer = tetrominos[index];
                                 if (!spawnTetromino(tetropointer)) {
                                     game_state = GameState::GameOver;
                                     return;

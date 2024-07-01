@@ -14,16 +14,7 @@ class Tetromino {
         std::array<Block*, 4> blocks;
         Block* pivot;
         int rotation; // this is kinda scuffed, perhaps that enum thing would be better
-        std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions = {{
-                // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
-                // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
-                // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} },
-                // { {{0, 0}, {0, 0}, {0, 0}, {0, 0}} }
-                { {{0,-1}, {0,0}, {-1,0}, {0,1}} },
-                { {{-1,0}, {0,0}, {1,0}, {0,1}} },
-                { {{0,-1}, {0,0}, {1,0}, {0,1}} },
-                { {{-1,0}, {0,0}, {1,0}, {0,-1}} },
-        }};
+        std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions; 
         sf::Color colo;
 
     public:
@@ -58,7 +49,7 @@ class Tetromino {
 
         // Tetromino constructed from pivot point returns
         // false if constructing Tetromino results in a collision
-        bool constructTetromino(Board& board);
+        virtual bool constructTetromino(Board& board);
 
         // Attempts to rotate the tetromino 90 degrees to the right.
         // Returns true if success, false if not.

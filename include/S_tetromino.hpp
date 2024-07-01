@@ -2,15 +2,19 @@
 #define S_TETROMINO_HPP
 
 #include "tetromino.hpp"
+#include <iostream>
 
 class S_Tetromino : public Tetromino {
-    private:
-        std::array<Block*, 4> blocks;
-        Block* pivot;
-        int rotation; 
-        sf::Color colo;
-        static const std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions;
-    
+    public:
+        S_Tetromino() : Tetromino() {
+            colo = sf::Color(255,0,0);
+            rotation_positions = {{
+                { {{0,-1}, {0,0}, {-1,0}, {-1,1}} },
+                { {{-1,0}, {0,0}, {0,1}, {1,1}} },
+                { {{1,-1}, {1,0}, {0,0}, {0,1}} },
+                { {{-1,-1}, {0,-1}, {0,0}, {1,0}} }
+            }};
+        }
 };
 
 #endif
