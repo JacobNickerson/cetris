@@ -3,8 +3,8 @@
 
 #include "board.hpp"
 #include "sprite_board.hpp"
-#include <vector>
 #include "tetromino_types.hpp"
+#include <vector>
 
 enum class GameState {
     Title,
@@ -14,12 +14,12 @@ enum class GameState {
 
 class Game {
     private:
-        Board game_board;
-        SpriteBoard game_sprite_board;
-        GameState game_state;
-        sf::Font game_font;
         int score;
         std::vector<Tetromino*> tetrominos;
+        sf::Font game_font;
+        Board game_board;
+        GameState game_state;
+        SpriteBoard game_sprite_board;
 
     public:
         Game() {
@@ -50,14 +50,18 @@ class Game {
         // places the tetromino in the current position and spawns one at a given coordinate
         bool spawnTetromino(Tetromino* tetromino, int row, int col);
 
+        // takes the title text and press to start text as parameters and renders them on a title screen
+        // waits for any keyboard input to change gamestates and return from method
         void titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message);
         
+        // the main game loop
         void playGame(sf::RenderWindow& window);
 
-        bool initializeSprites();
-
+        // calls all the reset methods for each of game's members
         void reset();
 
+        // takes end text and end score text as parameters and renders them on endscreen
+        // awaits inputting 'Esc' to transition gamestate back to titlescreen
         void endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score);
 };
 
