@@ -5,6 +5,7 @@
 #include "sprite_board.hpp"
 #include "tetromino_types.hpp"
 #include <vector>
+#include <random>
 
 enum class GameState {
     Title,
@@ -20,12 +21,12 @@ class Game {
         Board game_board;
         GameState game_state;
         SpriteBoard game_sprite_board;
+        std::random_device rd;
+        std::mt19937 RNG;
 
     public:
-        Game() {
-            game_state = GameState::Title;
+        Game() : game_state(GameState::Title), score(0), RNG(rd()) {
             game_font.loadFromFile("./fonts/tetris-font.ttf");
-            score = 0;
             tetrominos.push_back(new I_Tetromino);
             tetrominos.push_back(new J_Tetromino);
             tetrominos.push_back(new L_Tetromino);
