@@ -28,3 +28,9 @@ void O_Tetromino::expandPivot(Board& board) {
     blocks[2] = board.getBlock(pivot->getRow()-1, pivot->getColu()+1);
     blocks[3] = board.getBlock(pivot->getRow(), pivot->getColu()+1);
 }
+
+std::array<std::pair<int, int>, 4> O_Tetromino::getRotationPositions() {
+    return {{
+        {-1, 0}, {0, 0}, {0, 1}, {-1, 1}
+    }};
+}

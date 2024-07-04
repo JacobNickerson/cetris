@@ -219,3 +219,7 @@ void Tetromino::set(int rot, Block* piv) {
     rotation = rot;
     pivot = piv;
 }
+
+std::array<std::pair<int,int>, 4> Tetromino::getRotationPositions() {
+    return rotation_positions[0];
+}

@@ -107,6 +107,9 @@ class Tetromino {
 
         // sets a tetromino to have a specified rotation, a specified pivot point
         void set(int rot, Block* pivot);
+
+        // returns offsets from rotated_positions for position rotation = 0
+        virtual std::array<std::pair<int, int>, 4> getRotationPositions();
 };
 
 #endif

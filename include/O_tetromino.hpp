@@ -16,6 +16,8 @@ class O_Tetromino : public Tetromino {
         bool rotateLeft(Board& board) override;
 
         void expandPivot(Board& board) override;
+
+        std::array<std::pair<int, int>, 4> getRotationPositions() override;
 };
 
 #endif

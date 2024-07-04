@@ -50,11 +50,10 @@ class Board {
             }
         }
 
-        void reset();
+        virtual void reset();
 
         // Get a pointer to the block at the position row, col : Board[row][col]
-        Block* getBlock(int row, int colu);
-
+        virtual Block* getBlock(int row, int colu);
 
         // does what it says on the tin
         void removeRow(int row);

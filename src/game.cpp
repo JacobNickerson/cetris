@@ -72,6 +72,9 @@ void Game::run() {
     // Initializing our next tetromino window
     game_sprite_board.initializeNextTetrominoBox(score_box_texture);
 
+    // Initializing our next tetromino block matrix
+    game_sprite_board.initializeNextTetrominoMatrix(block_texture);
+
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
             titleScreen(window, title, press_to_start_message);
@@ -135,6 +138,8 @@ void Game::playGame(sf::RenderWindow& window) {
     Tetromino* tetropointer = tetrominos[distribution(RNG)];
     Tetromino* next_tetropointer = tetrominos[distribution(RNG)];
     spawnTetromino(tetropointer);
+    next_tet_board.activate(next_tetropointer);
+    game_sprite_board.colorNextTetromino(next_tetropointer);
 
     // resetting our clock to 0
     game_clock.restart();
@@ -146,7 +151,10 @@ void Game::playGame(sf::RenderWindow& window) {
                 score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
                 game_sprite_board.setScoreText(score);
                 tetropointer = next_tetropointer;
+                next_tet_board.reset();
                 next_tetropointer = tetrominos[distribution(RNG)];
+                next_tet_board.activate(next_tetropointer);
+                game_sprite_board.colorNextTetromino(next_tetropointer);
                 if (!spawnTetromino(tetropointer)) {
                     game_state = GameState::GameOver;
                     return;
@@ -167,6 +175,9 @@ void Game::playGame(sf::RenderWindow& window) {
                                 game_sprite_board.setScoreText(score);
                                 tetropointer = next_tetropointer;
                                 next_tetropointer = tetrominos[distribution(RNG)];
+                                next_tet_board.reset();
+                                next_tet_board.activate(next_tetropointer);
+                                game_sprite_board.colorNextTetromino(next_tetropointer);
                                 if (!spawnTetromino(tetropointer)) {
                                     game_state = GameState::GameOver;
                                     return;
@@ -198,6 +209,9 @@ void Game::playGame(sf::RenderWindow& window) {
                             game_sprite_board.setScoreText(score);
                             tetropointer = next_tetropointer;
                             next_tetropointer = tetrominos[distribution(RNG)];
+                            next_tet_board.reset();
+                            next_tet_board.activate(next_tetropointer);
+                            game_sprite_board.colorNextTetromino(next_tetropointer);
                             if (!spawnTetromino(tetropointer)) {
                                 game_state = GameState::GameOver;
                                 return;
@@ -219,6 +233,15 @@ void Game::playGame(sf::RenderWindow& window) {
                 }
             }
         }
+
+        for (int i = 0; i < 4; i++) { // i got lazy and didn't make another getter
+            for (int j = 0; j < 4; j++) {  // its a 4 length square box every time lol
+                if (next_tet_board.getBlock(i, j)->isActive()) {
+                    window.draw(game_sprite_board.getNextSprite(i, j));
+                }
+            }
+        }
+
         window.draw(game_sprite_board.getScoreBoxSprite());
         window.draw(game_sprite_board.getScoreText());
         window.draw(game_sprite_board.getNextTetrominoBox());
@@ -229,6 +252,7 @@ void Game::playGame(sf::RenderWindow& window) {
 void Game::reset() {
     game_board.reset();
     game_sprite_board.reset();
+    next_tet_board.reset();
     game_state = GameState::Title;
     score = 0;
 }

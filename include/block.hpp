@@ -17,6 +17,7 @@ class Block {
         Block(int x, int y) : colu(x), row(y) {};
 
         // "Activates" the block
+        void activate();
         void activate(sf::Color);
 
         // Deactivates the block and removes its color.

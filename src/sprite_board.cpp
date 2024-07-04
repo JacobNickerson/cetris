@@ -34,6 +34,17 @@ void SpriteBoard::initializeNextTetrominoBox(sf::Texture& score_box_texture) {
     next_tetromino_box.setPosition(sf::Vector2f(744, 301.0));
 }
 
+void SpriteBoard::initializeNextTetrominoMatrix(sf::Texture& sprite_texture) {
+    for (int i = 0; i < next_tetromino_matrix.size(); i++) {
+        for (int j = 0; j < next_tetromino_matrix[0].size(); j++) {
+            next_tetromino_matrix[i][j]->setTexture(sprite_texture);
+            next_tetromino_matrix[i][j]->setScale(sf::Vector2f(0.5, 0.5));
+            next_tetromino_matrix[i][j]->setPosition(sf::Vector2(next_tetromino_box.getPosition().x+(32*3), next_tetromino_box.getPosition().y+(32*1))); // offset by block size * number of blocks, ie 32 px * 3 blocks
+            next_tetromino_matrix[i][j]->move(sf::Vector2f(32.0*j, 32.0*i));
+        }
+    }
+}
+
 sf::Sprite SpriteBoard::getBoardSprite(int row, int col) {
     return *sprite_board_matrix[row][col];
 }
@@ -48,6 +59,10 @@ sf::Text SpriteBoard::getScoreText() {
 
 sf::Sprite SpriteBoard::getNextTetrominoBox() {
     return next_tetromino_box;
+}
+
+sf::Sprite SpriteBoard::getNextSprite(int i, int j) {
+    return *next_tetromino_matrix[i][j];
 }
 
 void SpriteBoard::setScoreText(int score) {
@@ -74,4 +89,11 @@ void SpriteBoard::colorTetromino(Tetromino* tetromino) {
 
 void SpriteBoard::reset() {  // to chris: remember when you said you made a function that calls another function at your internship?
     setScoreText(0);
+}
+
+void SpriteBoard::colorNextTetromino(Tetromino* tetromino) {
+    std::array<std::pair<int, int>, 4> rotation_offsets = tetromino->getRotationPositions();
+    for (int i = 0; i < 4; i++) {
+        next_tetromino_matrix[2+rotation_offsets[i].first][1+rotation_offsets[i].second]->setColor(tetromino->getColor());
+    }
 }

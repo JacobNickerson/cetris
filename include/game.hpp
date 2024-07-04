@@ -3,6 +3,7 @@
 
 #include "board.hpp"
 #include "sprite_board.hpp"
+#include "next_tetromino_board.hpp"
 #include "tetromino_types.hpp"
 #include <vector>
 #include <random>
@@ -17,6 +18,7 @@ class Game {
     private:
         int score;
         Board game_board;
+        NextTetBoard next_tet_board;
         GameState game_state;
         SpriteBoard game_sprite_board;
         sf::Clock game_clock;
