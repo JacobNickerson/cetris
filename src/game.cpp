@@ -137,6 +137,21 @@ void Game::playGame(sf::RenderWindow& window) {
     game_clock.restart();
 
     while (window.isOpen() && game_state == GameState::GameRunning) {
+        std::cout << game_clock.getElapsedTime().asMilliseconds() << std::endl;
+        if (game_clock.getElapsedTime().asMilliseconds() >= std::max(1000-(100*game_level), 50)) {  // tetromino moves down after a certain elapsed time
+            game_clock.restart();
+            if (!tetropointer->down(game_board)) {
+                score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
+                game_sprite_board.setScoreText(score);
+                tetropointer = next_tetropointer;
+                next_tetropointer = tetrominos[distribution(RNG)];
+                if (!spawnTetromino(tetropointer)) {
+                    game_state = GameState::GameOver;
+                    return;
+                }
+            }
+            game_sprite_board.colorTetromino(tetropointer);
+        }
         // User Inputs
         sf::Event event;
             while (window.pollEvent(event)) {
@@ -186,9 +201,9 @@ void Game::playGame(sf::RenderWindow& window) {
                                 return;
                             }
                             break;
-                        case sf::Keyboard::W:
+                        case sf::Keyboard::P:
+                            game_level++;
                             std::cout << game_level << std::endl;
-                            break;
                     }
                 }
             }
