@@ -7,7 +7,7 @@
 class J_Tetromino : public Tetromino {
     public:
         J_Tetromino() : Tetromino() {
-            colo = sf::Color(0,0,115);
+            colo = sf::Color(0,0,255);
             rotation_positions = {{
                 { {{-1,-1}, {0,-1}, {0,0}, {0,1}} },
                 { {{-1,1}, {-1,0}, {0,0}, {1,0}} },

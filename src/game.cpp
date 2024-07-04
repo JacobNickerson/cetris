@@ -85,7 +85,6 @@ void Game::run() {
         }
 
         while (window.isOpen() && game_state == GameState::GameOver) {
-            std::cout << "GAME OVER MAN" << std::endl;
             endScreen(window, end_text, end_score);
             reset();
         }
@@ -148,13 +147,7 @@ void Game::playGame(sf::RenderWindow& window) {
         if (game_clock.getElapsedTime().asMilliseconds() >= std::max(1000-(100*game_level), 50)) {  // tetromino moves down after a certain elapsed time
             game_clock.restart();
             if (!tetropointer->down(game_board)) {
-                score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
-                game_sprite_board.setScoreText(score);
-                tetropointer = next_tetropointer;
-                next_tet_board.reset();
-                next_tetropointer = tetrominos[distribution(RNG)];
-                next_tet_board.activate(next_tetropointer);
-                game_sprite_board.colorNextTetromino(next_tetropointer);
+                placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG));
                 if (!spawnTetromino(tetropointer)) {
                     game_state = GameState::GameOver;
                     return;
@@ -171,13 +164,7 @@ void Game::playGame(sf::RenderWindow& window) {
                     switch (event.key.code) {
                         case sf::Keyboard::S: 
                             if (!tetropointer->down(game_board)) {
-                                score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
-                                game_sprite_board.setScoreText(score);
-                                tetropointer = next_tetropointer;
-                                next_tetropointer = tetrominos[distribution(RNG)];
-                                next_tet_board.reset();
-                                next_tet_board.activate(next_tetropointer);
-                                game_sprite_board.colorNextTetromino(next_tetropointer);
+                                placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG));
                                 if (!spawnTetromino(tetropointer)) {
                                     game_state = GameState::GameOver;
                                     return;
@@ -205,21 +192,12 @@ void Game::playGame(sf::RenderWindow& window) {
                         case sf::Keyboard::Space:
                             tetropointer->hardDrop(game_board);
                             game_sprite_board.colorTetromino(tetropointer);
-                            score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
-                            game_sprite_board.setScoreText(score);
-                            tetropointer = next_tetropointer;
-                            next_tetropointer = tetrominos[distribution(RNG)];
-                            next_tet_board.reset();
-                            next_tet_board.activate(next_tetropointer);
-                            game_sprite_board.colorNextTetromino(next_tetropointer);
+                            placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG));
                             if (!spawnTetromino(tetropointer)) {
                                 game_state = GameState::GameOver;
                                 return;
                             }
                             break;
-                        case sf::Keyboard::P:
-                            game_level++;
-                            std::cout << game_level << std::endl;
                     }
                 }
             }
@@ -277,4 +255,14 @@ void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end
         window.draw(end_score);
         window.display();
     }
+}
+
+void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int RNG_index) {
+    score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
+    game_sprite_board.setScoreText(score);
+    tetropointer = next_tetropointer;
+    next_tet_board.reset();
+    next_tetropointer = tetrominos[RNG_index];
+    next_tet_board.activate(next_tetropointer);
+    game_sprite_board.colorNextTetromino(next_tetropointer);
 }

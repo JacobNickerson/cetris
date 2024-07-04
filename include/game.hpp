@@ -68,6 +68,10 @@ class Game {
         // takes end text and end score text as parameters and renders them on endscreen
         // awaits inputting 'Esc' to transition gamestate back to titlescreen
         void endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score);
+
+        // various functions are called whenever a tetromino is placed
+        // this method bundles them together to make the logic cleaner
+        void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int RNG_index);
 };
 
 #endif
