@@ -26,10 +26,11 @@ class Game {
         std::vector<Tetromino*> tetrominos;
         std::random_device rd;
         std::mt19937 RNG;
-
+        sf::Texture background_texture;
 
     public:
         Game() : game_state(GameState::Title), score(0), RNG(rd()) {
+            background_texture.loadFromFile("./images/background.png");
             game_font.loadFromFile("./fonts/tetris-font.ttf");
             tetrominos.push_back(new I_Tetromino);
             tetrominos.push_back(new J_Tetromino);
@@ -57,7 +58,7 @@ class Game {
 
         // takes the title text and press to start text as parameters and renders them on a title screen
         // waits for any keyboard input to change gamestates and return from method
-        void titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message);
+        void titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message, sf::Sprite& title_background);
         
         // the main game loop
         void playGame(sf::RenderWindow& window);
@@ -67,7 +68,7 @@ class Game {
 
         // takes end text and end score text as parameters and renders them on endscreen
         // awaits inputting 'Esc' to transition gamestate back to titlescreen
-        void endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score);
+        void endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score, sf::Text& end_prompt, sf::Sprite& end_background);
 
         // various functions are called whenever a tetromino is placed
         // this method bundles them together to make the logic cleaner

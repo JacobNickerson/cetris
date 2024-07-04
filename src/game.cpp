@@ -7,6 +7,9 @@
 void Game::run() {
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Cetris");
 
+    // Initializing background
+    sf::Sprite menu_background(background_texture);
+
     // Initializing title with our specified font
     sf::Text title;
     title.setFont(game_font);
@@ -18,7 +21,7 @@ void Game::run() {
     sf::FloatRect textRect = title.getLocalBounds();
     title.setOrigin(textRect.left + textRect.width/2.0f,
                 textRect.top  + textRect.height/2.0f);
-    title.setPosition(sf::Vector2f(1600/2.0f,900/2.0f));
+    title.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 150));
 
     sf::Text press_to_start_message = title;
     press_to_start_message.setString("Press any key to start");
@@ -26,7 +29,7 @@ void Game::run() {
     sf::FloatRect start_rect = press_to_start_message.getLocalBounds();
     press_to_start_message.setOrigin(start_rect.left + start_rect.width/2.0f,
                 start_rect.top  + start_rect.height/2.0f);
-    press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
+    press_to_start_message.setPosition(sf::Vector2f(1600/2.0f,900/2.0f));
 
     // Initializing endscreen with our specified font
     sf::Text end_text;
@@ -39,7 +42,7 @@ void Game::run() {
     sf::FloatRect end_text_rect = end_text.getLocalBounds();
     end_text.setOrigin(end_text_rect.left + end_text_rect.width/2.0f,
                 end_text_rect.top  + end_text_rect.height/2.0f);
-    end_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f));
+    end_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f-200));
 
     sf::Text end_score = end_text;
     end_score.setString("You Scored: 0 Points");
@@ -47,7 +50,15 @@ void Game::run() {
     sf::FloatRect end_rect = end_score.getLocalBounds();
     end_score.setOrigin(end_rect.left + end_rect.width/2.0f,
                 end_rect.top  + end_rect.height/2.0f);
-    end_score.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 150.0f));
+    end_score.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 50.0f));
+    
+    sf::Text end_prompt = end_text;
+    end_prompt.setString("Press ESC to play again");
+    end_prompt.setCharacterSize(50);
+    sf::FloatRect end_prompt_rect = end_prompt.getLocalBounds();
+    end_prompt.setOrigin(end_prompt_rect.left + end_prompt_rect.width/2.0f,
+                end_prompt_rect.top  + end_prompt_rect.height/2.0f);
+    end_prompt.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 100.0f));
 
     // Initializing our sprite texture
     sf::Texture block_texture;
@@ -77,7 +88,7 @@ void Game::run() {
 
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
-            titleScreen(window, title, press_to_start_message);
+            titleScreen(window, title, press_to_start_message, menu_background);
         }
 
         while (window.isOpen() && game_state == GameState::GameRunning) {
@@ -85,7 +96,7 @@ void Game::run() {
         }
 
         while (window.isOpen() && game_state == GameState::GameOver) {
-            endScreen(window, end_text, end_score);
+            endScreen(window, end_text, end_score, end_prompt, menu_background);
             reset();
         }
     }
@@ -108,7 +119,7 @@ bool Game::spawnTetromino(Tetromino* tetromino, int row, int col) {
     return true;
 }
 
-void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message) {
+void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message, sf::Sprite& title_background) {
     while (window.isOpen() && game_state == GameState::Title) {
         sf::Event event;
 
@@ -121,8 +132,8 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
                 game_state = GameState::GameRunning;
             }
         }
-        
         window.clear();
+        window.draw(title_background);
         window.draw(title);
         window.draw(press_to_start_message);
         window.display();
@@ -235,7 +246,8 @@ void Game::reset() {
     score = 0;
 }
 
-void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score) {
+void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score, sf::Text& end_prompt, sf::Sprite& end_background) {
+    sf::Clock render_clock;
     end_score.setString("You Scored: " + std::to_string(score));
     while (window.isOpen() && game_state == GameState::GameOver) {
         sf::Event event;
@@ -251,8 +263,18 @@ void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end
         }
         
         window.clear();
-        window.draw(end_text);
-        window.draw(end_score);
+        window.draw(end_background);
+        if (render_clock.getElapsedTime().asMilliseconds() >= 1000) {
+            window.draw(end_text);
+        }
+
+        if (render_clock.getElapsedTime().asMilliseconds() >= 2000) {
+            window.draw(end_score);
+        }
+
+        if (render_clock.getElapsedTime().asMilliseconds() >= 3000) {
+            window.draw(end_prompt);
+        }
         window.display();
     }
 }
