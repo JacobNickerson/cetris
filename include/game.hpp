@@ -26,12 +26,9 @@ class Game {
         std::vector<Tetromino*> tetrominos;
         std::random_device rd;
         std::mt19937 RNG;
-        sf::Texture background_texture;
 
     public:
         Game() : game_state(GameState::Title), score(0), RNG(rd()) {
-            background_texture.loadFromFile("./images/background.png");
-            game_font.loadFromFile("./fonts/tetris-font.ttf");
             tetrominos.push_back(new I_Tetromino);
             tetrominos.push_back(new J_Tetromino);
             tetrominos.push_back(new L_Tetromino);
@@ -61,7 +58,7 @@ class Game {
         void titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message, sf::Sprite& title_background);
         
         // the main game loop
-        void playGame(sf::RenderWindow& window);
+        void playGame(sf::RenderWindow& window, sf::Sprite& play_background);
 
         // calls all the reset methods for each of game's members
         void reset();

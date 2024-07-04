@@ -7,10 +7,25 @@
 void Game::run() {
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Cetris");
 
-    // Initializing background
-    sf::Sprite menu_background(background_texture);
+    // Initializing backgrounds
+    sf::Texture menu_background_texture;
+    if (!menu_background_texture.loadFromFile("./images/menubackground.png")) {
+        std::cout << "Menu background failed to load" << std::endl;
+        return;
+    }
+    sf::Sprite menu_background(menu_background_texture);
+    sf::Texture play_background_texture;
+    if (!play_background_texture.loadFromFile("./images/playbackground.png")) {
+        std::cout << "Play background failed to load" << std::endl;
+        return;
+    }
+    sf::Sprite play_background(play_background_texture);
 
     // Initializing title with our specified font
+    if (!game_font.loadFromFile("./fonts/tetris-font.ttf")) {
+        std::cout << "Font failed to load" << std::endl;
+        return;
+    }
     sf::Text title;
     title.setFont(game_font);
     title.setString("Cetris!");
@@ -94,7 +109,7 @@ void Game::run() {
         }
 
         while (window.isOpen() && game_state == GameState::GameRunning) {
-            playGame(window);
+            playGame(window, play_background);
         }
 
         while (window.isOpen() && game_state == GameState::GameOver) {
@@ -155,7 +170,7 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
     }
 }
 
-void Game::playGame(sf::RenderWindow& window) {
+void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
     int game_level = 0; // game level progresses according to line clears and determines things like points per clear and drop speed
     int game_clears = 0; // amount of lines cleared, once it reaches 10 we increment game level and reduce it by 10
     // moving our tetromino to the correct spawn location and generating its blocks
@@ -230,6 +245,7 @@ void Game::playGame(sf::RenderWindow& window) {
 
         // rendering
         window.clear();
+        window.draw(play_background);
         for (int i = 2; i < game_sprite_board.getHeight()-1; i++) {
             for (int j = 1; j < game_sprite_board.getWidth()-1; j++) {
                 if (game_board.getBlock(i, j)->isActive()) {
@@ -274,6 +290,7 @@ void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 game_state = GameState::Title;
+                
             }
         }
         
