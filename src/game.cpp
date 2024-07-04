@@ -69,6 +69,9 @@ void Game::run() {
     // Initializing our scoreboard
     game_sprite_board.initializeScoreBox(score_box_texture, game_font);
 
+    // Initializing our next tetromino window
+    game_sprite_board.initializeNextTetrominoBox(score_box_texture);
+
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
             titleScreen(window, title, press_to_start_message);
@@ -137,7 +140,6 @@ void Game::playGame(sf::RenderWindow& window) {
     game_clock.restart();
 
     while (window.isOpen() && game_state == GameState::GameRunning) {
-        std::cout << game_clock.getElapsedTime().asMilliseconds() << std::endl;
         if (game_clock.getElapsedTime().asMilliseconds() >= std::max(1000-(100*game_level), 50)) {  // tetromino moves down after a certain elapsed time
             game_clock.restart();
             if (!tetropointer->down(game_board)) {
@@ -219,6 +221,7 @@ void Game::playGame(sf::RenderWindow& window) {
         }
         window.draw(game_sprite_board.getScoreBoxSprite());
         window.draw(game_sprite_board.getScoreText());
+        window.draw(game_sprite_board.getNextTetrominoBox());
         window.display();
     }
 }

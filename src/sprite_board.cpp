@@ -22,12 +22,16 @@ void SpriteBoard::initializeScoreBox(sf::Texture& score_box_texture, sf::Font& s
     score_text.setFillColor(sf::Color::White);
     score_text.setCharacterSize(50);
     
-    float score_textX = score_box.getPosition().x + ((score_box.getLocalBounds().width - score_text.getLocalBounds().width)/2);
-    float score_textY = score_box.getPosition().y + ((score_box.getLocalBounds().height - score_text.getLocalBounds().height)/2);
+    float score_textX = score_box.getPosition().x + ((score_box.getGlobalBounds().width - score_text.getGlobalBounds().width)/2);
+    float score_textY = score_box.getPosition().y + ((score_box.getGlobalBounds().height - score_text.getGlobalBounds().height)/2);
 
     score_text.setPosition(sf::Vector2f(score_textX, score_textY));
-    // score_text.setPosition(sf::Vector2f(score_box.getPosition().x, score_box.getPosition().y));
-    // score_text.move(sf::Vector2f(score_box.get)
+}
+
+void SpriteBoard::initializeNextTetrominoBox(sf::Texture& score_box_texture) {
+    next_tetromino_box.setTexture(score_box_texture);
+    next_tetromino_box.setScale(sf::Vector2f(0.5,0.5));
+    next_tetromino_box.setPosition(sf::Vector2f(744, 301.0));
 }
 
 sf::Sprite SpriteBoard::getBoardSprite(int row, int col) {
@@ -42,8 +46,16 @@ sf::Text SpriteBoard::getScoreText() {
     return score_text;
 }
 
+sf::Sprite SpriteBoard::getNextTetrominoBox() {
+    return next_tetromino_box;
+}
+
 void SpriteBoard::setScoreText(int score) {
     score_text.setString(std::to_string(score));
+    float score_textX = score_box.getPosition().x + ((score_box.getGlobalBounds().width - score_text.getLocalBounds().width)/2);
+    float score_textY = score_box.getPosition().y + ((score_box.getGlobalBounds().height - score_text.getLocalBounds().height)/2);
+
+    score_text.setPosition(sf::Vector2f(score_textX, score_textY));
 }
 
 int SpriteBoard::getWidth() {

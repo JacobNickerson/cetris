@@ -13,3 +13,7 @@ gdb:
 
 	@# Finally, run main
 	gdb ./build/tetris
+
+# runs program without compiling
+run:
+	./build/tetris
