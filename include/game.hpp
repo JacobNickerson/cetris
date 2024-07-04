@@ -16,13 +16,15 @@ enum class GameState {
 class Game {
     private:
         int score;
-        std::vector<Tetromino*> tetrominos;
-        sf::Font game_font;
         Board game_board;
         GameState game_state;
         SpriteBoard game_sprite_board;
+        sf::Clock game_clock;
+        sf::Font game_font;
+        std::vector<Tetromino*> tetrominos;
         std::random_device rd;
         std::mt19937 RNG;
+
 
     public:
         Game() : game_state(GameState::Title), score(0), RNG(rd()) {

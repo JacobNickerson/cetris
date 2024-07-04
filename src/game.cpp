@@ -125,11 +125,16 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
 }
 
 void Game::playGame(sf::RenderWindow& window) {
+    int game_level = 0; // game level progresses according to line clears and determines things like points per clear and drop speed
+    int game_clears = 0; // amount of lines cleared, once it reaches 10 we increment game level and reduce it by 10
     // moving our tetromino to the correct spawn location and generating its blocks
-    std::uniform_int_distribution<> distribution(0,6);
+    std::uniform_int_distribution<> distribution(0,6);  // setting up RNG to generate a number in range [0,6]
     Tetromino* tetropointer = tetrominos[distribution(RNG)];
     Tetromino* next_tetropointer = tetrominos[distribution(RNG)];
     spawnTetromino(tetropointer);
+
+    // resetting our clock to 0
+    game_clock.restart();
 
     while (window.isOpen() && game_state == GameState::GameRunning) {
         // User Inputs
@@ -141,7 +146,7 @@ void Game::playGame(sf::RenderWindow& window) {
                     switch (event.key.code) {
                         case sf::Keyboard::S: 
                             if (!tetropointer->down(game_board)) {
-                                score += game_board.checkPlacement(tetropointer->getBlocks());
+                                score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
                                 game_sprite_board.setScoreText(score);
                                 tetropointer = next_tetropointer;
                                 next_tetropointer = tetrominos[distribution(RNG)];
@@ -172,7 +177,7 @@ void Game::playGame(sf::RenderWindow& window) {
                         case sf::Keyboard::Space:
                             tetropointer->hardDrop(game_board);
                             game_sprite_board.colorTetromino(tetropointer);
-                            score += game_board.checkPlacement(tetropointer->getBlocks());
+                            score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
                             game_sprite_board.setScoreText(score);
                             tetropointer = next_tetropointer;
                             next_tetropointer = tetrominos[distribution(RNG)];
@@ -180,6 +185,9 @@ void Game::playGame(sf::RenderWindow& window) {
                                 game_state = GameState::GameOver;
                                 return;
                             }
+                            break;
+                        case sf::Keyboard::W:
+                            std::cout << game_level << std::endl;
                             break;
                     }
                 }

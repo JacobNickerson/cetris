@@ -64,7 +64,7 @@ class Board {
 
         // checks tetromino placement for completed rows, removes completed rows
         // return an integer, 0 if no rows cleared otherwise returns points to add to score
-        int checkPlacement(std::array<Block*, 4> blocks);
+        int checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears);
 
         void pullBlocksDown(int& row);
 };
