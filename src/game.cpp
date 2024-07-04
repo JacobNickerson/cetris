@@ -14,8 +14,10 @@ void Game::run() {
     sf::Text title;
     title.setFont(game_font);
     title.setString("Cetris!");
-    title.setCharacterSize(100);
-    title.setFillColor(sf::Color::White);
+    title.setCharacterSize(200);
+    sf::Color title_color = sf::Color::White;
+    title_color.a = 0;
+    title.setFillColor(title_color);
 
     // center start screen text
     sf::FloatRect textRect = title.getLocalBounds();
@@ -120,6 +122,8 @@ bool Game::spawnTetromino(Tetromino* tetromino, int row, int col) {
 }
 
 void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message, sf::Sprite& title_background) {
+    sf::Clock render_clock;
+
     while (window.isOpen() && game_state == GameState::Title) {
         sf::Event event;
 
@@ -132,9 +136,20 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
                 game_state = GameState::GameRunning;
             }
         }
+        int time_elapsed = render_clock.getElapsedTime().asMilliseconds();
+        if (time_elapsed <= 1020) {
+            sf::Color title_color = title.getFillColor();
+            title_color.a = render_clock.getElapsedTime().asMilliseconds()/4;
+            title.setFillColor(title_color);
+        }
+
         window.clear();
         window.draw(title_background);
-        window.draw(title);
+        if (time_elapsed <= 1020) {
+            window.draw(title);
+        } else if (time_elapsed % 800 < 400) {
+            window.draw(title);
+        }
         window.draw(press_to_start_message);
         window.display();
     }
