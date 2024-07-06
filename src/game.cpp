@@ -104,6 +104,9 @@ void Game::run() {
     // Initializing our next tetromino block matrix
     game_sprite_board.initializeNextTetrominoMatrix(block_texture);
 
+    // Initializing our level window
+    game_sprite_board.initializeLevelText(game_font);
+
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
             titleScreen(window, title, press_to_start_message, menu_background);
@@ -269,6 +272,7 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
         window.draw(game_sprite_board.getScoreBoxSprite());
         window.draw(game_sprite_board.getScoreText());
         window.draw(game_sprite_board.getNextTetrominoBox());
+        window.draw(game_sprite_board.getLevelText());
         window.display();
     }
 }
@@ -323,4 +327,5 @@ void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointe
     next_tetropointer = tetrominos[RNG_index];
     next_tet_board.activate(next_tetropointer);
     game_sprite_board.colorNextTetromino(next_tetropointer);
+    game_sprite_board.setLevelText(game_level);
 }

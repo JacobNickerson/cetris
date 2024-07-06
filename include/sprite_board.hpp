@@ -14,6 +14,7 @@ class SpriteBoard {
         sf::Sprite score_box;
         sf::Text score_text;
         sf::Sprite next_tetromino_box;
+        sf::Text level_text;
 
     public:
         // Constructor
@@ -54,6 +55,8 @@ class SpriteBoard {
 
         void initializeNextTetrominoMatrix(sf::Texture& sprite_texture);
 
+        void initializeLevelText(sf::Font& level_font);
+
         // returns the sprite at specific coordinates
         sf::Sprite getBoardSprite(int row, int col);
 
@@ -62,6 +65,12 @@ class SpriteBoard {
 
         // returns the score text
         sf::Text getScoreText();
+
+        // returns the level text
+        sf::Text getLevelText();
+
+        // sets the level text
+        void setLevelText(int level);
 
         // returns next tetromino box sprite
         sf::Sprite getNextTetrominoBox();

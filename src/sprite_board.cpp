@@ -45,6 +45,15 @@ void SpriteBoard::initializeNextTetrominoMatrix(sf::Texture& sprite_texture) {
     }
 }
 
+void SpriteBoard::initializeLevelText(sf::Font& level_box_font) {
+    level_text.setFont(level_box_font);
+    level_text.setPosition(sf::Vector2f(score_text.getPosition().x, score_text.getPosition().y+(12*32))); // position is set relative to score_text, call its init first
+    level_text.setString("1");                                                                            // 12 * 32 corresponds to six 32 pixel squares down
+    level_text.setFont(level_box_font);
+    level_text.setFillColor(sf::Color::White);
+    level_text.setCharacterSize(50);
+}
+
 sf::Sprite SpriteBoard::getBoardSprite(int row, int col) {
     return *sprite_board_matrix[row][col];
 }
@@ -55,6 +64,14 @@ sf::Sprite SpriteBoard::getScoreBoxSprite() {
 
 sf::Text SpriteBoard::getScoreText() {
     return score_text;
+}
+
+sf::Text SpriteBoard::getLevelText() {
+    return level_text;
+}
+
+void SpriteBoard::setLevelText(int level) {
+    level_text.setString(std::to_string(level+1));
 }
 
 sf::Sprite SpriteBoard::getNextTetrominoBox() {
@@ -87,8 +104,9 @@ void SpriteBoard::colorTetromino(Tetromino* tetromino) {
     }
 }
 
-void SpriteBoard::reset() {  // to chris: remember when you said you made a function that calls another function at your internship?
+void SpriteBoard::reset() {
     setScoreText(0);
+    setLevelText(0);
 }
 
 void SpriteBoard::colorNextTetromino(Tetromino* tetromino) {
