@@ -269,9 +269,7 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
             }
         }
 
-        window.draw(game_sprite_board.getScoreBoxSprite());
         window.draw(game_sprite_board.getScoreText());
-        window.draw(game_sprite_board.getNextTetrominoBox());
         window.draw(game_sprite_board.getLevelText());
         window.display();
     }
