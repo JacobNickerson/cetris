@@ -38,11 +38,12 @@ void Game::run() {
     sf::FloatRect textRect = title.getLocalBounds();
     title.setOrigin(textRect.left + textRect.width/2.0f,
                 textRect.top  + textRect.height/2.0f);
-    title.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 150));
+    title.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 252));  // the weird offset is for an animation where the title "slides" into place
 
     sf::Text press_to_start_message = title;
     press_to_start_message.setString("Press any key to start");
     press_to_start_message.setCharacterSize(50);
+    press_to_start_message.setFillColor(sf::Color::White);
     sf::FloatRect start_rect = press_to_start_message.getLocalBounds();
     press_to_start_message.setOrigin(start_rect.left + start_rect.width/2.0f,
                 start_rect.top  + start_rect.height/2.0f);
@@ -156,16 +157,19 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
             sf::Color title_color = title.getFillColor();
             title_color.a = render_clock.getElapsedTime().asMilliseconds()/4;
             title.setFillColor(title_color);
+            title.move(sf::Vector2f(0, 0.1));
         }
 
         window.clear();
         window.draw(title_background);
-        if (time_elapsed <= 1020) {
+        if (time_elapsed <= 2000) {
             window.draw(title);
-        } else if (time_elapsed % 800 < 400) {
+        } else if (time_elapsed % 1000 < 500) {
             window.draw(title);
         }
-        window.draw(press_to_start_message);
+        if (time_elapsed >= 2400) {
+            window.draw(press_to_start_message);
+        }
         window.display();
     }
 }
