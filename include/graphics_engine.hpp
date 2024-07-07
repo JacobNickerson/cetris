@@ -1,5 +1,5 @@
-#ifndef SPRITE_BOARD_HPP
-#define SPRITE_BOARD_HPP
+#ifndef GRAPHICS_ENGINE_HPP
+#define GRAPHICS_ENGINE_HPP
 
 #include <SFML/Graphics.hpp>
 #include "tetromino.hpp"
@@ -7,7 +7,7 @@
 static constexpr int SPRITE_BOARD_HEIGHT = 24;
 static constexpr int SPRITE_BOARD_WIDTH = 14;
 
-class SpriteBoard {
+class GraphicsEngine {
     private:
         std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;
         std::array<std::array<sf::Sprite*, 4>, 4> next_tetromino_matrix;
@@ -18,7 +18,7 @@ class SpriteBoard {
 
     public:
         // Constructor
-        SpriteBoard() {
+        GraphicsEngine() {
             for (size_t i = 0; i < BOARD_HEIGHT; i++) {
                 for (size_t j = 0; j < BOARD_WIDTH; j++) {
                     sprite_board_matrix[i][j] = new sf::Sprite;
@@ -31,7 +31,7 @@ class SpriteBoard {
             }
         }
 
-        ~SpriteBoard() {
+        ~GraphicsEngine() {
             for (int i = 0; i < BOARD_HEIGHT; i++) {
                 for (int j = 0; j < BOARD_WIDTH; j++) {
                     delete sprite_board_matrix[i][j];

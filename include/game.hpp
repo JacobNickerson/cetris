@@ -2,7 +2,7 @@
 #define GAME_HPP
 
 #include "board.hpp"
-#include "sprite_board.hpp"
+#include "graphics_engine.hpp"
 #include "next_tetromino_board.hpp"
 #include "tetromino_types.hpp"
 #include <vector>
@@ -20,7 +20,7 @@ class Game {
         Board game_board;
         NextTetBoard next_tet_board;
         GameState game_state;
-        SpriteBoard game_sprite_board;
+        GraphicsEngine game_sprite_board;
         sf::Clock game_clock;
         sf::Font game_font;
         std::vector<Tetromino*> tetrominos;
