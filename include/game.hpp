@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "audio_engine.hpp"
 #include "board.hpp"
 #include "graphics_engine.hpp"
 #include "next_tetromino_board.hpp"
@@ -17,10 +18,11 @@ enum class GameState {
 class Game {
     private:
         int score;
+        AudioEngine game_audio_engine;
         Board game_board;
         NextTetBoard next_tet_board;
         GameState game_state;
-        GraphicsEngine game_sprite_board;
+        GraphicsEngine game_graphics_engine;
         sf::Clock game_clock;
         sf::Font game_font;
         std::vector<Tetromino*> tetrominos;
@@ -69,7 +71,7 @@ class Game {
 
         // various functions are called whenever a tetromino is placed
         // this method bundles them together to make the logic cleaner
-        void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int RNG_index);
+        void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int RNG_index, int& score);
 };
 
 #endif

@@ -93,19 +93,23 @@ void Game::run() {
     }    
 
     // Initializing our sprite board
-    game_sprite_board.initializeSpriteMatrix(block_texture);
+    game_graphics_engine.initializeSpriteMatrix(block_texture);
 
     // Initializing our scoreboard
-    game_sprite_board.initializeScoreBox(score_box_texture, game_font);
+    game_graphics_engine.initializeScoreBox(score_box_texture, game_font);
 
     // Initializing our next tetromino window
-    game_sprite_board.initializeNextTetrominoBox(score_box_texture);
+    game_graphics_engine.initializeNextTetrominoBox(score_box_texture);
 
     // Initializing our next tetromino block matrix
-    game_sprite_board.initializeNextTetrominoMatrix(block_texture);
+    game_graphics_engine.initializeNextTetrominoMatrix(block_texture);
 
     // Initializing our level window
-    game_sprite_board.initializeLevelText(game_font);
+    game_graphics_engine.initializeLevelText(game_font);
+
+    // Initializing test sound
+    game_audio_engine.initialize();
+
 
     while (window.isOpen()) {
         while (window.isOpen() && game_state == GameState::Title) {
@@ -128,7 +132,7 @@ bool Game::spawnTetromino(Tetromino* tetromino) {
     tetromino->movePivot(2,6, game_board);
     if (!tetromino->constructTetromino(game_board)) return false;
     tetromino->activate();
-    game_sprite_board.colorTetromino(tetromino);
+    game_graphics_engine.colorTetromino(tetromino);
     return true;
 }
 
@@ -136,7 +140,7 @@ bool Game::spawnTetromino(Tetromino* tetromino, int row, int col) {
     tetromino->movePivot(row, col, game_board);
     if (!tetromino->constructTetromino(game_board)) return false;
     tetromino->activate();
-    game_sprite_board.colorTetromino(tetromino);
+    game_graphics_engine.colorTetromino(tetromino);
     return true;
 }
 
@@ -152,6 +156,7 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
                 window.close(); 
             }
             if (event.type == sf::Event::KeyPressed) {
+                game_audio_engine.playMenuTransition();
                 game_state = GameState::GameRunning;
             }
         }
@@ -186,7 +191,7 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
     Tetromino* next_tetropointer = tetrominos[distribution(RNG)];
     spawnTetromino(tetropointer);
     next_tet_board.activate(next_tetropointer);
-    game_sprite_board.colorNextTetromino(next_tetropointer);
+    game_graphics_engine.colorNextTetromino(next_tetropointer);
 
     // resetting our clock to 0
     game_clock.restart();
@@ -195,13 +200,14 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
         if (game_clock.getElapsedTime().asMilliseconds() >= std::max(1000-(100*game_level), 50)) {  // tetromino moves down after a certain elapsed time
             game_clock.restart();
             if (!tetropointer->down(game_board)) {
-                placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG));
+                game_audio_engine.playPlace();
+                placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG), score);
                 if (!spawnTetromino(tetropointer)) {
                     game_state = GameState::GameOver;
                     return;
                 }
             }
-            game_sprite_board.colorTetromino(tetropointer);
+            game_graphics_engine.colorTetromino(tetropointer);
         }
         // User Inputs
         sf::Event event;
@@ -212,35 +218,45 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
                     switch (event.key.code) {
                         case sf::Keyboard::S: 
                             if (!tetropointer->down(game_board)) {
-                                placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG));
+                                game_audio_engine.playPlace();
+                                placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG), score);
                                 if (!spawnTetromino(tetropointer)) {
                                     game_state = GameState::GameOver;
                                     return;
                                 }
                                 break;
                             }
-                            game_sprite_board.colorTetromino(tetropointer);
+                            game_graphics_engine.colorTetromino(tetropointer);
                             break;
                         case sf::Keyboard::A:
-                            tetropointer->left(game_board);
-                            game_sprite_board.colorTetromino(tetropointer);
+                            if(!tetropointer->left(game_board)) {
+                                game_audio_engine.playCollision();
+                            }
+                            game_graphics_engine.colorTetromino(tetropointer);
                             break;
                         case sf::Keyboard::D:
-                            tetropointer->right(game_board);
-                            game_sprite_board.colorTetromino(tetropointer);
+                            if(!tetropointer->right(game_board)) {
+                                game_audio_engine.playCollision();
+                            }
+                            game_graphics_engine.colorTetromino(tetropointer);
                             break;
                         case sf::Keyboard::Q:
-                            tetropointer->rotateLeft(game_board);
-                            game_sprite_board.colorTetromino(tetropointer);
+                            if (!tetropointer->rotateLeft(game_board)) {
+                                game_audio_engine.playCollision();
+                            }
+                            game_graphics_engine.colorTetromino(tetropointer);
                             break;
                         case sf::Keyboard::E:
-                            tetropointer->rotateRight(game_board);
-                            game_sprite_board.colorTetromino(tetropointer);
+                            if (!tetropointer->rotateRight(game_board)) {
+                                game_audio_engine.playCollision();
+                            }
+                            game_graphics_engine.colorTetromino(tetropointer);
                             break;
                         case sf::Keyboard::Space:
+                            game_audio_engine.playHardDrop();
                             tetropointer->hardDrop(game_board);
-                            game_sprite_board.colorTetromino(tetropointer);
-                            placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG));
+                            game_graphics_engine.colorTetromino(tetropointer);
+                            placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG), score);
                             if (!spawnTetromino(tetropointer)) {
                                 game_state = GameState::GameOver;
                                 return;
@@ -253,10 +269,10 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
         // rendering
         window.clear();
         window.draw(play_background);
-        for (int i = 2; i < game_sprite_board.getHeight()-1; i++) {
-            for (int j = 1; j < game_sprite_board.getWidth()-1; j++) {
+        for (int i = 2; i < game_graphics_engine.getHeight()-1; i++) {
+            for (int j = 1; j < game_graphics_engine.getWidth()-1; j++) {
                 if (game_board.getBlock(i, j)->isActive()) {
-                    window.draw(game_sprite_board.getBoardSprite(i,j));
+                    window.draw(game_graphics_engine.getBoardSprite(i,j));
                 }
             }
         }
@@ -264,20 +280,20 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
         for (int i = 0; i < 4; i++) { // i got lazy and didn't make another getter
             for (int j = 0; j < 4; j++) {  // its a 4 length square box every time lol
                 if (next_tet_board.getBlock(i, j)->isActive()) {
-                    window.draw(game_sprite_board.getNextSprite(i, j));
+                    window.draw(game_graphics_engine.getNextSprite(i, j));
                 }
             }
         }
 
-        window.draw(game_sprite_board.getScoreText());
-        window.draw(game_sprite_board.getLevelText());
+        window.draw(game_graphics_engine.getScoreText());
+        window.draw(game_graphics_engine.getLevelText());
         window.display();
     }
 }
 
 void Game::reset() {
     game_board.reset();
-    game_sprite_board.reset();
+    game_graphics_engine.reset();
     next_tet_board.reset();
     game_state = GameState::Title;
     score = 0;
@@ -317,13 +333,27 @@ void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end
     }
 }
 
-void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int RNG_index) {
-    score += game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears);
-    game_sprite_board.setScoreText(score);
+void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int RNG_index, int& score) {
+    int clears = game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears, score);
+    switch (clears) {
+        case 1:
+            game_audio_engine.playOneLineClear();
+            break;
+        case 2:
+            game_audio_engine.playTwoLineClear();
+            break;
+        case 3:
+            game_audio_engine.playThreeLineClear();
+            break;
+        case 4:
+            game_audio_engine.playFourLineClear();
+            break;
+    }
+    game_graphics_engine.setScoreText(score);
     tetropointer = next_tetropointer;
     next_tet_board.reset();
     next_tetropointer = tetrominos[RNG_index];
     next_tet_board.activate(next_tetropointer);
-    game_sprite_board.colorNextTetromino(next_tetropointer);
-    game_sprite_board.setLevelText(game_level);
+    game_graphics_engine.colorNextTetromino(next_tetropointer);
+    game_graphics_engine.setLevelText(game_level);
 }

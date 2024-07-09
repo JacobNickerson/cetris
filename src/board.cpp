@@ -42,7 +42,7 @@ bool Board::rowIsFull(int row) {
     return true;
 }
 
-int Board::checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears) {
+int Board::checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears, int& score) {
     std::vector<int> rows;
     int rows_cleared = 0;
     for (Block* block : blocks) {
@@ -86,7 +86,8 @@ int Board::checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& ga
         game_clears %= 10;
         game_level++;
     }
-    return score_increase;
+    score += score_increase;
+    return clears;
 }
 
 void Board::pullBlocksDown(int& row) {
