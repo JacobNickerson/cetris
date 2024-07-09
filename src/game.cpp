@@ -41,7 +41,7 @@ void Game::run() {
     title.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 252));  // the weird offset is for an animation where the title "slides" into place
 
     sf::Text press_to_start_message = title;
-    press_to_start_message.setString("Press any key to start");
+    press_to_start_message.setString("Press enter to start");
     press_to_start_message.setCharacterSize(50);
     press_to_start_message.setFillColor(sf::Color::White);
     sf::FloatRect start_rect = press_to_start_message.getLocalBounds();
@@ -149,18 +149,41 @@ void Game::titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& pres
 
     while (window.isOpen() && game_state == GameState::Title) {
         sf::Event event;
+        int time_elapsed = render_clock.getElapsedTime().asMilliseconds();
 
         // pollEvent pops any new events off the event stack and breaks when empty
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) { 
                 window.close(); 
             }
-            if (event.type == sf::Event::KeyPressed) {
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
                 game_audio_engine.playMenuTransition();
+                // rendering the transition animation
+                sf::CircleShape transition_circle(1.0f);
+                transition_circle.setFillColor(sf::Color::Black);
+                transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+                transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
+                while (transition_circle.getRadius() < 1000.0f) {
+                    transition_circle.setRadius(transition_circle.getRadius() + 10.0f);
+                    transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+                    transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
+                    window.clear();
+                    window.draw(title_background);
+                    if (time_elapsed <= 2000) {
+                        window.draw(title);
+                    } else if (time_elapsed % 1000 < 500) {
+                        window.draw(title);
+                    }
+                    if (time_elapsed >= 2400) {
+                        window.draw(press_to_start_message);
+                    }
+                    window.draw(transition_circle);
+                    window.display();
+                }
                 game_state = GameState::GameRunning;
+                return;
             }
         }
-        int time_elapsed = render_clock.getElapsedTime().asMilliseconds();
         if (time_elapsed <= 1020) {
             sf::Color title_color = title.getFillColor();
             title_color.a = render_clock.getElapsedTime().asMilliseconds()/4;
@@ -192,6 +215,38 @@ void Game::playGame(sf::RenderWindow& window, sf::Sprite& play_background) {
     spawnTetromino(tetropointer);
     next_tet_board.activate(next_tetropointer);
     game_graphics_engine.colorNextTetromino(next_tetropointer);
+
+    // rendering transition
+    sf::CircleShape transition_circle(1000.0f);
+    transition_circle.setFillColor(sf::Color::Black);
+    transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+    transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
+    while (transition_circle.getRadius() > 0.f) {
+        window.clear();
+        window.draw(play_background);
+        for (int i = 2; i < game_graphics_engine.getHeight()-1; i++) {
+            for (int j = 1; j < game_graphics_engine.getWidth()-1; j++) {
+                if (game_board.getBlock(i, j)->isActive()) {
+                    window.draw(game_graphics_engine.getBoardSprite(i,j));
+                }
+            }
+        }
+
+        for (int i = 0; i < 4; i++) { // i got lazy and didn't make another getter
+            for (int j = 0; j < 4; j++) {  // its a 4 length square box every time lol
+                if (next_tet_board.getBlock(i, j)->isActive()) {
+                    window.draw(game_graphics_engine.getNextSprite(i, j));
+                }
+            }
+        }
+
+        window.draw(game_graphics_engine.getScoreText());
+        window.draw(game_graphics_engine.getLevelText());
+        window.draw(transition_circle);
+        window.display();
+        transition_circle.setRadius(transition_circle.getRadius() - 10.0f);
+        transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
+    }
 
     // resetting our clock to 0
     game_clock.restart();
@@ -312,7 +367,29 @@ void Game::endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 game_state = GameState::Title;
-                
+                sf::RectangleShape transition_rect(sf::Vector2f(1600,900));
+                sf::Color transition_color(255,255,255,0);
+                transition_rect.setFillColor(transition_color);
+                for (int i = 0; i < 52; i++) {  // can't use color.a for comparison
+                    window.clear();
+                    window.draw(end_background);
+                    if (render_clock.getElapsedTime().asMilliseconds() >= 1000) {
+                        window.draw(end_text);
+                    }
+
+                    if (render_clock.getElapsedTime().asMilliseconds() >= 2000) {
+                        window.draw(end_score);
+                    }
+
+                    if (render_clock.getElapsedTime().asMilliseconds() >= 3000) {
+                        window.draw(end_prompt);
+                    }
+                    window.draw(transition_rect);
+                    window.display();
+                    transition_color.a += 5;
+                    transition_rect.setFillColor(transition_color);
+                }
+                return;
             }
         }
         
