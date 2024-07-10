@@ -17,7 +17,9 @@ enum class GameState {
 
 class Game {
     private:
-        int score;
+        int game_score;
+        int game_level; 
+        int game_clears;
         AudioEngine game_audio_engine;
         Board game_board;
         NextTetBoard next_tet_board;
@@ -28,9 +30,10 @@ class Game {
         std::vector<Tetromino*> tetrominos;
         std::random_device rd;
         std::mt19937 RNG;
+        std::uniform_int_distribution<> RNG_distribution;  // setting up RNG to generate a number in range [0,6]
 
     public:
-        Game() : game_state(GameState::Title), score(0), RNG(rd()) {
+        Game() : game_state(GameState::Title), game_score(0), game_level(0), game_clears(0), RNG(rd()), RNG_distribution(0,6) {
             tetrominos.push_back(new I_Tetromino);
             tetrominos.push_back(new J_Tetromino);
             tetrominos.push_back(new L_Tetromino);
@@ -71,7 +74,9 @@ class Game {
 
         // various functions are called whenever a tetromino is placed
         // this method bundles them together to make the logic cleaner
-        void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int RNG_index, int& score);
+        void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int& score);
+
+        void moveDown();
 };
 
 #endif

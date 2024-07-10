@@ -11,12 +11,16 @@ class GraphicsEngine {
     private:
         std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;
         std::array<std::array<sf::Sprite*, 4>, 4> next_tetromino_matrix;
+        sf::Texture block_texture;
+        sf::Texture box_texture;
+        sf::Font game_font;
+
+    public:
         sf::Sprite score_box;
         sf::Text score_text;
         sf::Sprite next_tetromino_box;
         sf::Text level_text;
-
-    public:
+        
         // Constructor
         GraphicsEngine() {
             for (size_t i = 0; i < BOARD_HEIGHT; i++) {
@@ -46,6 +50,8 @@ class GraphicsEngine {
             }
         }
         
+        // the one ring.
+        void initialize();
         // Initialize sprites with an sf::Texture
         void initializeSpriteMatrix(sf::Texture& sprite_texture);
 

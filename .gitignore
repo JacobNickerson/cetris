@@ -1,3 +1,4 @@
 build/*
 !build/README.md
 .vscode
+SFML
