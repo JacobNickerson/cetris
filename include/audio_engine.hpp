@@ -17,17 +17,6 @@ struct AudioEngineBuffers {
 };
 
 class AudioEngine {
-    private:
-        AudioEngineBuffers buffers;
-        sf::Sound place;
-        sf::Sound harddrop;
-        sf::Sound menu_transition;
-        sf::Sound collision;
-        sf::Sound one_line_clear;
-        sf::Sound two_line_clear;
-        sf::Sound three_line_clear;
-        sf::Sound four_line_clear;
-
     public:
         AudioEngine() {}
         
@@ -49,7 +38,16 @@ class AudioEngine {
 
         void playFourLineClear();
 
-
+    private:
+        AudioEngineBuffers buffers;
+        sf::Sound place;
+        sf::Sound harddrop;
+        sf::Sound menu_transition;
+        sf::Sound collision;
+        sf::Sound one_line_clear;
+        sf::Sound two_line_clear;
+        sf::Sound three_line_clear;
+        sf::Sound four_line_clear;
 };
 
 #endif

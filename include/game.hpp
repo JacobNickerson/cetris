@@ -20,22 +20,6 @@ enum class GameState {
 };
 
 class Game {
-    private:
-        int game_score;
-        int game_level; 
-        int game_clears;
-        AudioEngine game_audio_engine;
-        Board game_board;
-        NextTetBoard next_tet_board;
-        GameState game_state;
-        GraphicsEngine game_graphics_engine;
-        sf::Clock game_clock;
-        sf::Font game_font;
-        std::vector<Tetromino*> tetrominos;
-        std::random_device rd;
-        std::mt19937 RNG;
-        std::uniform_int_distribution<> RNG_distribution;  // setting up RNG to generate a number in range [0,6]
-
     public:
         Game() : game_state(GameState::Title), game_score(0), game_level(0), game_clears(0), RNG(rd()), RNG_distribution(0,6) {
             tetrominos.push_back(new I_Tetromino);
@@ -81,6 +65,25 @@ class Game {
         void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer);
 
         void moveDown();
+
+        // STICKY GRAVITY!
+        void lineClear();
+    
+    private:
+        int game_score;
+        int game_level; 
+        int game_clears;
+        AudioEngine game_audio_engine;
+        Board game_board;
+        NextTetBoard next_tet_board;
+        GameState game_state;
+        GraphicsEngine game_graphics_engine;
+        sf::Clock game_clock;
+        sf::Font game_font;
+        std::vector<Tetromino*> tetrominos;
+        std::random_device rd;
+        std::mt19937 RNG;
+        std::uniform_int_distribution<> RNG_distribution;  // setting up RNG to generate a number in range [0,6]
 };
 
 #endif

@@ -13,9 +13,6 @@ static constexpr int BOARD_HEIGHT = 24;
 static constexpr int BOARD_WIDTH = 14;
 
 class Board {
-    private:
-        std::array<std::array<Block*, BOARD_WIDTH>, BOARD_HEIGHT> board_matrix = {};
-
     public:
         // Constructor
         Board() {
@@ -66,6 +63,9 @@ class Board {
         int checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears, int& score);
 
         void pullBlocksDown(int& row);
+
+    private:
+        std::array<std::array<Block*, BOARD_WIDTH>, BOARD_HEIGHT> board_matrix = {};
 };
 
 #endif

@@ -7,11 +7,6 @@
 
 // Represents a block in the grid.
 class Block {
-    private:
-        const int colu; 
-        const int row;
-        std::optional<sf::Color> colo;
-
     public:
         // Constructor
         Block(int x, int y) : colu(x), row(y) {};
@@ -34,6 +29,11 @@ class Block {
 
         // returns exactly what you'd think
         sf::Color getColo();
+    
+    private:
+        const int colu; 
+        const int row;
+        std::optional<sf::Color> colo;
 };
 
 #endif

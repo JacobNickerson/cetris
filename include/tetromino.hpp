@@ -10,13 +10,6 @@
 
 
 class Tetromino {
-    protected:
-        std::array<Block*, 4> blocks;
-        Block* pivot;
-        int rotation; // this is kinda scuffed, perhaps that enum thing would be better
-        std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions; 
-        sf::Color colo;
-
     public:
         Tetromino() : rotation(0), colo(sf::Color(255,0,0)) {
             for (size_t i = 0; i < blocks.size(); i++) {
@@ -110,6 +103,13 @@ class Tetromino {
 
         // returns offsets from rotated_positions for position rotation = 0
         virtual std::array<std::pair<int, int>, 4> getRotationPositions();
+
+    protected:
+        std::array<Block*, 4> blocks;
+        Block* pivot;
+        int rotation; // this is kinda scuffed, perhaps that enum thing would be better
+        std::array<std::array<std::pair<int, int>, 4>, 4> rotation_positions; 
+        sf::Color colo;
 };
 
 #endif

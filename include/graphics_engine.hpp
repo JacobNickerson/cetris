@@ -8,16 +8,6 @@ static constexpr int SPRITE_BOARD_HEIGHT = 24;
 static constexpr int SPRITE_BOARD_WIDTH = 14;
 
 class GraphicsEngine {
-    private:
-        std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;
-        std::array<std::array<sf::Sprite*, 4>, 4> next_tetromino_matrix;
-        sf::Texture block_texture;
-        sf::Texture box_texture;
-        sf::Texture menu_background_texture;
-        sf::Texture play_background_texture;
-        sf::Color title_color;
-        sf::Font game_font;
-
     public:
         sf::Sprite play_background;
         sf::Sprite menu_background;
@@ -108,6 +98,16 @@ class GraphicsEngine {
 
         // plays an animation of a fade to white for the entire screen to transition from end to title
         void endToTitleAnimation(sf::RenderWindow& window, sf::Clock& render_clock);
+    
+    private:
+        std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;
+        std::array<std::array<sf::Sprite*, 4>, 4> next_tetromino_matrix;
+        sf::Texture block_texture;
+        sf::Texture box_texture;
+        sf::Texture menu_background_texture;
+        sf::Texture play_background_texture;
+        sf::Color title_color;
+        sf::Font game_font;
 };
 
 #endif

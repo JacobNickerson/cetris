@@ -5,9 +5,6 @@
 #include "tetromino.hpp"
 
 class NextTetBoard : public Board {
-    private:
-        std::array<std::array<Block*, 4>, 4> board_matrix;
-
     public:
         NextTetBoard() {
             for (int i = 0; i < 4; i++) {
@@ -32,7 +29,8 @@ class NextTetBoard : public Board {
 
         void activate(Tetromino* tetromino);
 
-        
+    private:
+        std::array<std::array<Block*, 4>, 4> board_matrix;
 };
 
 
