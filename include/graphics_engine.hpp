@@ -100,10 +100,14 @@ class GraphicsEngine {
         void colorNextTetromino(Tetromino* tetromino);
 
         // slowly increases alpha of title text from 0 to 255 and translates text down
-        void titleSlideAnimation(int time);
+        void titleSlideAnimation(sf::RenderWindow& window, sf::Clock& render_clock);
 
-        void titleToPlayAnimation(sf::RenderWindow& window);
+        // plays an animation of a growing/shrinking black circle to transition from title to play
+        void titleToPlayAnimation(sf::RenderWindow& window, sf::Clock& render_clock);
         void titleToPlayAnimation2(sf::RenderWindow& window, Board& game_board, Board& next_text_board);
+
+        // plays an animation of a fade to white for the entire screen to transition from end to title
+        void endToTitleAnimation(sf::RenderWindow& window, sf::Clock& render_clock);
 };
 
 #endif

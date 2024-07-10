@@ -195,14 +195,23 @@ void GraphicsEngine::colorNextTetromino(Tetromino* tetromino) {
     }
 }
 
-void GraphicsEngine::titleSlideAnimation(int time) {
-    title_color = title_text.getFillColor();
-    title_color.a = time/4;
-    title_text.setFillColor(title_color);
-    title_text.move(sf::Vector2f(0, 0.1));
+void GraphicsEngine::titleSlideAnimation(sf::RenderWindow& window, sf::Clock& render_clock) {
+    int time_elapsed = 0;
+    while (time_elapsed <= 1020) {
+        time_elapsed = render_clock.getElapsedTime().asMilliseconds();
+        title_color = title_text.getFillColor();
+        title_color.a = time_elapsed/4;
+        title_text.setFillColor(title_color);
+        title_text.move(sf::Vector2f(0, 0.1));
+        window.clear();
+        window.draw(menu_background);
+        window.draw(title_text);
+        window.display();
+    }
+    title_text.setFillColor(sf::Color::White);
 }
 
-void GraphicsEngine::titleToPlayAnimation(sf::RenderWindow& window) {
+void GraphicsEngine::titleToPlayAnimation(sf::RenderWindow& window, sf::Clock& render_clock) {
     sf::CircleShape transition_circle(1.0f);
     transition_circle.setFillColor(sf::Color::Black);
     transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
@@ -212,9 +221,12 @@ void GraphicsEngine::titleToPlayAnimation(sf::RenderWindow& window) {
         transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
         transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
         window.clear();
+        int time_elapsed = render_clock.getElapsedTime().asMilliseconds();
         window.draw(menu_background);
         window.draw(title_text);
-        window.draw(press_to_start_text);
+        if (time_elapsed >= 2400 && time_elapsed % 1000 < 500) {
+            window.draw(press_to_start_text);
+        }
         window.draw(transition_circle);
         window.display();
     }
@@ -250,5 +262,30 @@ void GraphicsEngine::titleToPlayAnimation2(sf::RenderWindow& window, Board& game
         window.display();
         transition_circle.setRadius(transition_circle.getRadius() - 10.0f);
         transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
+    }
+}
+
+void GraphicsEngine::endToTitleAnimation(sf::RenderWindow& window, sf::Clock& render_clock) {
+    sf::RectangleShape transition_rect(sf::Vector2f(1600,900));
+    sf::Color transition_color(255,255,255,0);
+    transition_rect.setFillColor(transition_color);
+    for (int i = 0; i < 52; i++) {  // can't use color.a for comparison
+        window.clear();
+        window.draw(menu_background);
+        if (render_clock.getElapsedTime().asMilliseconds() >= 1000) {
+            window.draw(end_screen_text);
+        }
+
+        if (render_clock.getElapsedTime().asMilliseconds() >= 2000) {
+            window.draw(end_score_text);
+        }
+
+        if (render_clock.getElapsedTime().asMilliseconds() >= 3000) {
+            window.draw(end_prompt_text);
+        }
+        window.draw(transition_rect);
+        window.display();
+        transition_color.a += 5;
+        transition_rect.setFillColor(transition_color);
     }
 }

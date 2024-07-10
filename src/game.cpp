@@ -49,11 +49,12 @@ bool Game::spawnTetromino(Tetromino* tetromino, int row, int col) {
 }
 
 void Game::titleScreen(sf::RenderWindow& window) {
-    sf::Clock render_clock;
+    game_clock.restart();
+    game_graphics_engine.titleSlideAnimation(window, game_clock);
     int time_elapsed;
     while (window.isOpen() && game_state == GameState::Title) {
         sf::Event event;
-        time_elapsed = render_clock.getElapsedTime().asMilliseconds();
+        time_elapsed = game_clock.getElapsedTime().asMilliseconds();
         // pollEvent pops any new events off the event stack and breaks when empty
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) { 
@@ -62,23 +63,16 @@ void Game::titleScreen(sf::RenderWindow& window) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
                 game_audio_engine.playMenuTransition();
                 // rendering the transition animation
-                game_graphics_engine.titleToPlayAnimation(window);
+                game_graphics_engine.titleToPlayAnimation(window, game_clock);
                 game_state = GameState::GameRunning;
                 return;
             }
         }
-        if (time_elapsed <= 1020) {
-            game_graphics_engine.titleSlideAnimation(time_elapsed);
-        }
 
         window.clear();
         window.draw(game_graphics_engine.menu_background);
-        if (time_elapsed <= 2000) {
-            window.draw(game_graphics_engine.title_text);
-        } else if (time_elapsed % 1000 < 500) {
-            window.draw(game_graphics_engine.title_text);
-        }
-        if (time_elapsed >= 2400) {
+        window.draw(game_graphics_engine.title_text);
+        if (time_elapsed >= 1020 && time_elapsed % 1000 < 500) {
             window.draw(game_graphics_engine.press_to_start_text);
         }
         window.display();
@@ -100,6 +94,11 @@ void Game::playGame(sf::RenderWindow& window) {
     // resetting our clock to 0
     game_clock.restart();
 
+    // Events
+    sf::Event event;
+    // Clear Event queue
+    while (window.pollEvent(event)) {}
+
     while (window.isOpen() && game_state == GameState::GameRunning) {
         if (game_clock.getElapsedTime().asMilliseconds() >= std::max(1000-(100*game_level), 50)) {  // tetromino moves down after a certain elapsed time
             game_clock.restart();
@@ -114,7 +113,6 @@ void Game::playGame(sf::RenderWindow& window) {
             game_graphics_engine.colorTetromino(tetropointer);
         }
         // User Inputs
-        sf::Event event;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed) { 
                     window.close(); 
@@ -217,28 +215,7 @@ void Game::endScreen(sf::RenderWindow& window) {
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 game_state = GameState::Title;
-                sf::RectangleShape transition_rect(sf::Vector2f(1600,900));
-                sf::Color transition_color(255,255,255,0);
-                transition_rect.setFillColor(transition_color);
-                for (int i = 0; i < 52; i++) {  // can't use color.a for comparison
-                    window.clear();
-                    window.draw(game_graphics_engine.menu_background);
-                    if (render_clock.getElapsedTime().asMilliseconds() >= 1000) {
-                        window.draw(game_graphics_engine.end_screen_text);
-                    }
-
-                    if (render_clock.getElapsedTime().asMilliseconds() >= 2000) {
-                        window.draw(game_graphics_engine.end_score_text);
-                    }
-
-                    if (render_clock.getElapsedTime().asMilliseconds() >= 3000) {
-                        window.draw(game_graphics_engine.end_prompt_text);
-                    }
-                    window.draw(transition_rect);
-                    window.display();
-                    transition_color.a += 5;
-                    transition_rect.setFillColor(transition_color);
-                }
+                game_graphics_engine.endToTitleAnimation(window, render_clock);
                 return;
             }
         }
