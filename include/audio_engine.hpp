@@ -13,7 +13,7 @@ struct AudioEngineBuffers {
     sf::SoundBuffer buffer_three_line_clear;
     sf::SoundBuffer buffer_four_line_clear;
 
-    void initialize();
+    bool initialize();
 };
 
 class AudioEngine {
@@ -29,11 +29,9 @@ class AudioEngine {
         sf::Sound four_line_clear;
 
     public:
-        AudioEngine() {
-            buffers.initialize();
-        }
+        AudioEngine() {}
         
-        void initialize();
+        bool initialize();
 
         void playPlace();
 

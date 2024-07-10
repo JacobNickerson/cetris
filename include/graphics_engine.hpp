@@ -13,13 +13,23 @@ class GraphicsEngine {
         std::array<std::array<sf::Sprite*, 4>, 4> next_tetromino_matrix;
         sf::Texture block_texture;
         sf::Texture box_texture;
+        sf::Texture menu_background_texture;
+        sf::Texture play_background_texture;
+        sf::Color title_color;
         sf::Font game_font;
 
     public:
-        sf::Sprite score_box;
-        sf::Text score_text;
+        sf::Sprite play_background;
+        sf::Sprite menu_background;
         sf::Sprite next_tetromino_box;
+        sf::Sprite score_box;
         sf::Text level_text;
+        sf::Text score_text;
+        sf::Text title_text;
+        sf::Text press_to_start_text;
+        sf::Text end_screen_text;
+        sf::Text end_score_text;
+        sf::Text end_prompt_text;
         
         // Constructor
         GraphicsEngine() {
@@ -51,17 +61,7 @@ class GraphicsEngine {
         }
         
         // the one ring.
-        void initialize();
-        // Initialize sprites with an sf::Texture
-        void initializeSpriteMatrix(sf::Texture& sprite_texture);
-
-        void initializeScoreBox(sf::Texture& score_box_texture, sf::Font& score_box_font);
-
-        void initializeNextTetrominoBox(sf::Texture& score_box_texture);
-
-        void initializeNextTetrominoMatrix(sf::Texture& sprite_texture);
-
-        void initializeLevelText(sf::Font& level_font);
+        bool initialize();
 
         // returns the sprite at specific coordinates
         sf::Sprite getBoardSprite(int row, int col);
@@ -98,6 +98,12 @@ class GraphicsEngine {
         void reset();
 
         void colorNextTetromino(Tetromino* tetromino);
+
+        // slowly increases alpha of title text from 0 to 255 and translates text down
+        void titleSlideAnimation(int time);
+
+        void titleToPlayAnimation(sf::RenderWindow& window);
+        void titleToPlayAnimation2(sf::RenderWindow& window, Board& game_board, Board& next_text_board);
 };
 
 #endif

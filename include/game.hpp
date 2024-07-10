@@ -2,12 +2,16 @@
 #define GAME_HPP
 
 #include "audio_engine.hpp"
+#include "block.hpp"
 #include "board.hpp"
 #include "graphics_engine.hpp"
 #include "next_tetromino_board.hpp"
 #include "tetromino_types.hpp"
-#include <vector>
+#include <array>
+#include <iostream>
 #include <random>
+#include <vector>
+
 
 enum class GameState {
     Title,
@@ -60,21 +64,21 @@ class Game {
 
         // takes the title text and press to start text as parameters and renders them on a title screen
         // waits for any keyboard input to change gamestates and return from method
-        void titleScreen(sf::RenderWindow& window, sf::Text& title, sf::Text& press_to_start_message, sf::Sprite& title_background);
+        void titleScreen(sf::RenderWindow& window);
         
         // the main game loop
-        void playGame(sf::RenderWindow& window, sf::Sprite& play_background);
+        void playGame(sf::RenderWindow& window);
 
         // calls all the reset methods for each of game's members
         void reset();
 
         // takes end text and end score text as parameters and renders them on endscreen
         // awaits inputting 'Esc' to transition gamestate back to titlescreen
-        void endScreen(sf::RenderWindow& window, sf::Text& end_text, sf::Text& end_score, sf::Text& end_prompt, sf::Sprite& end_background);
+        void endScreen(sf::RenderWindow& window);
 
         // various functions are called whenever a tetromino is placed
         // this method bundles them together to make the logic cleaner
-        void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer, int& game_level, int& game_clears, int& score);
+        void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer);
 
         void moveDown();
 };

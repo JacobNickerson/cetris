@@ -1,20 +1,21 @@
 #include "audio_engine.hpp"
 
 // AudioEngineBuffers
-void AudioEngineBuffers::initialize() {
-    buffer_place.loadFromFile("./sounds/place_tetromino.wav");
-    buffer_harddrop.loadFromFile("./sounds/hard_drop.wav");
-    buffer_menu_transition.loadFromFile("./sounds/menu_transition.wav");
-    buffer_collision.loadFromFile("./sounds/collision.wav");
-    buffer_one_line_clear.loadFromFile("./sounds/one_line_clear.wav");
-    buffer_two_line_clear.loadFromFile("./sounds/two_line_clear.wav");
-    buffer_three_line_clear.loadFromFile("./sounds/three_line_clear.wav");
-    buffer_four_line_clear.loadFromFile("./sounds/four_line_clear.wav");
-
+bool AudioEngineBuffers::initialize() {
+    if (!buffer_place.loadFromFile("./sounds/place_tetromino.wav")) return false;
+    if (!buffer_harddrop.loadFromFile("./sounds/hard_drop.wav")) return false;
+    if (!buffer_menu_transition.loadFromFile("./sounds/menu_transition.wav")) return false;
+    if (!buffer_collision.loadFromFile("./sounds/collision.wav")) return false;
+    if (!buffer_one_line_clear.loadFromFile("./sounds/one_line_clear.wav")) return false;
+    if (!buffer_two_line_clear.loadFromFile("./sounds/two_line_clear.wav")) return false;
+    if (!buffer_three_line_clear.loadFromFile("./sounds/three_line_clear.wav")) return false;
+    if (!buffer_four_line_clear.loadFromFile("./sounds/four_line_clear.wav")) return false;
+    return true;
 }
 
 // AudioEngine
-    void AudioEngine::initialize() {
+    bool AudioEngine::initialize() {
+        if (!buffers.initialize()) return false;
         place.setBuffer(buffers.buffer_place);
         harddrop.setBuffer(buffers.buffer_harddrop);
         menu_transition.setBuffer(buffers.buffer_menu_transition);
@@ -23,6 +24,7 @@ void AudioEngineBuffers::initialize() {
         two_line_clear.setBuffer(buffers.buffer_two_line_clear);
         three_line_clear.setBuffer(buffers.buffer_three_line_clear);
         four_line_clear.setBuffer(buffers.buffer_four_line_clear);
+        return true;
     }
 
     void AudioEngine::playPlace() {
