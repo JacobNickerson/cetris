@@ -12,6 +12,8 @@ struct AudioEngineBuffers {
     sf::SoundBuffer buffer_two_line_clear;
     sf::SoundBuffer buffer_three_line_clear;
     sf::SoundBuffer buffer_four_line_clear;
+    sf::SoundBuffer buffer_end_to_start_transition;
+    sf::SoundBuffer buffer_loss;
 
     bool initialize();
 };
@@ -42,6 +44,10 @@ class AudioEngine {
 
         void stopMusic();
 
+        void playEndToStartTransition();
+
+        void playLossSound();
+
     private:
         AudioEngineBuffers buffers;
         sf::Music play_music;
@@ -53,6 +59,8 @@ class AudioEngine {
         sf::Sound two_line_clear;
         sf::Sound three_line_clear;
         sf::Sound four_line_clear;
+        sf::Sound end_to_start_transition;
+        sf::Sound loss;
 };
 
 #endif

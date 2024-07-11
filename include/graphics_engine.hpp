@@ -100,6 +100,8 @@ class GraphicsEngine {
         void endToTitleAnimation(sf::RenderWindow& window, sf::Clock& render_clock);
 
         void setEndScoreText(int& game_score);
+
+        void lossAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board);
     
     private:
         std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;

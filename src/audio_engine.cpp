@@ -10,6 +10,8 @@ bool AudioEngineBuffers::initialize() {
     if (!buffer_two_line_clear.loadFromFile("./sounds/two_line_clear.ogg")) return false;
     if (!buffer_three_line_clear.loadFromFile("./sounds/three_line_clear.ogg")) return false;
     if (!buffer_four_line_clear.loadFromFile("./sounds/four_line_clear.ogg")) return false;
+    if (!buffer_end_to_start_transition.loadFromFile("./sounds/end_to_start_transition.ogg")) return false;
+    if (!buffer_loss.loadFromFile("./sounds/loss.ogg")) return false;
     return true;
 }
 
@@ -24,6 +26,8 @@ bool AudioEngineBuffers::initialize() {
         two_line_clear.setBuffer(buffers.buffer_two_line_clear);
         three_line_clear.setBuffer(buffers.buffer_three_line_clear);
         four_line_clear.setBuffer(buffers.buffer_four_line_clear);
+        end_to_start_transition.setBuffer(buffers.buffer_end_to_start_transition);
+        loss.setBuffer(buffers.buffer_loss);
         if (!play_music.openFromFile("music/tetris.ogg")) return false;
         return true;
     }
@@ -67,4 +71,12 @@ bool AudioEngineBuffers::initialize() {
 
     void AudioEngine::stopMusic() {
         play_music.stop();
+    }
+
+    void AudioEngine::playEndToStartTransition() {
+        end_to_start_transition.play();
+    }
+    
+    void AudioEngine::playLossSound() {
+        loss.play();
     }

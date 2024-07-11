@@ -2,6 +2,9 @@
 
 void Game::run() {
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Cetris");
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    sf::Vector2i window_position((desktop.width - 1600) / 2, (desktop.height - 900) / 2);    
+    window.setPosition(window_position);
 
     // Initialize graphics
     if (!game_graphics_engine.initialize()) {
@@ -109,6 +112,9 @@ void Game::playGame(sf::RenderWindow& window) {
                 game_audio_engine.playPlace();
                 placeTetromino(tetropointer, next_tetropointer);
                 if (!spawnTetromino(tetropointer)) {
+                    game_audio_engine.stopMusic();
+                    game_audio_engine.playLossSound();
+                    game_graphics_engine.lossAnimation(window, game_board, next_tet_board);
                     game_state = GameState::GameOver;
                     return;
                 }
@@ -127,6 +133,9 @@ void Game::playGame(sf::RenderWindow& window) {
                                 game_audio_engine.playPlace();
                                 placeTetromino(tetropointer, next_tetropointer);
                                 if (!spawnTetromino(tetropointer)) {
+                                    game_audio_engine.stopMusic();
+                                    game_audio_engine.playLossSound();
+                                    game_graphics_engine.lossAnimation(window, game_board, next_tet_board);
                                     game_state = GameState::GameOver;
                                     return;
                                 }
@@ -163,6 +172,9 @@ void Game::playGame(sf::RenderWindow& window) {
                             game_graphics_engine.colorTetromino(tetropointer);
                             placeTetromino(tetropointer, next_tetropointer);
                             if (!spawnTetromino(tetropointer)) {
+                                game_audio_engine.stopMusic();
+                                game_audio_engine.playLossSound();
+                                game_graphics_engine.lossAnimation(window, game_board, next_tet_board);
                                 game_state = GameState::GameOver;
                                 return;
                             }
@@ -208,6 +220,9 @@ void Game::reset() {
 void Game::endScreen(sf::RenderWindow& window) {
     sf::Clock render_clock;
     game_graphics_engine.setEndScoreText(game_score);
+    bool sound1_played = false;
+    bool sound2_played = false;
+    bool sound3_played = false;
     while (window.isOpen() && game_state == GameState::GameOver) {
         sf::Event event;
 
@@ -218,6 +233,7 @@ void Game::endScreen(sf::RenderWindow& window) {
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 game_state = GameState::Title;
+                game_audio_engine.playEndToStartTransition();
                 game_graphics_engine.endToTitleAnimation(window, render_clock);
                 return;
             }
@@ -226,14 +242,26 @@ void Game::endScreen(sf::RenderWindow& window) {
         window.clear();
         window.draw(game_graphics_engine.menu_background);
         if (render_clock.getElapsedTime().asMilliseconds() >= 1000) {
+            if (!sound1_played) {
+                game_audio_engine.playCollision();
+                sound1_played = !sound1_played;
+            }
             window.draw(game_graphics_engine.end_screen_text);
         }
 
         if (render_clock.getElapsedTime().asMilliseconds() >= 2000) {
+            if (!sound2_played) {
+                game_audio_engine.playCollision();
+                sound2_played = !sound2_played;
+            }
             window.draw(game_graphics_engine.end_score_text);
         }
 
         if (render_clock.getElapsedTime().asMilliseconds() >= 3000) {
+            if (!sound3_played) {
+                game_audio_engine.playFourLineClear();
+                sound3_played = !sound3_played;
+            }
             window.draw(game_graphics_engine.end_prompt_text);
         }
         window.display();

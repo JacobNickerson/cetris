@@ -235,8 +235,8 @@ void GraphicsEngine::titleToPlayAnimation2(sf::RenderWindow& window, Board& game
     // rendering transition
     sf::CircleShape transition_circle(1000.0f);
     transition_circle.setFillColor(sf::Color::Black);
-    transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
     transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
+    transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
     while (transition_circle.getRadius() > 0.f) {
         window.clear();
         window.draw(play_background);
@@ -298,4 +298,50 @@ void GraphicsEngine::setEndScoreText(int& game_score) {
     end_score_text.setOrigin(end_rect.left + end_rect.width/2.0f,
                 end_rect.top  + end_rect.height/2.0f);
     end_score_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 50.0f));
+}
+
+void GraphicsEngine::lossAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board) {
+    sf::Clock flash_clock;
+    sf::Clock block_remove_clock;
+    sf::RectangleShape screen_color_animation(sf::Vector2f(1600,900));
+    screen_color_animation.setFillColor(sf::Color::Black);
+    bool color_change = false;
+    int row = 0;
+    while (row < BOARD_HEIGHT-1) {
+        if (flash_clock.getElapsedTime().asMilliseconds() > 400) {
+            if (block_remove_clock.getElapsedTime().asMilliseconds() > 150) {
+                block_remove_clock.restart();
+                game_board.removeRow(row);
+                row++;
+            }
+        }
+        window.clear();
+        window.draw(play_background);
+        for (int i = 2; i < getHeight()-1; i++) {
+            for (int j = 1; j < getWidth()-1; j++) {
+                if (game_board.getBlock(i, j)->isActive()) {
+                    window.draw(getBoardSprite(i,j));
+                }
+            }
+        }
+
+        for (int i = 0; i < 4; i++) { // i got lazy and didn't make another getter
+            for (int j = 0; j < 4; j++) {  // its a 4 length square box every time lol
+                if (next_tet_board.getBlock(i, j)->isActive()) {
+                    window.draw(getNextSprite(i, j));
+                }
+            }
+        }
+
+        window.draw(score_text);
+        window.draw(level_text);
+        if (flash_clock.getElapsedTime().asMilliseconds() <= 200) {
+            if (flash_clock.getElapsedTime().asMilliseconds() > 100 && !color_change) {
+                screen_color_animation.setFillColor(sf::Color::White);
+                color_change = !color_change;
+            }
+            window.draw(screen_color_animation);
+        }
+        window.display();
+    }
 }
