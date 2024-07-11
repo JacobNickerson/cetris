@@ -23,7 +23,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/JacobNickerson/cetris">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="171" height="81">
   </a>
 
 <h3 align="center">Cetris</h3>
