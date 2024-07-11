@@ -2,14 +2,14 @@
 
 // AudioEngineBuffers
 bool AudioEngineBuffers::initialize() {
-    if (!buffer_place.loadFromFile("./sounds/place_tetromino.wav")) return false;
-    if (!buffer_harddrop.loadFromFile("./sounds/hard_drop.wav")) return false;
-    if (!buffer_menu_transition.loadFromFile("./sounds/menu_transition.wav")) return false;
-    if (!buffer_collision.loadFromFile("./sounds/collision.wav")) return false;
-    if (!buffer_one_line_clear.loadFromFile("./sounds/one_line_clear.wav")) return false;
-    if (!buffer_two_line_clear.loadFromFile("./sounds/two_line_clear.wav")) return false;
-    if (!buffer_three_line_clear.loadFromFile("./sounds/three_line_clear.wav")) return false;
-    if (!buffer_four_line_clear.loadFromFile("./sounds/four_line_clear.wav")) return false;
+    if (!buffer_place.loadFromFile("./sounds/place_tetromino.ogg")) return false;
+    if (!buffer_harddrop.loadFromFile("./sounds/hard_drop.ogg")) return false;
+    if (!buffer_menu_transition.loadFromFile("./sounds/menu_transition.ogg")) return false;
+    if (!buffer_collision.loadFromFile("./sounds/collision.ogg")) return false;
+    if (!buffer_one_line_clear.loadFromFile("./sounds/one_line_clear.ogg")) return false;
+    if (!buffer_two_line_clear.loadFromFile("./sounds/two_line_clear.ogg")) return false;
+    if (!buffer_three_line_clear.loadFromFile("./sounds/three_line_clear.ogg")) return false;
+    if (!buffer_four_line_clear.loadFromFile("./sounds/four_line_clear.ogg")) return false;
     return true;
 }
 
