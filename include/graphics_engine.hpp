@@ -98,6 +98,8 @@ class GraphicsEngine {
 
         // plays an animation of a fade to white for the entire screen to transition from end to title
         void endToTitleAnimation(sf::RenderWindow& window, sf::Clock& render_clock);
+
+        void setEndScoreText(int& game_score);
     
     private:
         std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;

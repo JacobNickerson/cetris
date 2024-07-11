@@ -38,8 +38,13 @@ class AudioEngine {
 
         void playFourLineClear();
 
+        void playMusic();
+
+        void stopMusic();
+
     private:
         AudioEngineBuffers buffers;
+        sf::Music play_music;
         sf::Sound place;
         sf::Sound harddrop;
         sf::Sound menu_transition;

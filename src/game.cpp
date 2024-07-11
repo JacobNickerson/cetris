@@ -22,6 +22,7 @@ void Game::run() {
 
         while (window.isOpen() && game_state == GameState::GameRunning) {
             playGame(window);
+            game_audio_engine.stopMusic();
         }
 
         while (window.isOpen() && game_state == GameState::GameOver) {
@@ -90,6 +91,8 @@ void Game::playGame(sf::RenderWindow& window) {
     next_tet_board.activate(next_tetropointer);
     game_graphics_engine.colorNextTetromino(next_tetropointer);
 
+    // Starting our music and setting it to loop
+    game_audio_engine.playMusic();
 
     // resetting our clock to 0
     game_clock.restart();
@@ -204,7 +207,7 @@ void Game::reset() {
 
 void Game::endScreen(sf::RenderWindow& window) {
     sf::Clock render_clock;
-    game_graphics_engine.setScoreText(game_score);
+    game_graphics_engine.setEndScoreText(game_score);
     while (window.isOpen() && game_state == GameState::GameOver) {
         sf::Event event;
 

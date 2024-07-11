@@ -24,6 +24,7 @@ bool AudioEngineBuffers::initialize() {
         two_line_clear.setBuffer(buffers.buffer_two_line_clear);
         three_line_clear.setBuffer(buffers.buffer_three_line_clear);
         four_line_clear.setBuffer(buffers.buffer_four_line_clear);
+        if (!play_music.openFromFile("music/tetris.ogg")) return false;
         return true;
     }
 
@@ -57,4 +58,13 @@ bool AudioEngineBuffers::initialize() {
 
     void AudioEngine::playFourLineClear() {
         four_line_clear.play();
+    }
+
+    void AudioEngine::playMusic() {
+        play_music.setLoop(true);
+        play_music.play();
+    }
+
+    void AudioEngine::stopMusic() {
+        play_music.stop();
     }

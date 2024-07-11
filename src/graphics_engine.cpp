@@ -289,3 +289,13 @@ void GraphicsEngine::endToTitleAnimation(sf::RenderWindow& window, sf::Clock& re
         transition_rect.setFillColor(transition_color);
     }
 }
+
+void GraphicsEngine::setEndScoreText(int& game_score) {
+    end_score_text.setString("You Scored: " + std::to_string(game_score) + " Points");
+
+    // Centering the end score text
+    sf::FloatRect end_rect = end_score_text.getLocalBounds();
+    end_score_text.setOrigin(end_rect.left + end_rect.width/2.0f,
+                end_rect.top  + end_rect.height/2.0f);
+    end_score_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 50.0f));
+}
