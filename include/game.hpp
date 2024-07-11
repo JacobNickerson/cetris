@@ -21,7 +21,7 @@ enum class GameState {
 
 class Game {
     public:
-        Game() : game_state(GameState::Title), game_score(0), game_level(0), game_clears(0), RNG(rd()), RNG_distribution(0,6) {
+        Game() : window_width(1600), window_height(900), game_state(GameState::Title), game_score(0), game_level(0), game_clears(0), RNG(rd()), RNG_distribution(0,6) {
             tetrominos.push_back(new I_Tetromino);
             tetrominos.push_back(new J_Tetromino);
             tetrominos.push_back(new L_Tetromino);
@@ -73,6 +73,8 @@ class Game {
         int game_score;
         int game_level; 
         int game_clears;
+        int window_width;
+        int window_height;
         AudioEngine game_audio_engine;
         Board game_board;
         NextTetBoard next_tet_board;

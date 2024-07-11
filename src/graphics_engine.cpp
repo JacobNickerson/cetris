@@ -20,7 +20,7 @@ bool GraphicsEngine::initialize() {
     sf::FloatRect textRect = title_text.getLocalBounds();
     title_text.setOrigin(textRect.left + textRect.width/2.0f,
                 textRect.top  + textRect.height/2.0f);
-    title_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 252));  // the weird offset is for an animation where the title "slides" into place
+    title_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f - 252));  // the weird offset is for an animation where the title "slides" into place
 
     // Initializing press to start text
     press_to_start_text = title_text;
@@ -30,7 +30,7 @@ bool GraphicsEngine::initialize() {
     sf::FloatRect start_rect = press_to_start_text.getLocalBounds();
     press_to_start_text.setOrigin(start_rect.left + start_rect.width/2.0f,
                 start_rect.top  + start_rect.height/2.0f);
-    press_to_start_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f));
+    press_to_start_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f));
 
     // Initialize score text for score window
     score_text.setString("0");
@@ -60,7 +60,7 @@ bool GraphicsEngine::initialize() {
     sf::FloatRect end_text_rect = end_screen_text.getLocalBounds();
     end_screen_text.setOrigin(end_text_rect.left + end_text_rect.width/2.0f,
                 end_text_rect.top  + end_text_rect.height/2.0f);
-    end_screen_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f-200));
+    end_screen_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f-200));
 
     // Initializing end score text
     end_score_text = end_screen_text;
@@ -71,7 +71,7 @@ bool GraphicsEngine::initialize() {
     sf::FloatRect end_rect = end_score_text.getLocalBounds();
     end_score_text.setOrigin(end_rect.left + end_rect.width/2.0f,
                 end_rect.top  + end_rect.height/2.0f);
-    end_score_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 50.0f));
+    end_score_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f - 50.0f));
     
     // Initializing end prompt text
     end_prompt_text = end_screen_text;
@@ -82,7 +82,7 @@ bool GraphicsEngine::initialize() {
     sf::FloatRect end_prompt_rect = end_prompt_text.getLocalBounds();
     end_prompt_text.setOrigin(end_prompt_rect.left + end_prompt_rect.width/2.0f,
                 end_prompt_rect.top  + end_prompt_rect.height/2.0f);
-    end_prompt_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f + 100.0f));
+    end_prompt_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f + 100.0f));
 
     // Load texture for all block sprites
     if (!block_texture.loadFromFile("images/block.png")) {
@@ -214,7 +214,7 @@ void GraphicsEngine::titleSlideAnimation(sf::RenderWindow& window, sf::Clock& re
 void GraphicsEngine::titleToPlayAnimation(sf::RenderWindow& window, sf::Clock& render_clock) {
     sf::CircleShape transition_circle(1.0f);
     transition_circle.setFillColor(sf::Color::Black);
-    transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+    transition_circle.setPosition(window_width / 2.f, window_height / 2.f);
     transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
     while (transition_circle.getRadius() < 1000.0f) {
         transition_circle.setRadius(transition_circle.getRadius() + 10.0f);
@@ -266,7 +266,7 @@ void GraphicsEngine::titleToPlayAnimation2(sf::RenderWindow& window, Board& game
 }
 
 void GraphicsEngine::endToTitleAnimation(sf::RenderWindow& window, sf::Clock& render_clock) {
-    sf::RectangleShape transition_rect(sf::Vector2f(1600,900));
+    sf::RectangleShape transition_rect(sf::Vector2f(window_width,window_height));
     sf::Color transition_color(255,255,255,0);
     transition_rect.setFillColor(transition_color);
     for (int i = 0; i < 52; i++) {  // can't use color.a for comparison
@@ -297,13 +297,13 @@ void GraphicsEngine::setEndScoreText(int& game_score) {
     sf::FloatRect end_rect = end_score_text.getLocalBounds();
     end_score_text.setOrigin(end_rect.left + end_rect.width/2.0f,
                 end_rect.top  + end_rect.height/2.0f);
-    end_score_text.setPosition(sf::Vector2f(1600/2.0f,900/2.0f - 50.0f));
+    end_score_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f - 50.0f));
 }
 
 void GraphicsEngine::lossAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board) {
     sf::Clock flash_clock;
     sf::Clock block_remove_clock;
-    sf::RectangleShape screen_color_animation(sf::Vector2f(1600,900));
+    sf::RectangleShape screen_color_animation(sf::Vector2f(window_width,window_height));
     screen_color_animation.setFillColor(sf::Color::Black);
     bool color_change = false;
     int row = 0;

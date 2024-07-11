@@ -22,7 +22,7 @@ class GraphicsEngine {
         sf::Text end_prompt_text;
         
         // Constructor
-        GraphicsEngine() {
+        GraphicsEngine() : window_width(1600), window_height(900) {
             for (size_t i = 0; i < BOARD_HEIGHT; i++) {
                 for (size_t j = 0; j < BOARD_WIDTH; j++) {
                     sprite_board_matrix[i][j] = new sf::Sprite;
@@ -104,6 +104,8 @@ class GraphicsEngine {
         void lossAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board);
     
     private:
+        int window_width;
+        int window_height;
         std::array<std::array<sf::Sprite*, BOARD_WIDTH>, BOARD_HEIGHT> sprite_board_matrix;
         std::array<std::array<sf::Sprite*, 4>, 4> next_tetromino_matrix;
         sf::Texture block_texture;

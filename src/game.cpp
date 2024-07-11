@@ -1,10 +1,11 @@
 #include "game.hpp"
 
 void Game::run() {
-    sf::RenderWindow window(sf::VideoMode(1600, 900), "Cetris");
+    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Cetris");
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    sf::Vector2i window_position((desktop.width - 1600) / 2, (desktop.height - 900) / 2);    
+    sf::Vector2i window_position((desktop.width - window_width) / 2, (desktop.height - window_height) / 2);    
     window.setPosition(window_position);
+    window.setFramerateLimit(240);
 
     // Initialize graphics
     if (!game_graphics_engine.initialize()) {
