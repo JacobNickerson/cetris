@@ -103,7 +103,11 @@ class GraphicsEngine {
 
         void lossAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board);
 
-        void colorBlock(Block*);
+        void colorBlock(Block* block);
+        void colorBlock(Block* block, sf::Color color);
+
+        // plays an animation at the inputted row
+        void lineClearAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board,  std::vector<int>& rows);
     
     private:
         int window_width;

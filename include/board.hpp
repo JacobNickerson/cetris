@@ -58,10 +58,6 @@ class Board {
         // does what it says on the tin
         bool rowIsFull(int row);
 
-        // checks tetromino placement for completed rows, removes completed rows
-        // return a pair of integers, {# of rows cleared, bottom row_cleared}
-        std::pair<int, int> checkPlacement(std::vector<Block*> blocks, int& game_level, int& game_clears, int& score);
-
         void pullBlocksDown(int& row);
 
         // takes the bottom row cleared out of a number of rows cleared in one move

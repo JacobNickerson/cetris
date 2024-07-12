@@ -42,55 +42,6 @@ bool Board::rowIsFull(int row) {
     return true;
 }
 
-std::pair<int, int> Board::checkPlacement(std::vector<Block*> blocks, int& game_level, int& game_clears, int& score) {
-    std::vector<int> rows;
-    int bottom_row = -1;
-    int rows_cleared = 0;
-    for (Block* block : blocks) {
-        if (std::find(rows.begin(), rows.end(), block->getRow()) == rows.end()) {
-            rows.push_back(block->getRow());
-        }
-    }
-    for (int row : rows) {
-        if (rowIsFull(row)) {
-            removeRow(row);
-            rows_cleared++;
-            bottom_row = std::max(row, bottom_row);
-        }
-    }
-    int score_increase;
-    int clears;
-    switch (rows_cleared) {
-        case 0:
-            score_increase = 0;
-            clears = 0;
-            break;
-        case 1:
-            score_increase = 40*(1+game_level);
-            clears = 1;
-            break;
-        case 2:
-            score_increase = 100*(1+game_level);
-            clears = 2;
-            break;
-        case 3:
-            score_increase = 300*(1+game_level);
-            clears = 3;
-            break;
-        case 4:
-            score_increase = 1200*(1+game_level);
-            clears = 4;
-            break;
-    }
-    game_clears += clears;
-    if (game_clears >= 10) {
-        game_clears %= 10;
-        game_level++;
-    }
-    score += score_increase;
-    return {clears, bottom_row};
-}
-
 void Board::pullBlocksDown(int& row) {
     for (int r = row-1; r >= 2; r--) {
         for (int c = 2; c < BOARD_WIDTH-2; c++) {

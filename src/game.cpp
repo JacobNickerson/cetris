@@ -103,6 +103,7 @@ void Game::playGame(sf::RenderWindow& window) {
 
     // we need this for recursive gravity :shrug:
     std::vector<Block*> blocks;
+    std::vector<int> rows_cleared_at_once;
 
     // Events
     sf::Event event;
@@ -114,7 +115,7 @@ void Game::playGame(sf::RenderWindow& window) {
             game_clock.restart();
             if (!tetropointer->down(game_board)) {
                 game_audio_engine.playPlace();
-                placeTetrominoNew(blocks);
+                placeTetrominoNew(blocks, window);
                 updateBoardAfterPlace(tetropointer, next_tetropointer);
                 blocks.clear();
                 if (!spawnTetromino(tetropointer)) {
@@ -137,7 +138,7 @@ void Game::playGame(sf::RenderWindow& window) {
                             // moveDown();
                             if (!tetropointer->down(game_board)) {
                                 game_audio_engine.playPlace();
-                                placeTetrominoNew(blocks);
+                                placeTetrominoNew(blocks, window);
                                 updateBoardAfterPlace(tetropointer, next_tetropointer);
                                 blocks.clear();
                                 if (!spawnTetromino(tetropointer)) {
@@ -181,7 +182,7 @@ void Game::playGame(sf::RenderWindow& window) {
                             for (Block* block : tetropointer->getBlocks()) {
                                 blocks.push_back(block);
                             }
-                            placeTetrominoNew(blocks);
+                            placeTetrominoNew(blocks, window);
                             updateBoardAfterPlace(tetropointer, next_tetropointer);
                             blocks.clear();
                             if (!spawnTetromino(tetropointer)) {
@@ -288,56 +289,64 @@ void Game::endScreen(sf::RenderWindow& window) {
     }
 }
 
-void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer) {
-    std::vector<Block*> blocks;
-    for (Block* block : tetropointer->getBlocks()) {
-        blocks.push_back(block);
-    }
-    std::pair<int, int> line_clear = game_board.checkPlacement(blocks, game_level, game_clears, game_score);
-    switch (line_clear.first) {
-        case 1:
-            game_audio_engine.playOneLineClear();
-            break;
-        case 2:
-            game_audio_engine.playTwoLineClear();
-            break;
-        case 3:
-            game_audio_engine.playThreeLineClear();
-            break;
-        case 4:
-            game_audio_engine.playFourLineClear();
-            break;
-    }
-    // game_board.stickyGravity(line_clear.second);
-    std::vector<std::vector<std::pair<Block*, sf::Color>>> chunks = game_board.findConnectedChunks(line_clear.second);
-    int chunk_num = 0;
-    for (auto chunk : chunks) {
-        int gravity_dist = game_board.findGravityPosition(chunk);
-        game_board.activateGravityChunk(chunk, gravity_dist);
-        for (auto pair : chunk) {
-            game_graphics_engine.colorBlock(game_board.getBlock(pair.first->getRow()+gravity_dist, pair.first->getColu()));
+// void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer) {
+//     std::vector<Block*> blocks;
+//     for (Block* block : tetropointer->getBlocks()) {
+//         blocks.push_back(block);
+//     }
+//     std::pair<int, int> line_clear = game_board.checkPlacement(blocks, game_level, game_clears, game_score);
+//     switch (line_clear.first) {
+//         case 1:
+//             game_audio_engine.playOneLineClear();
+//             break;
+//         case 2:
+//             game_audio_engine.playTwoLineClear();
+//             break;
+//         case 3:
+//             game_audio_engine.playThreeLineClear();
+//             break;
+//         case 4:
+//             game_audio_engine.playFourLineClear();
+//             break;
+//     }
+//     std::vector<std::vector<std::pair<Block*, sf::Color>>> chunks = game_board.findConnectedChunks(line_clear.second);
+//     int chunk_num = 0;
+//     for (auto chunk : chunks) {
+//         int gravity_dist = game_board.findGravityPosition(chunk);
+//         game_board.activateGravityChunk(chunk, gravity_dist);
+//         for (auto pair : chunk) {
+//             game_graphics_engine.colorBlock(game_board.getBlock(pair.first->getRow()+gravity_dist, pair.first->getColu()));
+//         }
+//     }
+// }
+
+void Game::placeTetrominoNew(std::vector<Block*> blocks, sf::RenderWindow& window) {
+    // check for line clears
+    std::vector<int> rows_to_clear;
+    std::pair<int, int> line_clear = checkPlacement(blocks, rows_to_clear);
+    if (line_clear.first >= 5) {
+        game_audio_engine.playFourLineClear();
+    } else {
+        switch (line_clear.first) {
+            case 0:
+                return;
+            case 1:
+                game_audio_engine.playOneLineClear();
+                break;
+            case 2:
+                game_audio_engine.playTwoLineClear();
+                break;
+            case 3:
+                game_audio_engine.playThreeLineClear();
+                break;
+            case 4:
+                game_audio_engine.playFourLineClear();
+                break;
         }
     }
-}
-
-void Game::placeTetrominoNew(std::vector<Block*> blocks) {
-    // check for line clears
-    std::pair<int, int> line_clear = game_board.checkPlacement(blocks, game_level, game_clears, game_score);
-    switch (line_clear.first) {
-        case 0:
-            return;
-        case 1:
-            game_audio_engine.playOneLineClear();
-            break;
-        case 2:
-            game_audio_engine.playTwoLineClear();
-            break;
-        case 3:
-            game_audio_engine.playThreeLineClear();
-            break;
-        case 4:
-            game_audio_engine.playFourLineClear();
-            break;
+    game_graphics_engine.lineClearAnimation(window, game_board, next_tet_board, rows_to_clear);
+    for (int row : rows_to_clear) {
+        game_board.removeRow(row);
     }
     // gravity
     std::vector<Block*> recursive_blocks;
@@ -351,7 +360,7 @@ void Game::placeTetrominoNew(std::vector<Block*> blocks) {
             game_graphics_engine.colorBlock(block);
         }
     }
-    placeTetrominoNew(recursive_blocks);
+    placeTetrominoNew(recursive_blocks, window);
 }
 
 void Game::updateBoardAfterPlace(Tetromino*& tetropointer, Tetromino*& next_tetropointer) {
@@ -375,3 +384,55 @@ void Game::updateBoardAfterPlace(Tetromino*& tetropointer, Tetromino*& next_tetr
 //     }
 //     game_graphics_engine.colorTetromino(tetropointer);
 // }
+std::pair<int, int> Game::checkPlacement(std::vector<Block*> blocks, std::vector<int>& rows_to_clear) {
+    std::vector<int> rows;
+    int bottom_row = -1;
+    int rows_cleared = 0;
+    for (Block* block : blocks) {
+        if (std::find(rows.begin(), rows.end(), block->getRow()) == rows.end()) {
+            rows.push_back(block->getRow());
+        }
+    }
+    for (int row : rows) {
+        if (game_board.rowIsFull(row)) {
+            rows_cleared++;
+            rows_to_clear.push_back(row);
+            bottom_row = std::max(row, bottom_row);
+        }
+    }
+    int score_increase;
+    int clears;
+    if (rows_cleared >= 5) {
+        score_increase = (300*rows_cleared)*(1+game_level);
+    } else {
+        switch (rows_cleared) {
+            case 0:
+                score_increase = 0;
+                clears = 0;
+                break;
+            case 1:
+                score_increase = 40*(1+game_level);
+                clears = 1;
+                break;
+            case 2:
+                score_increase = 100*(1+game_level);
+                clears = 2;
+                break;
+            case 3:
+                score_increase = 300*(1+game_level);
+                clears = 3;
+                break;
+            case 4:
+                score_increase = 1200*(1+game_level);
+                clears = 4;
+                break;
+        }
+    }
+    game_clears += clears;
+    if (game_clears >= 10) {
+        game_clears %= 10;
+        game_level++;
+    }
+    game_score += score_increase;
+    return {clears, bottom_row};
+}

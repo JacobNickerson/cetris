@@ -63,7 +63,7 @@ class Game {
         // various functions are called whenever a tetromino is placed
         // this method bundles them together to make the logic cleaner
         void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer);
-        void placeTetrominoNew(std::vector<Block*> blocks);
+        void placeTetrominoNew(std::vector<Block*> blocks, sf::RenderWindow& window);
 
         void moveDown();
 
@@ -71,6 +71,10 @@ class Game {
         void lineClear();
 
         void updateBoardAfterPlace(Tetromino*& tetropointer, Tetromino*& next_tetropointer);
+        
+        // checks tetromino placement for completed rows, removes completed rows
+        // return a pair of integers, {# of rows cleared, bottom row_cleared}
+        std::pair<int,int> checkPlacement(std::vector<Block*> blocks, std::vector<int>& rows_to_clear);
     
     private:
         int game_score;

@@ -349,3 +349,46 @@ void GraphicsEngine::lossAnimation(sf::RenderWindow& window, Board& game_board, 
 void GraphicsEngine::colorBlock(Block* block) {
     sprite_board_matrix[block->getRow()][block->getColu()]->setColor(block->getColo());
 }
+
+
+void GraphicsEngine::lineClearAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board, std::vector<int>& rows) {
+
+    sf::Clock render_clock;
+    bool black = false;
+    for (int j = 2; j < getWidth()-2; j++) {
+        for (int i : rows)
+        sprite_board_matrix[i][j]->setColor(sf::Color::White);
+    }
+
+    while (render_clock.getElapsedTime().asMilliseconds() < 200) {
+        window.clear();
+        window.draw(play_background);
+
+        if (render_clock.getElapsedTime().asMilliseconds() > 100 && black == false) {
+            for (int j = 2; j < getWidth()-2; j++) {
+                for (int i : rows)
+                sprite_board_matrix[i][j]->setColor(sf::Color::Black);
+            }
+            black = !black;
+        }
+        for (int i = 2; i < getHeight()-1; i++) {
+            for (int j = 1; j < getWidth()-1; j++) {
+                if (game_board.getBlock(i, j)->isActive()) {
+                    window.draw(getBoardSprite(i,j));
+                }
+            }
+        }
+
+        for (int i = 0; i < 4; i++) { // i got lazy and didn't make another getter
+            for (int j = 0; j < 4; j++) {  // its a 4 length square box every time lol
+                if (next_tet_board.getBlock(i, j)->isActive()) {
+                    window.draw(getNextSprite(i, j));
+                }
+            }
+        }
+
+        window.draw(score_text);
+        window.draw(level_text);
+        window.display();
+    }
+}
