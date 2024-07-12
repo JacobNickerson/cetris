@@ -9,7 +9,7 @@
 class Block {
     public:
         // Constructor
-        Block(int x, int y) : colu(x), row(y) {};
+        Block(int x, int y) : active (false),colu(x), row(y) {};
 
         // "Activates" the block
         void activate();
@@ -31,6 +31,7 @@ class Block {
         sf::Color getColo();
     
     private:
+        bool active;
         const int colu; 
         const int row;
         std::optional<sf::Color> colo;

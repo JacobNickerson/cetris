@@ -345,3 +345,7 @@ void GraphicsEngine::lossAnimation(sf::RenderWindow& window, Board& game_board, 
         window.display();
     }
 }
+
+void GraphicsEngine::colorBlock(Block* block) {
+    sprite_board_matrix[block->getRow()][block->getColu()]->setColor(block->getColo());
+}

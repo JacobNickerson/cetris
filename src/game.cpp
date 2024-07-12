@@ -180,6 +180,8 @@ void Game::playGame(sf::RenderWindow& window) {
                                 return;
                             }
                             break;
+                        case sf::Keyboard::P:
+                            game_board.setUpDebug();
                     }
                 }
             }
@@ -270,8 +272,8 @@ void Game::endScreen(sf::RenderWindow& window) {
 }
 
 void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer) {
-    int clears = game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears, game_score);
-    switch (clears) {
+    std::pair<int, int> line_clear = game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears, game_score);
+    switch (line_clear.first) {
         case 1:
             game_audio_engine.playOneLineClear();
             break;
@@ -284,6 +286,16 @@ void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointe
         case 4:
             game_audio_engine.playFourLineClear();
             break;
+    }
+    // game_board.stickyGravity(line_clear.second);
+    std::vector<std::vector<std::pair<Block*, sf::Color>>> chunks = game_board.findConnectedChunks(line_clear.second);
+    int chunk_num = 0;
+    for (auto chunk : chunks) {
+        int gravity_dist = game_board.findGravityPosition(chunk);
+        game_board.activateGravityChunk(chunk, gravity_dist);
+        for (auto pair : chunk) {
+            game_graphics_engine.colorBlock(game_board.getBlock(pair.first->getRow()+gravity_dist, pair.first->getColu()));
+        }
     }
     game_graphics_engine.setScoreText(game_score);
     tetropointer = next_tetropointer;

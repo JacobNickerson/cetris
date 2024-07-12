@@ -59,10 +59,35 @@ class Board {
         bool rowIsFull(int row);
 
         // checks tetromino placement for completed rows, removes completed rows
-        // return an integer, 0 if no rows cleared otherwise returns points to add to score
-        int checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears, int& score);
+        // return a pair of integers, {# of rows cleared, bottom row_cleared}
+        std::pair<int, int> checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears, int& score);
 
         void pullBlocksDown(int& row);
+
+        // takes the bottom row cleared out of a number of rows cleared in one move
+        // scans all blocks above for connected segments, a segment is connected if it is connected to the rest of the blocks by active blocks
+        // returns a vector of vector of pairs, each vector of pairs is a connected segment and their colors
+        std::vector<std::vector<std::pair<Block*, sf::Color>>> findConnectedChunks(int row);
+
+        // recursive function
+        // given a row and col as parameters and a vector of pairs to add results into
+        // if a block is active it is pushed into chunk and function is recursively called on neighboring blocks unless they are out of bounds
+        // returns void but populates chunk vector with all blocks connected to the block in the initial function call and their current colors
+        void floodFillChunk(int row, int col, std::vector<std::pair<Block*, sf::Color>>& chunk);
+
+        // accepts a vector of pairs of block* and colors as a parameter, returns an int
+        // integer is the distance from a chunk of connected blocks to the nearest active block
+        int findGravityPosition(std::vector<std::pair<Block*, sf::Color>>& chunk);
+        
+        // accepts a vector of pairs of block* and colors and an integer as a parameter
+        // activates all blocks in the chunk moved down by the integer
+        // returns nothing, used as part of the sticky gravity methods
+        void activateGravityChunk(std::vector<std::pair<Block*, sf::Color>>& chunk, int gravity_dist);
+
+        // calls the above functions together, read their comments if you don't understand
+        void stickyGravity(int row);
+
+        void setUpDebug();
 
     private:
         std::array<std::array<Block*, BOARD_WIDTH>, BOARD_HEIGHT> board_matrix = {};

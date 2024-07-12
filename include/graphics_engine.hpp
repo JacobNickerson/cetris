@@ -102,6 +102,8 @@ class GraphicsEngine {
         void setEndScoreText(int& game_score);
 
         void lossAnimation(sf::RenderWindow& window, Board& game_board, Board& next_tet_board);
+
+        void colorBlock(Block*);
     
     private:
         int window_width;

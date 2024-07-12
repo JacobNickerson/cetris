@@ -10,20 +10,21 @@ int Block::getColu() {
 }
 
 bool Block::isActive() {
-    if (colo.has_value()) return true;
-    return false;
+    return active;
 }
 
 void Block::activate() {
     colo = sf::Color(255,255,255);
+    active = true;
 }
 
 void Block::activate(sf::Color new_color) {
     colo = new_color;
+    active = true;
 }
 
 void Block::deactivate() {
-    colo.reset();
+    active = false;
 }
 
 sf::Color Block::getColo() {
