@@ -118,14 +118,3 @@ void Board::stickyGravity(int row) {
         activateGravityChunk(chunk, gravity_dist);
     }
 }
-
-void Board::setUpDebug() {
-    reset();
-    for (int j = 3; j < BOARD_WIDTH-2; j++) {
-        board_matrix[BOARD_HEIGHT-3][j]->activate(sf::Color::Red);
-        board_matrix[BOARD_HEIGHT-4][j]->activate(sf::Color::Blue);
-        board_matrix[BOARD_HEIGHT-5][j]->activate(sf::Color::Green);
-    }
-    board_matrix[BOARD_HEIGHT-5][3]->deactivate();
-    board_matrix[BOARD_HEIGHT-5][4]->deactivate();
-}

@@ -57,8 +57,11 @@ void Game::titleScreen(sf::RenderWindow& window) {
     game_clock.restart();
     game_graphics_engine.titleSlideAnimation(window, game_clock);
     int time_elapsed;
+    // Clear the event queue
+    sf::Event event;
+    while (window.pollEvent(event)) {}
+
     while (window.isOpen() && game_state == GameState::Title) {
-        sf::Event event;
         time_elapsed = game_clock.getElapsedTime().asMilliseconds();
         // pollEvent pops any new events off the event stack and breaks when empty
         while (window.pollEvent(event)) {
@@ -103,7 +106,6 @@ void Game::playGame(sf::RenderWindow& window) {
 
     // we need this for recursive gravity :shrug:
     std::vector<Block*> blocks;
-    std::vector<int> rows_cleared_at_once;
 
     // Events
     sf::Event event;
@@ -115,16 +117,7 @@ void Game::playGame(sf::RenderWindow& window) {
             game_clock.restart();
             if (!tetropointer->down(game_board)) {
                 game_audio_engine.playPlace();
-                placeTetrominoNew(blocks, window);
-                updateBoardAfterPlace(tetropointer, next_tetropointer);
-                blocks.clear();
-                if (!spawnTetromino(tetropointer)) {
-                    game_audio_engine.stopMusic();
-                    game_audio_engine.playLossSound();
-                    game_graphics_engine.lossAnimation(window, game_board, next_tet_board);
-                    game_state = GameState::GameOver;
-                    return;
-                }
+                if (!tetrominoPlaced(tetropointer, next_tetropointer, window)) return;
             }
             game_graphics_engine.colorTetromino(tetropointer);
         }
@@ -138,16 +131,7 @@ void Game::playGame(sf::RenderWindow& window) {
                             // moveDown();
                             if (!tetropointer->down(game_board)) {
                                 game_audio_engine.playPlace();
-                                placeTetrominoNew(blocks, window);
-                                updateBoardAfterPlace(tetropointer, next_tetropointer);
-                                blocks.clear();
-                                if (!spawnTetromino(tetropointer)) {
-                                    game_audio_engine.stopMusic();
-                                    game_audio_engine.playLossSound();
-                                    game_graphics_engine.lossAnimation(window, game_board, next_tet_board);
-                                    game_state = GameState::GameOver;
-                                    return;
-                                }
+                                if (!tetrominoPlaced(tetropointer, next_tetropointer, window)) return;
                             }
                             game_graphics_engine.colorTetromino(tetropointer);
                             break;
@@ -179,27 +163,8 @@ void Game::playGame(sf::RenderWindow& window) {
                             game_audio_engine.playHardDrop();
                             tetropointer->hardDrop(game_board);
                             game_graphics_engine.colorTetromino(tetropointer);
-                            for (Block* block : tetropointer->getBlocks()) {
-                                blocks.push_back(block);
-                            }
-                            placeTetrominoNew(blocks, window);
-                            updateBoardAfterPlace(tetropointer, next_tetropointer);
-                            blocks.clear();
-                            if (!spawnTetromino(tetropointer)) {
-                                game_audio_engine.stopMusic();
-                                game_audio_engine.playLossSound();
-                                game_graphics_engine.lossAnimation(window, game_board, next_tet_board);
-                                game_state = GameState::GameOver;
-                                return;
-                            }
+                            if (!tetrominoPlaced(tetropointer, next_tetropointer, window)) return;
                             break;
-                        case sf::Keyboard::P:
-                            game_board.setUpDebug();
-                            for (int j = 3; j < BOARD_WIDTH-2; j++) {
-                                game_graphics_engine.colorBlock(game_board.getBlock(BOARD_HEIGHT-3, j));
-                                game_graphics_engine.colorBlock(game_board.getBlock(BOARD_HEIGHT-4, j));
-                                game_graphics_engine.colorBlock(game_board.getBlock(BOARD_HEIGHT-5, j));
-                            }
                     }
                 }
             }
@@ -244,8 +209,12 @@ void Game::endScreen(sf::RenderWindow& window) {
     bool sound1_played = false;
     bool sound2_played = false;
     bool sound3_played = false;
+    
+    // Clear the event queue
+    sf::Event event;
+    while (window.pollEvent(event)) {}
+
     while (window.isOpen() && game_state == GameState::GameOver) {
-        sf::Event event;
 
         // pollEvent pops any new events off the event stack and breaks when empty
         while (window.pollEvent(event)) {
@@ -288,37 +257,6 @@ void Game::endScreen(sf::RenderWindow& window) {
         window.display();
     }
 }
-
-// void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer) {
-//     std::vector<Block*> blocks;
-//     for (Block* block : tetropointer->getBlocks()) {
-//         blocks.push_back(block);
-//     }
-//     std::pair<int, int> line_clear = game_board.checkPlacement(blocks, game_level, game_clears, game_score);
-//     switch (line_clear.first) {
-//         case 1:
-//             game_audio_engine.playOneLineClear();
-//             break;
-//         case 2:
-//             game_audio_engine.playTwoLineClear();
-//             break;
-//         case 3:
-//             game_audio_engine.playThreeLineClear();
-//             break;
-//         case 4:
-//             game_audio_engine.playFourLineClear();
-//             break;
-//     }
-//     std::vector<std::vector<std::pair<Block*, sf::Color>>> chunks = game_board.findConnectedChunks(line_clear.second);
-//     int chunk_num = 0;
-//     for (auto chunk : chunks) {
-//         int gravity_dist = game_board.findGravityPosition(chunk);
-//         game_board.activateGravityChunk(chunk, gravity_dist);
-//         for (auto pair : chunk) {
-//             game_graphics_engine.colorBlock(game_board.getBlock(pair.first->getRow()+gravity_dist, pair.first->getColu()));
-//         }
-//     }
-// }
 
 void Game::placeTetrominoNew(std::vector<Block*> blocks, sf::RenderWindow& window) {
     // check for line clears
@@ -373,17 +311,7 @@ void Game::updateBoardAfterPlace(Tetromino*& tetropointer, Tetromino*& next_tetr
     game_graphics_engine.colorNextTetromino(next_tetropointer);
     game_graphics_engine.setLevelText(game_level);
 }
-// void Game::moveDown() {
-//     if (!tetropointer->down(game_board)) {
-//         game_audio_engine.playPlace();
-//         placeTetromino(tetropointer, next_tetropointer, game_level, game_clears, distribution(RNG), score);
-//         if (!spawnTetromino(tetropointer)) {
-//             game_state = GameState::GameOver;
-//             return;
-//         }
-//     }
-//     game_graphics_engine.colorTetromino(tetropointer);
-// }
+
 std::pair<int, int> Game::checkPlacement(std::vector<Block*> blocks, std::vector<int>& rows_to_clear) {
     std::vector<int> rows;
     int bottom_row = -1;
@@ -435,4 +363,23 @@ std::pair<int, int> Game::checkPlacement(std::vector<Block*> blocks, std::vector
     }
     game_score += score_increase;
     return {clears, bottom_row};
+}
+
+bool Game::tetrominoPlaced(Tetromino*& tetropointer, Tetromino*& next_tetropointer, sf::RenderWindow& window) {
+    std::vector<Block*> blocks;
+    game_audio_engine.playPlace();
+    for (Block* block : tetropointer->getBlocks()) {
+        blocks.push_back(block);
+    }
+    placeTetrominoNew(blocks, window);
+    updateBoardAfterPlace(tetropointer, next_tetropointer);
+    blocks.clear();
+    if (!spawnTetromino(tetropointer)) {
+        game_audio_engine.stopMusic();
+        game_audio_engine.playLossSound();
+        game_graphics_engine.lossAnimation(window, game_board, next_tet_board);
+        game_state = GameState::GameOver;
+        return false;
+    }
+    return true;
 }

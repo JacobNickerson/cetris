@@ -75,6 +75,8 @@ class Game {
         // checks tetromino placement for completed rows, removes completed rows
         // return a pair of integers, {# of rows cleared, bottom row_cleared}
         std::pair<int,int> checkPlacement(std::vector<Block*> blocks, std::vector<int>& rows_to_clear);
+
+        bool tetrominoPlaced(Tetromino*& tetropointer, Tetromino*& next_tetropointer, sf::RenderWindow& window);
     
     private:
         int game_score;

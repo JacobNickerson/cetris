@@ -83,8 +83,6 @@ class Board {
         // calls the above functions together, read their comments if you don't understand
         void stickyGravity(int row);
 
-        void setUpDebug();
-
     private:
         std::array<std::array<Block*, BOARD_WIDTH>, BOARD_HEIGHT> board_matrix = {};
 };
