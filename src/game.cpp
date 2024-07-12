@@ -114,7 +114,9 @@ void Game::playGame(sf::RenderWindow& window) {
             game_clock.restart();
             if (!tetropointer->down(game_board)) {
                 game_audio_engine.playPlace();
-                placeTetromino(tetropointer, next_tetropointer);
+                placeTetrominoNew(blocks);
+                updateBoardAfterPlace(tetropointer, next_tetropointer);
+                blocks.clear();
                 if (!spawnTetromino(tetropointer)) {
                     game_audio_engine.stopMusic();
                     game_audio_engine.playLossSound();
@@ -135,7 +137,9 @@ void Game::playGame(sf::RenderWindow& window) {
                             // moveDown();
                             if (!tetropointer->down(game_board)) {
                                 game_audio_engine.playPlace();
-                                placeTetromino(tetropointer, next_tetropointer);
+                                placeTetrominoNew(blocks);
+                                updateBoardAfterPlace(tetropointer, next_tetropointer);
+                                blocks.clear();
                                 if (!spawnTetromino(tetropointer)) {
                                     game_audio_engine.stopMusic();
                                     game_audio_engine.playLossSound();
