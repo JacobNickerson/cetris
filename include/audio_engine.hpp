@@ -42,6 +42,8 @@ class AudioEngine {
 
         void playMusic();
 
+        void pauseMusic();
+        
         void stopMusic();
 
         void playEndToStartTransition();

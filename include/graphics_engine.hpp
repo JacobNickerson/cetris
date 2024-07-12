@@ -20,6 +20,8 @@ class GraphicsEngine {
         sf::Text end_screen_text;
         sf::Text end_score_text;
         sf::Text end_prompt_text;
+        sf::Text pause_text;
+        sf::Text pause_prompt_text;
         
         // Constructor
         GraphicsEngine() : window_width(1600), window_height(900) {

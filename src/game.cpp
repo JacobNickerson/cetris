@@ -59,7 +59,11 @@ void Game::titleScreen(sf::RenderWindow& window) {
     int time_elapsed;
     // Clear the event queue
     sf::Event event;
-    while (window.pollEvent(event)) {}
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) { 
+            window.close(); 
+        }
+    }
 
     while (window.isOpen() && game_state == GameState::Title) {
         time_elapsed = game_clock.getElapsedTime().asMilliseconds();
@@ -110,7 +114,11 @@ void Game::playGame(sf::RenderWindow& window) {
     // Events
     sf::Event event;
     // Clear Event queue
-    while (window.pollEvent(event)) {}
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) { 
+            window.close(); 
+        }
+    }
 
     while (window.isOpen() && game_state == GameState::GameRunning) {
         if (game_clock.getElapsedTime().asMilliseconds() >= std::max(1000-(100*game_level), 50)) {  // tetromino moves down after a certain elapsed time
@@ -165,31 +173,30 @@ void Game::playGame(sf::RenderWindow& window) {
                             game_graphics_engine.colorTetromino(tetropointer);
                             if (!tetrominoPlaced(tetropointer, next_tetropointer, window)) return;
                             break;
+                        case sf::Keyboard::Escape:
+                            game_state = GameState::Paused;
+                            game_audio_engine.pauseMusic();
+                            while (game_state == GameState::Paused) {
+                                while (window.pollEvent(event)) {
+                                    if (event.type == sf::Event::Closed) {
+                                        window.close();
+                                        return;
+                                    }
+                                    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                                        game_state = GameState::GameRunning;
+                                        game_audio_engine.playMusic();
+                                    }
+                                    
+                                }
+                                drawPlayScreen(window);
+                                window.draw(game_graphics_engine.pause_text);
+                                window.draw(game_graphics_engine.pause_prompt_text);
+                                window.display();
+                            } 
                     }
                 }
             }
-
-        // rendering
-        window.clear();
-        window.draw(game_graphics_engine.play_background);
-        for (int i = 2; i < game_graphics_engine.getHeight()-1; i++) {
-            for (int j = 1; j < game_graphics_engine.getWidth()-1; j++) {
-                if (game_board.getBlock(i, j)->isActive()) {
-                    window.draw(game_graphics_engine.getBoardSprite(i,j));
-                }
-            }
-        }
-
-        for (int i = 0; i < 4; i++) { // i got lazy and didn't make another getter
-            for (int j = 0; j < 4; j++) {  // its a 4 length square box every time lol
-                if (next_tet_board.getBlock(i, j)->isActive()) {
-                    window.draw(game_graphics_engine.getNextSprite(i, j));
-                }
-            }
-        }
-
-        window.draw(game_graphics_engine.score_text);
-        window.draw(game_graphics_engine.level_text);
+        drawPlayScreen(window);
         window.display();
     }
 }
@@ -212,15 +219,16 @@ void Game::endScreen(sf::RenderWindow& window) {
     
     // Clear the event queue
     sf::Event event;
-    while (window.pollEvent(event)) {}
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) { 
+            window.close(); 
+        }
+    }
 
     while (window.isOpen() && game_state == GameState::GameOver) {
 
         // pollEvent pops any new events off the event stack and breaks when empty
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) { 
-                window.close(); 
-            }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 game_state = GameState::Title;
                 game_audio_engine.playEndToStartTransition();
@@ -382,4 +390,27 @@ bool Game::tetrominoPlaced(Tetromino*& tetropointer, Tetromino*& next_tetropoint
         return false;
     }
     return true;
+}
+
+void Game::drawPlayScreen(sf::RenderWindow& window) {
+    window.clear();
+    window.draw(game_graphics_engine.play_background);
+    for (int i = 2; i < game_graphics_engine.getHeight()-1; i++) {
+        for (int j = 1; j < game_graphics_engine.getWidth()-1; j++) {
+            if (game_board.getBlock(i, j)->isActive()) {
+                window.draw(game_graphics_engine.getBoardSprite(i,j));
+            }
+        }
+    }
+
+    for (int i = 0; i < 4; i++) { // i got lazy and didn't make another getter
+        for (int j = 0; j < 4; j++) {  // its a 4 length square box every time lol
+            if (next_tet_board.getBlock(i, j)->isActive()) {
+                window.draw(game_graphics_engine.getNextSprite(i, j));
+            }
+        }
+    }
+
+    window.draw(game_graphics_engine.score_text);
+    window.draw(game_graphics_engine.level_text);
 }

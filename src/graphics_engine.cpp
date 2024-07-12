@@ -3,7 +3,7 @@
 
 bool GraphicsEngine::initialize() {
     // Load font for all text in the game
-    if (!game_font.loadFromFile("fonts/tetris-font.ttf")) {
+    if (!game_font.loadFromFile("fonts/cetris-font.ttf")) {
         std::cout << "Game font failed to load!" << std::endl;
         return false;
     }
@@ -83,6 +83,32 @@ bool GraphicsEngine::initialize() {
     end_prompt_text.setOrigin(end_prompt_rect.left + end_prompt_rect.width/2.0f,
                 end_prompt_rect.top  + end_prompt_rect.height/2.0f);
     end_prompt_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f + 100.0f));
+
+    // Initialize text for pause
+    pause_text.setFont(game_font);
+    pause_text.setString("PAUSED");
+    pause_text.setCharacterSize(200);
+    pause_text.setFillColor(sf::Color::White);
+    pause_text.setOutlineThickness(2);
+    pause_text.setOutlineColor(sf::Color::Black);
+
+    // Centering the pause text
+    sf::FloatRect pause_rect = pause_text.getLocalBounds();
+    pause_text.setOrigin(pause_rect.left + pause_rect.width/2.0f,
+                pause_rect.top  + pause_rect.height/2.0f);
+    pause_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f-200));  // the weird offset is for an animation where the title "slides" into place
+
+    // Initializing pause prompt text
+    pause_prompt_text = pause_text;
+    pause_prompt_text.setString("Press ESCAPE to resume");
+    pause_prompt_text.setCharacterSize(50);
+    pause_prompt_text.setFillColor(sf::Color::White);
+    pause_prompt_text.setOutlineThickness(2);
+    pause_prompt_text.setOutlineColor(sf::Color::Black);
+    sf::FloatRect pause_prompt_rect = pause_prompt_text.getLocalBounds();
+    pause_prompt_text.setOrigin(pause_prompt_rect.left + pause_prompt_rect.width/2.0f,
+                pause_prompt_rect.top  + pause_prompt_rect.height/2.0f);
+    pause_prompt_text.setPosition(sf::Vector2f(window_width/2.0f,window_height/2.0f));
 
     // Load texture for all block sprites
     if (!block_texture.loadFromFile("images/block.png")) {

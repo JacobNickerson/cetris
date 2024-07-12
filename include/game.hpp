@@ -16,7 +16,8 @@
 enum class GameState {
     Title,
     GameRunning,
-    GameOver
+    GameOver,
+    Paused
 };
 
 class Game {
@@ -77,6 +78,9 @@ class Game {
         std::pair<int,int> checkPlacement(std::vector<Block*> blocks, std::vector<int>& rows_to_clear);
 
         bool tetrominoPlaced(Tetromino*& tetropointer, Tetromino*& next_tetropointer, sf::RenderWindow& window);
+
+        void drawPlayScreen(sf::RenderWindow& window);
+        
     
     private:
         int game_score;
