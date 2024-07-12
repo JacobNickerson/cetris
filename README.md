@@ -148,8 +148,8 @@ The next window showcases the next tetromino that will appear.
 ## Roadmap
 
 - [x] 1.0.0 Release
-- [ ] 1.1.0 Release
-    - [ ] Sticky Gravity
+- [x] 1.1.0 Release
+    - [x] Sticky Gravity
 
 See the [open issues](https://github.com/JacobNickerson/cetris/issues) for a full list of proposed features (and known issues).
 
