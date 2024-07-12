@@ -132,7 +132,7 @@ This should be sufficient. Most of the build process is automated in the Makefil
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use WASD for translation; Q/E for rotation; Space for hard drops
+Use WASD for translation; Q/E for rotation; Space for hard drops; ESC to pause
 <br />
 Clear lines by filling every space in a row. Score increases by clearing lines; clearing more lines in a single move will give increasingly more points.
 <br />
