@@ -63,11 +63,14 @@ class Game {
         // various functions are called whenever a tetromino is placed
         // this method bundles them together to make the logic cleaner
         void placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer);
+        void placeTetrominoNew(std::vector<Block*> blocks);
 
         void moveDown();
 
         // STICKY GRAVITY!
         void lineClear();
+
+        void updateBoardAfterPlace(Tetromino*& tetropointer, Tetromino*& next_tetropointer);
     
     private:
         int game_score;

@@ -101,6 +101,9 @@ void Game::playGame(sf::RenderWindow& window) {
     // resetting our clock to 0
     game_clock.restart();
 
+    // we need this for recursive gravity :shrug:
+    std::vector<Block*> blocks;
+
     // Events
     sf::Event event;
     // Clear Event queue
@@ -171,7 +174,12 @@ void Game::playGame(sf::RenderWindow& window) {
                             game_audio_engine.playHardDrop();
                             tetropointer->hardDrop(game_board);
                             game_graphics_engine.colorTetromino(tetropointer);
-                            placeTetromino(tetropointer, next_tetropointer);
+                            for (Block* block : tetropointer->getBlocks()) {
+                                blocks.push_back(block);
+                            }
+                            placeTetrominoNew(blocks);
+                            updateBoardAfterPlace(tetropointer, next_tetropointer);
+                            blocks.clear();
                             if (!spawnTetromino(tetropointer)) {
                                 game_audio_engine.stopMusic();
                                 game_audio_engine.playLossSound();
@@ -182,6 +190,11 @@ void Game::playGame(sf::RenderWindow& window) {
                             break;
                         case sf::Keyboard::P:
                             game_board.setUpDebug();
+                            for (int j = 3; j < BOARD_WIDTH-2; j++) {
+                                game_graphics_engine.colorBlock(game_board.getBlock(BOARD_HEIGHT-3, j));
+                                game_graphics_engine.colorBlock(game_board.getBlock(BOARD_HEIGHT-4, j));
+                                game_graphics_engine.colorBlock(game_board.getBlock(BOARD_HEIGHT-5, j));
+                            }
                     }
                 }
             }
@@ -272,7 +285,11 @@ void Game::endScreen(sf::RenderWindow& window) {
 }
 
 void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointer) {
-    std::pair<int, int> line_clear = game_board.checkPlacement(tetropointer->getBlocks(), game_level, game_clears, game_score);
+    std::vector<Block*> blocks;
+    for (Block* block : tetropointer->getBlocks()) {
+        blocks.push_back(block);
+    }
+    std::pair<int, int> line_clear = game_board.checkPlacement(blocks, game_level, game_clears, game_score);
     switch (line_clear.first) {
         case 1:
             game_audio_engine.playOneLineClear();
@@ -297,6 +314,44 @@ void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointe
             game_graphics_engine.colorBlock(game_board.getBlock(pair.first->getRow()+gravity_dist, pair.first->getColu()));
         }
     }
+}
+
+void Game::placeTetrominoNew(std::vector<Block*> blocks) {
+    // check for line clears
+    std::pair<int, int> line_clear = game_board.checkPlacement(blocks, game_level, game_clears, game_score);
+    switch (line_clear.first) {
+        case 0:
+            return;
+        case 1:
+            game_audio_engine.playOneLineClear();
+            break;
+        case 2:
+            game_audio_engine.playTwoLineClear();
+            break;
+        case 3:
+            game_audio_engine.playThreeLineClear();
+            break;
+        case 4:
+            game_audio_engine.playFourLineClear();
+            break;
+    }
+    // gravity
+    std::vector<Block*> recursive_blocks;
+    std::vector<std::vector<std::pair<Block*, sf::Color>>> chunks = game_board.findConnectedChunks(line_clear.second);
+    for (auto chunk : chunks) {
+        int gravity_dist = game_board.findGravityPosition(chunk);
+        game_board.activateGravityChunk(chunk, gravity_dist);
+        for (auto pair : chunk) {
+            Block* block = game_board.getBlock(pair.first->getRow()+gravity_dist, pair.first->getColu());
+            recursive_blocks.push_back(block);
+            game_graphics_engine.colorBlock(block);
+        }
+    }
+    placeTetrominoNew(recursive_blocks);
+}
+
+void Game::updateBoardAfterPlace(Tetromino*& tetropointer, Tetromino*& next_tetropointer) {
+    // other stuff
     game_graphics_engine.setScoreText(game_score);
     tetropointer = next_tetropointer;
     next_tet_board.reset();
@@ -305,7 +360,6 @@ void Game::placeTetromino(Tetromino*& tetropointer, Tetromino*& next_tetropointe
     game_graphics_engine.colorNextTetromino(next_tetropointer);
     game_graphics_engine.setLevelText(game_level);
 }
-
 // void Game::moveDown() {
 //     if (!tetropointer->down(game_board)) {
 //         game_audio_engine.playPlace();

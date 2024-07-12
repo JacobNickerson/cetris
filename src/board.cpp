@@ -42,7 +42,7 @@ bool Board::rowIsFull(int row) {
     return true;
 }
 
-std::pair<int, int> Board::checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears, int& score) {
+std::pair<int, int> Board::checkPlacement(std::vector<Block*> blocks, int& game_level, int& game_clears, int& score) {
     std::vector<int> rows;
     int bottom_row = -1;
     int rows_cleared = 0;
@@ -170,22 +170,11 @@ void Board::stickyGravity(int row) {
 
 void Board::setUpDebug() {
     reset();
-    for (int j = 5; j < BOARD_WIDTH-2; j++) {
-        board_matrix[BOARD_HEIGHT-3][j]->activate();
-        board_matrix[BOARD_HEIGHT-5][j]->activate();
+    for (int j = 3; j < BOARD_WIDTH-2; j++) {
+        board_matrix[BOARD_HEIGHT-3][j]->activate(sf::Color::Red);
+        board_matrix[BOARD_HEIGHT-4][j]->activate(sf::Color::Blue);
+        board_matrix[BOARD_HEIGHT-5][j]->activate(sf::Color::Green);
     }
-    board_matrix[BOARD_HEIGHT-4][5]->activate();
-    board_matrix[BOARD_HEIGHT-5][5]->activate();
-    board_matrix[BOARD_HEIGHT-4][6]->activate();
-    board_matrix[BOARD_HEIGHT-5][6]->activate();
-    board_matrix[BOARD_HEIGHT-6][6]->activate();
-    for (int j = 2; j < BOARD_WIDTH-2; j++) {
-        board_matrix[BOARD_HEIGHT-7][j]->activate();
-    }
-    board_matrix[BOARD_HEIGHT-7][7]->deactivate();
-    board_matrix[BOARD_HEIGHT-8][2]->activate();
-    board_matrix[BOARD_HEIGHT-8][BOARD_WIDTH-3]->activate();
-    board_matrix[BOARD_HEIGHT-9][BOARD_WIDTH-3]->activate();
-    board_matrix[BOARD_HEIGHT-8][BOARD_WIDTH-4]->activate();
-    board_matrix[BOARD_HEIGHT-9][BOARD_WIDTH-4]->activate();
+    board_matrix[BOARD_HEIGHT-5][3]->deactivate();
+    board_matrix[BOARD_HEIGHT-5][4]->deactivate();
 }

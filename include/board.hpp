@@ -60,7 +60,7 @@ class Board {
 
         // checks tetromino placement for completed rows, removes completed rows
         // return a pair of integers, {# of rows cleared, bottom row_cleared}
-        std::pair<int, int> checkPlacement(std::array<Block*, 4> blocks, int& game_level, int& game_clears, int& score);
+        std::pair<int, int> checkPlacement(std::vector<Block*> blocks, int& game_level, int& game_clears, int& score);
 
         void pullBlocksDown(int& row);
 
