@@ -14,7 +14,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![GPL License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -29,7 +29,10 @@
 <h3 align="center">Cetris</h3>
 
   <p align="center">
-    project_description
+    A tetromino-based gravity puzzle game! Cetris is programmed entirely in C++ using SFML for graphical and audio rendering. 
+    Boasting seven different unique tetrominos, Cetris challenges your spatial skills and quick-thinking. Use WASD for translation, Q/E for rotation, and SPACE for hard drops. 
+    The game level increases after more and more lines are cleared, increasing the speed of gravity but also the points earned. How high can you score?
+  </p>
     <br />
     <a href="https://github.com/JacobNickerson/cetris"><strong>Explore the docs »</strong></a>
     <br />
@@ -39,7 +42,6 @@
     <a href="https://github.com/JacobNickerson/cetris/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
     <a href="https://github.com/JacobNickerson/cetris/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-  </p>
 </div>
 
 
@@ -130,9 +132,13 @@ This should be sufficient. Most of the build process is automated in the Makefil
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+Use WASD for translation; Q/E for rotation; Space for hard drops
+<br />
+Clear lines by filling every space in a row. Score increases by clearing lines; clearing more lines in a single move will give increasingly more points.
+<br />
+Level progresses by clearing lines, as level increases, the speed of tetromino automatic falling increases. Clearing lines will grant more points at higher levels.
+<br />
+The next window showcases the next tetromino that will appear.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -172,7 +178,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -192,9 +198,9 @@ Project Link: [https://github.com/JacobNickerson/cetris](https://github.com/Jaco
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [![Pixabay][Pixabay.com]][pixabay-url] - Royalty Free Sounds
+* [![fontspace][fontspace.com]][fontspace-url] - Unlicensed Fonts
+* [![musescore][musescore.com]][musescore-url] - Unlicensed Music Sheets
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -211,7 +217,7 @@ Project Link: [https://github.com/JacobNickerson/cetris](https://github.com/Jaco
 [issues-shield]: https://img.shields.io/github/issues/JacobNickerson/cetris.svg?style=for-the-badge
 [issues-url]: https://github.com/JacobNickerson/cetris/issues
 [license-shield]: https://img.shields.io/github/license/JacobNickerson/cetris.svg?style=for-the-badge
-[license-url]: https://github.com/JacobNickerson/cetris/blob/master/LICENSE.txt
+[license-url]: https://github.com/JacobNickerson/cetris/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/jacobnickerson817
 [product-screenshot]: images/screenshot.png
@@ -219,3 +225,9 @@ Project Link: [https://github.com/JacobNickerson/cetris](https://github.com/Jaco
 [C++-url]: https://isocpp.org/
 [SFML-dev.org]: https://img.shields.io/badge/SFML-white?style=for-the-badge&logo=SFML&logoColor=8EC547
 [SFML-url]: https://www.sfml-dev.org/
+[Pixabay.com]: https://img.shields.io/badge/Pixabay-4CA84C?style=for-the-badge&logo=Pixabay&logoColor=white
+[pixabay-url]: https://www.pixabay.com/
+[fontspace.com]: https://img.shields.io/badge/fontspace-000000?style=for-the-badge&logo=fontspace&logoColor=white
+[fontspace-url]: https://www.fontspace.com/
+[musescore.com]: https://img.shields.io/badge/MuseScore-FFFFFF?style=for-the-badge&logo=MuseScore&logoColor=cyan
+[musescore-url]: https://www.musescore.com/
