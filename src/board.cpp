@@ -1,5 +1,4 @@
 #include "board.hpp"
-#include <iostream>
 
 
 void Board::reset() {

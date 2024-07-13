@@ -4,6 +4,8 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
+#include <iostream>
 
 #include "block.hpp"
 
