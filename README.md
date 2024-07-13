@@ -201,6 +201,7 @@ Project Link: [https://github.com/JacobNickerson/cetris](https://github.com/Jaco
 * [![Pixabay][Pixabay.com]][pixabay-url] - Royalty Free Sounds
 * [![fontspace][fontspace.com]][fontspace-url] - Unlicensed Fonts
 * [![musescore][musescore.com]][musescore-url] - Unlicensed Music Sheets
+* Regarding the release's detection as malware: I'm not paying for a license for this personal project >:( Compile it from source if you don't like running strange executables on your machine (which is probably smart anyway)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
