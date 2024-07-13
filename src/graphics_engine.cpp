@@ -242,14 +242,15 @@ void GraphicsEngine::titleToPlayAnimation(sf::RenderWindow& window, sf::Clock& r
     transition_circle.setFillColor(sf::Color::Black);
     transition_circle.setPosition(window_width / 2.f, window_height / 2.f);
     transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
-    while (transition_circle.getRadius() < 1000.0f) {
-        transition_circle.setRadius(transition_circle.getRadius() + 10.0f);
-        transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+    sf::Clock circle_clock;
+
+    while (transition_circle.getRadius() <= 1000) {
+        transition_circle.setRadius(circle_clock.getElapsedTime().asMilliseconds());
         transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
         window.clear();
-        int time_elapsed = render_clock.getElapsedTime().asMilliseconds();
         window.draw(menu_background);
         window.draw(title_text);
+        int time_elapsed = render_clock.getElapsedTime().asMilliseconds();
         if (time_elapsed >= 2400 && time_elapsed % 1000 < 500) {
             window.draw(press_to_start_text);
         }
@@ -261,9 +262,13 @@ void GraphicsEngine::titleToPlayAnimation2(sf::RenderWindow& window, Board& game
     // rendering transition
     sf::CircleShape transition_circle(1000.0f);
     transition_circle.setFillColor(sf::Color::Black);
+    transition_circle.setPosition(window_width / 2.f, window_height / 2.f);
     transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
-    transition_circle.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
-    while (transition_circle.getRadius() > 0.f) {
+    sf::Clock circle_clock;
+
+    while (transition_circle.getRadius() >= 0) {
+        transition_circle.setRadius(1000.0f - circle_clock.getElapsedTime().asMilliseconds());
+        transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
         window.clear();
         window.draw(play_background);
         for (int i = 2; i < getHeight()-1; i++) {
@@ -286,8 +291,6 @@ void GraphicsEngine::titleToPlayAnimation2(sf::RenderWindow& window, Board& game
         window.draw(level_text);
         window.draw(transition_circle);
         window.display();
-        transition_circle.setRadius(transition_circle.getRadius() - 10.0f);
-        transition_circle.setOrigin(transition_circle.getRadius(), transition_circle.getRadius());
     }
 }
 
