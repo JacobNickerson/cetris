@@ -229,6 +229,9 @@ void Game::endScreen(sf::RenderWindow& window) {
 
         // pollEvent pops any new events off the event stack and breaks when empty
         while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 game_state = GameState::Title;
                 game_audio_engine.playEndToStartTransition();
