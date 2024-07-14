@@ -17,8 +17,3 @@ gdb:
 # runs program without compiling
 run:
 	./build/cetris
-
-# compiles program and exports an .exe file, currently broken
-wrelease:
-	@# Compile main.cpp
-	x86_64-w64-mingw32-g++ -I include/ src/*.cpp -ISFML/include -LSFML/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -std=c++17 -o build/Cetris.exe
