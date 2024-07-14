@@ -122,11 +122,11 @@ Cetris was built using WSL (Ubuntu 22.04.2 LTS on Windows 10 x86_64). Your versi
    ```sh
    sudo apt-get install libsfml-dev && sudo apt-get install make
    ```
-3b. Install build-essential if you don't have G++ or a C++ compiler 
+4. Install build-essential if you don't have G++ or a C++ compiler 
    ```sh
    sudo apt-get install build-essential
    ```
-4. Compile and run using the included Makefile
+5. Compile and run using the included Makefile
    ```sh
    `make`
    ```
