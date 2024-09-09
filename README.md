@@ -29,13 +29,8 @@
 <h3 align="center">Cetris</h3>
 
   <p align="center">
-    A tetromino-based gravity puzzle game! Cetris is programmed entirely in C++ using SFML for graphical and audio rendering. 
-    Boasting seven different unique tetrominos, Cetris challenges your spatial skills and quick-thinking. Use WASD for translation, Q/E for rotation, and SPACE for hard drops. 
-    The game level increases after more and more lines are cleared, increasing the speed of gravity but also the points earned. How high can you score?
+    Tetromino-based Gravity Puzzle Game
   </p>
-    <br />
-    <a href="https://github.com/JacobNickerson/cetris"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="https://github.com/JacobNickerson/cetris">View Demo</a>
     ·
@@ -78,6 +73,10 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
+
+A tetromino-based gravity puzzle game! Cetris is programmed entirely in C++ using SFML for graphical and audio rendering. 
+Boasting seven different unique tetrominos, Cetris challenges your spatial skills and quick-thinking. Use WASD for translation, Q/E for rotation, and SPACE for hard drops. 
+The game level increases after more and more lines are cleared, increasing the speed of gravity but also the points earned. How high can you score?
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -209,7 +208,6 @@ Project Link: [https://github.com/JacobNickerson/cetris](https://github.com/Jaco
 * [![Pixabay][Pixabay.com]][pixabay-url] - Royalty Free Sounds
 * [![fontspace][fontspace.com]][fontspace-url] - Unlicensed Fonts
 * [![musescore][musescore.com]][musescore-url] - Unlicensed Music Sheets
-* Regarding the release's detection as malware: I'm not paying for a license for this personal project >:( Compile it from source if you don't like running strange executables on your machine (which is probably smart anyway)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
